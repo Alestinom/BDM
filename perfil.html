@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
+
+  <div id="sidebar"></div>
+
+  <div class="flex-1 flex flex-col overflow-auto">
+
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
+        <span>›</span>
+        <span class="text-gray-800 font-medium">Mi Perfil</span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Mi Perfil</h1>
+    </div>
+
+    <div class="p-8">
+      <div class="max-w-3xl mx-auto space-y-5">
+
+        <div id="alertMsg" class="hidden text-sm px-4 py-3 rounded-lg"></div>
+
+        <!-- Foto y datos principales -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div class="flex items-center gap-6 mb-6">
+            <!-- Avatar -->
+            <div class="relative">
+              <div id="avatarPreview" class="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow">
+                JP
+              </div>
+              <label for="fotoInput" class="absolute -bottom-1 -right-1 w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center cursor-pointer shadow hover:bg-gray-50 transition-colors">
+                <span class="text-xs">✎</span>
+              </label>
+              <input id="fotoInput" type="file" accept="image/*" class="hidden" onchange="previsualizarFoto(this)">
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-gray-800">Juan Pérez López</h2>
+              <p class="text-gray-500 text-sm">@jperez</p>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 mt-1">Asegurado</span>
+            </div>
+          </div>
+
+          <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Información Personal</h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Nombre *</label>
+              <input id="nombre" type="text" value="Juan"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Apellidos *</label>
+              <input id="apellidos" type="text" value="Pérez López"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Fecha de Nacimiento</label>
+              <input id="fechaNac" type="date" value="1990-05-15"
+                class="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed" readonly>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Género</label>
+              <select id="genero" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="M" selected>Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">Prefiero no decir</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico *</label>
+              <input id="correo" type="email" value="juan@email.com"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Alias * <span class="text-gray-400">(único)</span></label>
+              <input id="alias" type="text" value="@jperez"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
+              <input id="telefono" type="tel" value="81 2345 6789"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Tipo de Usuario</label>
+              <input type="text" value="Asegurado" readonly
+                class="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed">
+            </div>
+          </div>
+
+          <button onclick="guardarPerfil()"
+            class="mt-5 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors text-sm">
+            Guardar Cambios
+          </button>
+        </div>
+
+        <!-- Cambiar contraseña -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Cambiar Contraseña</h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Contraseña actual *</label>
+              <input id="passActual" type="password" placeholder="••••••••"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Nueva contraseña *</label>
+              <input id="passNueva" type="password" placeholder="Mín. 8 caracteres" oninput="validarPassPerfil(this.value)"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Confirmar nueva *</label>
+              <input id="passConfirm" type="password" placeholder="Repite la contraseña"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+
+          <div class="mt-3 bg-gray-50 rounded-lg p-3 text-xs flex gap-5">
+            <span id="pReqLen"  class="text-red-400">✗ Mín. 8 caracteres</span>
+            <span id="pReqUp"   class="text-red-400">✗ Una mayúscula</span>
+            <span id="pReqNum"  class="text-red-400">✗ Un número</span>
+          </div>
+
+          <button onclick="cambiarPassword()"
+            class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors text-sm">
+            Actualizar Contraseña
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+  document.getElementById('sidebar').innerHTML = renderNav('');
+
+  function previsualizarFoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const url = URL.createObjectURL(input.files[0]);
+    const av = document.getElementById('avatarPreview');
+    av.innerHTML = `<img src="${url}" class="w-20 h-20 rounded-full object-cover">`;
+  }
+
+  function showAlert(msg, tipo = 'success') {
+    const el = document.getElementById('alertMsg');
+    el.className = `text-sm px-4 py-3 rounded-lg mb-1 ${tipo === 'error' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function guardarPerfil() {
+    const reqs = ['nombre','apellidos','correo','alias'];
+    for (const id of reqs) {
+      if (!document.getElementById(id).value.trim()) {
+        showAlert('Completa todos los campos obligatorios.', 'error'); return;
+      }
+    }
+    showAlert('Perfil actualizado correctamente.');
+  }
+
+  function validarPassPerfil(v) {
+    setR('pReqLen',  v.length >= 8);
+    setR('pReqUp',   /[A-Z]/.test(v));
+    setR('pReqNum',  /[0-9]/.test(v));
+  }
+
+  function setR(id, ok) {
+    const el = document.getElementById(id);
+    el.className = ok ? 'text-green-500' : 'text-red-400';
+    el.textContent = (ok ? '✓' : '✗') + el.textContent.slice(1);
+  }
+
+  function cambiarPassword() {
+    const actual   = document.getElementById('passActual').value;
+    const nueva    = document.getElementById('passNueva').value;
+    const confirm  = document.getElementById('passConfirm').value;
+    if (!actual || !nueva || !confirm) { showAlert('Completa los tres campos de contraseña.', 'error'); return; }
+    if (nueva !== confirm)             { showAlert('Las contraseñas nuevas no coinciden.', 'error'); return; }
+    if (nueva.length < 8 || !/[A-Z]/.test(nueva) || !/[0-9]/.test(nueva)) {
+      showAlert('La nueva contraseña no cumple los requisitos de seguridad.', 'error'); return;
+    }
+    showAlert('Contraseña actualizada correctamente.');
+    ['passActual','passNueva','passConfirm'].forEach(id => document.getElementById(id).value = '');
+  }
+</script>
+</body>
+</html>

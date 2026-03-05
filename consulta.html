@@ -1,56 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<title>Consulta</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Siniestros – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
 
-<body class="bg-gray-100">
+  <div id="sidebar"></div>
 
-<div class="p-8">
+  <div class="flex-1 flex flex-col overflow-auto">
 
-<h2 class="text-2xl mb-4 font-bold">
-Consulta de Siniestros
-</h2>
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
+        <span>›</span>
+        <span class="text-gray-800 font-medium">Consulta de Siniestros</span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Consulta de Siniestros</h1>
+    </div>
 
-<div class="flex gap-4 mb-4">
+    <div class="p-8">
 
-<input type="date" class="border p-2 rounded">
-<input type="date" class="border p-2 rounded">
+      <!-- Filtros -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-5">
+        <h2 class="text-sm font-semibold text-gray-700 mb-3">Filtros de Búsqueda</h2>
+        <div class="flex flex-wrap gap-3 items-end">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Fecha inicio</label>
+            <input type="date" id="fechaInicio" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Fecha fin</label>
+            <input type="date" id="fechaFin" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Estado</label>
+            <select id="filtroEstado" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Todos</option>
+              <option>Registrado</option>
+              <option>En revisión</option>
+              <option>Aprobado</option>
+              <option>Rechazado</option>
+              <option>En reparación</option>
+              <option>Pérdida total</option>
+              <option>Cerrado</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Ajustador</label>
+            <select id="filtroAjustador" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">Todos</option>
+              <option>Luis Garza</option>
+              <option>María Torres</option>
+            </select>
+          </div>
+          <button onclick="buscar()"
+            class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+            Buscar
+          </button>
+          <button onclick="limpiarFiltros()"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            Limpiar
+          </button>
+        </div>
+      </div>
 
-<button class="bg-blue-700 text-white px-4 rounded">
-Buscar
-</button>
+      <!-- Tabla -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-gray-700">Resultados <span id="countResults" class="text-gray-400 font-normal">(3 siniestros)</span></h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+                <th class="text-left px-5 py-3 font-semibold">No. Póliza</th>
+                <th class="text-left px-5 py-3 font-semibold">Cliente</th>
+                <th class="text-left px-5 py-3 font-semibold">Vehículo</th>
+                <th class="text-left px-5 py-3 font-semibold">Fecha</th>
+                <th class="text-left px-5 py-3 font-semibold">Ajustador</th>
+                <th class="text-left px-5 py-3 font-semibold">Estado</th>
+                <th class="text-left px-5 py-3 font-semibold">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaSiniestros" class="divide-y divide-gray-50">
+            </tbody>
+          </table>
+        </div>
+      </div>
 
+    </div>
+  </div>
 </div>
 
-<table class="w-full bg-white shadow rounded">
+<script src="nav.js"></script>
+<script>
+  document.getElementById('sidebar').innerHTML = renderNav('consulta.html');
 
-<tr class="bg-gray-200">
-<th class="p-2">Póliza</th>
-<th>Fecha</th>
-<th>Estado</th>
-<th>Detalle</th>
-</tr>
+  const siniestros = [
+    { id: 1, poliza: 'POL-00234', cliente: 'Juan Pérez', vehiculo: 'Toyota Corolla ABC-123', fecha: '03/03/2026', ajustador: 'Luis Garza', estado: 'En revisión' },
+    { id: 2, poliza: 'POL-00891', cliente: 'Ana López', vehiculo: 'Nissan Versa XYZ-789', fecha: '28/02/2026', ajustador: 'María Torres', estado: 'Aprobado' },
+    { id: 3, poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic MNO-456', fecha: '20/02/2026', ajustador: 'Luis Garza', estado: 'Cerrado' },
+  ];
 
-<tr class="text-center">
-<td class="p-2">12345</td>
-<td>01/03/2026</td>
-<td>Aceptado</td>
-<td>
-<a href="detalle.html" class="text-blue-600">
-Ver
-</a>
-</td>
-</tr>
+  const estadoBadge = {
+    'Registrado':    'bg-gray-100 text-gray-700',
+    'En revisión':   'bg-yellow-100 text-yellow-700',
+    'Aprobado':      'bg-green-100 text-green-700',
+    'Rechazado':     'bg-red-100 text-red-700',
+    'En reparación': 'bg-blue-100 text-blue-700',
+    'Pérdida total': 'bg-orange-100 text-orange-700',
+    'Cerrado':       'bg-purple-100 text-purple-700',
+  };
 
-</table>
+  function renderTabla(data) {
+    const tbody = document.getElementById('tablaSiniestros');
+    document.getElementById('countResults').textContent = `(${data.length} siniestros)`;
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-gray-400">No se encontraron siniestros con esos filtros.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(s => `
+      <tr class="hover:bg-gray-50 transition-colors">
+        <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.poliza}</td>
+        <td class="px-5 py-3 font-medium text-gray-800">${s.cliente}</td>
+        <td class="px-5 py-3 text-gray-600">${s.vehiculo}</td>
+        <td class="px-5 py-3 text-gray-600">${s.fecha}</td>
+        <td class="px-5 py-3 text-gray-600">${s.ajustador}</td>
+        <td class="px-5 py-3">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${estadoBadge[s.estado] || 'bg-gray-100 text-gray-600'}">
+            ${s.estado}
+          </span>
+        </td>
+        <td class="px-5 py-3">
+          <a href="detalle_siniestro.html" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
+        </td>
+      </tr>
+    `).join('');
+  }
 
-</div>
+  function buscar() {
+    const estado = document.getElementById('filtroEstado').value;
+    const ajustador = document.getElementById('filtroAjustador').value;
+    let filtrado = siniestros;
+    if (estado) filtrado = filtrado.filter(s => s.estado === estado);
+    if (ajustador) filtrado = filtrado.filter(s => s.ajustador === ajustador);
+    renderTabla(filtrado);
+  }
 
+  function limpiarFiltros() {
+    document.getElementById('fechaInicio').value = '';
+    document.getElementById('fechaFin').value = '';
+    document.getElementById('filtroEstado').value = '';
+    document.getElementById('filtroAjustador').value = '';
+    renderTabla(siniestros);
+  }
+
+  renderTabla(siniestros);
+</script>
 </body>
 </html>

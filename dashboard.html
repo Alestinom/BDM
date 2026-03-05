@@ -1,158 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<title>Panel del Sistema</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Principal – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
 
-<body class="bg-gray-100">
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
 
-<div class="flex h-screen">
+  <!-- CONTENIDO -->
+  <div class="flex-1 flex flex-col overflow-auto">
 
-<!-- SIDEBAR -->
-<div class="w-64 bg-blue-900 text-white flex flex-col">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Panel Principal</h1>
+        <p class="text-gray-500 text-sm">Bienvenido, <span id="nombreUsuario" class="font-medium text-blue-700">Usuario</span></p>
+      </div>
+      <div class="flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded-full border border-blue-200">
+        <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+        <span id="rolLabel">Supervisor</span>
+      </div>
+    </div>
 
-<div class="p-4 text-xl font-bold border-b border-blue-700">
-Sistema Siniestros
+    <div class="p-8">
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-500 mb-1">Total Siniestros</p>
+          <p class="text-3xl font-bold text-gray-800">48</p>
+          <p class="text-xs text-blue-600 mt-1">↑ 3 esta semana</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-500 mb-1">En Revisión</p>
+          <p class="text-3xl font-bold text-yellow-500">12</p>
+          <p class="text-xs text-gray-400 mt-1">Pendientes de aprobación</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-500 mb-1">Aprobados</p>
+          <p class="text-3xl font-bold text-green-500">29</p>
+          <p class="text-xs text-gray-400 mt-1">En reparación o cerrados</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <p class="text-xs text-gray-500 mb-1">Rechazados</p>
+          <p class="text-3xl font-bold text-red-500">7</p>
+          <p class="text-xs text-gray-400 mt-1">Este mes</p>
+        </div>
+      </div>
+
+      <!-- Tarjetas de acceso rápido -->
+      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Acceso Rápido</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <a href="registro_siniestro.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
+            <span class="text-blue-600 group-hover:text-white text-xl">＋</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-1">Registrar Siniestro</h3>
+          <p class="text-gray-500 text-sm">Captura un nuevo accidente o incidente.</p>
+        </a>
+
+        <a href="consulta.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-green-600 transition-colors">
+            <span class="text-green-600 group-hover:text-white text-xl">☰</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-1">Consultar Siniestros</h3>
+          <p class="text-gray-500 text-sm">Listado completo con filtros por fecha.</p>
+        </a>
+
+        <a href="busqueda.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-purple-600 transition-colors">
+            <span class="text-purple-600 group-hover:text-white text-xl">⌕</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-1">Búsqueda</h3>
+          <p class="text-gray-500 text-sm">Busca por póliza, placas o cliente.</p>
+        </a>
+
+        <a href="aprobaciones.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+          <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-yellow-500 transition-colors">
+            <span class="text-yellow-600 group-hover:text-white text-xl">✓</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-1">Aprobaciones</h3>
+          <p class="text-gray-500 text-sm">Autoriza o rechaza siniestros pendientes.</p>
+        </a>
+
+        <a href="clientes.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+          <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-teal-600 transition-colors">
+            <span class="text-teal-600 group-hover:text-white text-xl">♟</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-1">Gestión de Clientes</h3>
+          <p class="text-gray-500 text-sm">Administra los asegurados del sistema.</p>
+        </a>
+
+        <a href="usuarios.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+          <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gray-700 transition-colors">
+            <span class="text-gray-600 group-hover:text-white text-xl">⚙</span>
+          </div>
+          <h3 class="font-semibold text-gray-800 mb-1">Usuarios del Sistema</h3>
+          <p class="text-gray-500 text-sm">Gestiona ajustadores y supervisores.</p>
+        </a>
+
+      </div>
+    </div>
+  </div>
 </div>
 
-<nav class="flex-1 p-4 space-y-2">
-
-<a href="dashboard.html"
-class="block p-2 rounded hover:bg-blue-700">
-Panel
-</a>
-
-<a href="registro_siniestro.html"
-class="block p-2 rounded hover:bg-blue-700">
-Registrar Siniestro
-</a>
-
-<a href="consulta.html"
-class="block p-2 rounded hover:bg-blue-700">
-Consultar Siniestros
-</a>
-
-<a href="clientes.html"
-class="block p-2 rounded hover:bg-blue-700">
-Clientes
-</a>
-
-<a href="usuarios.html"
-class="block p-2 rounded hover:bg-blue-700">
-Usuarios
-</a>
-
-</nav>
-
-<div class="p-4 border-t border-blue-700">
-<a href="index.html"
-class="bg-red-500 block text-center p-2 rounded">
-Cerrar Sesión
-</a>
-</div>
-
-</div>
-
-<!-- CONTENIDO -->
-<div class="flex-1 p-8 overflow-auto">
-
-<h1 class="text-3xl font-bold mb-6">
-Panel Principal
-</h1>
-
-<!-- TARJETAS -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-<a href="registro_siniestro.html">
-
-<div class="bg-white p-6 rounded shadow hover:shadow-lg">
-
-<h2 class="text-xl font-bold mb-2">
-Registrar Siniestro
-</h2>
-
-<p class="text-gray-600">
-Registrar un nuevo accidente o incidente.
-</p>
-
-</div>
-
-</a>
-
-<a href="consulta.html">
-
-<div class="bg-white p-6 rounded shadow hover:shadow-lg">
-
-<h2 class="text-xl font-bold mb-2">
-Consultar Siniestros
-</h2>
-
-<p class="text-gray-600">
-Ver los siniestros registrados en el sistema.
-</p>
-
-</div>
-
-</a>
-
-<a href="clientes.html">
-
-<div class="bg-white p-6 rounded shadow hover:shadow-lg">
-
-<h2 class="text-xl font-bold mb-2">
-Gestión de Clientes
-</h2>
-
-<p class="text-gray-600">
-Agregar, modificar o eliminar clientes.
-</p>
-
-</div>
-
-</a>
-
-<a href="usuarios.html">
-
-<div class="bg-white p-6 rounded shadow hover:shadow-lg">
-
-<h2 class="text-xl font-bold mb-2">
-Usuarios
-</h2>
-
-<p class="text-gray-600">
-Administrar usuarios del sistema.
-</p>
-
-</div>
-
-</a>
-
-<a href="seguimiento.html">
-
-<div class="bg-white p-6 rounded shadow hover:shadow-lg">
-
-<h2 class="text-xl font-bold mb-2">
-Seguimiento
-</h2>
-
-<p class="text-gray-600">
-Ver comentarios y estado de los siniestros.
-</p>
-
-</div>
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
+<script src="nav.js"></script>
+<script>
+  document.getElementById('sidebar').innerHTML = renderNav('dashboard.html');
+</script>
 </body>
 </html>

@@ -1,63 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<title>Gestión de Clientes</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
 
-<body class="bg-gray-100">
+  <div id="sidebar"></div>
 
-<div class="bg-blue-800 text-white p-4 flex justify-between">
-<h1 class="text-xl font-bold">Clientes</h1>
-<a href="dashboard.html" class="bg-red-500 px-3 py-1 rounded">Volver</a>
+  <div class="flex-1 flex flex-col overflow-auto">
+
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
+        <span>›</span>
+        <span class="text-gray-800 font-medium">Clientes</span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Gestión de Clientes</h1>
+    </div>
+
+    <div class="p-8">
+
+      <div id="alertMsg" class="hidden text-sm px-4 py-3 rounded-lg mb-5"></div>
+
+      <!-- Formulario colapsable -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 mb-5">
+        <button onclick="toggleForm()" class="w-full flex items-center justify-between px-6 py-4 text-left">
+          <span class="font-semibold text-gray-800" id="formTitle">+ Agregar nuevo cliente</span>
+          <span id="formIcon" class="text-gray-400 text-lg">▾</span>
+        </button>
+        <div id="formContainer" class="hidden border-t border-gray-100 px-6 pb-6 pt-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Nombre *</label>
+              <input id="nombre" type="text" placeholder="Juan"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Apellidos *</label>
+              <input id="apellidos" type="text" placeholder="Pérez López"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Fecha de nacimiento *</label>
+              <input id="fechaNac" type="date"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Género *</label>
+              <select id="genero" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Seleccionar</option>
+                <option>Masculino</option>
+                <option>Femenino</option>
+                <option>Prefiero no decir</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico *</label>
+              <input id="correo" type="email" placeholder="ejemplo@correo.com"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Alias *</label>
+              <input id="alias" type="text" placeholder="@miusuario"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
+              <input id="telefono" type="tel" placeholder="81 1234 5678"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Número de cliente</label>
+              <input id="numCliente" type="text" placeholder="CLI-0001"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <button onclick="guardarCliente()"
+              class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
+              Guardar Cliente
+            </button>
+            <button onclick="toggleForm()"
+              class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-5 py-3 border-b border-gray-100">
+          <h2 class="text-sm font-semibold text-gray-700">Lista de Clientes</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+                <th class="text-left px-5 py-3 font-semibold">Nombre</th>
+                <th class="text-left px-5 py-3 font-semibold">Correo</th>
+                <th class="text-left px-5 py-3 font-semibold">Teléfono</th>
+                <th class="text-left px-5 py-3 font-semibold">Alias</th>
+                <th class="text-left px-5 py-3 font-semibold">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              <tr class="hover:bg-gray-50">
+                <td class="px-5 py-3 font-medium text-gray-800">Juan Pérez</td>
+                <td class="px-5 py-3 text-gray-600">juan@email.com</td>
+                <td class="px-5 py-3 text-gray-600">81 2345 6789</td>
+                <td class="px-5 py-3 text-gray-500 font-mono text-xs">@jperez</td>
+                <td class="px-5 py-3 space-x-2">
+                  <button onclick="confirmarEliminar('Juan Pérez')" class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-lg hover:bg-yellow-100 transition-colors">Editar</button>
+                  <button onclick="confirmarEliminar('Juan Pérez')" class="text-xs bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-lg hover:bg-red-100 transition-colors">Eliminar</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-5 py-3 font-medium text-gray-800">Ana López</td>
+                <td class="px-5 py-3 text-gray-600">ana@email.com</td>
+                <td class="px-5 py-3 text-gray-600">81 9876 5432</td>
+                <td class="px-5 py-3 text-gray-500 font-mono text-xs">@alopez</td>
+                <td class="px-5 py-3 space-x-2">
+                  <button class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-lg hover:bg-yellow-100 transition-colors">Editar</button>
+                  <button onclick="confirmarEliminar('Ana López')" class="text-xs bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-lg hover:bg-red-100 transition-colors">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<div class="p-6">
-
-<h2 class="text-xl font-bold mb-4">Agregar Cliente</h2>
-
-<div class="bg-white p-4 rounded shadow mb-6">
-
-<input class="border p-2 mb-2 w-full" placeholder="Nombre">
-<input class="border p-2 mb-2 w-full" placeholder="Apellidos">
-<input class="border p-2 mb-2 w-full" placeholder="Correo">
-<input class="border p-2 mb-2 w-full" placeholder="Teléfono">
-
-<button class="bg-green-600 text-white px-4 py-2 rounded">
-Guardar Cliente
-</button>
-
+<!-- Modal confirmación eliminar -->
+<div id="modalEliminar" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-2xl p-6 w-80">
+    <h3 class="font-bold text-gray-800 mb-2">¿Eliminar cliente?</h3>
+    <p class="text-sm text-gray-500 mb-5">Esta acción no se puede deshacer. Se eliminarán los datos de <strong id="nombreEliminar"></strong>.</p>
+    <div class="flex gap-3">
+      <button onclick="cerrarModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-semibold">Cancelar</button>
+      <button onclick="eliminar()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg text-sm font-semibold">Eliminar</button>
+    </div>
+  </div>
 </div>
 
-<h2 class="text-xl font-bold mb-2">Lista de Clientes</h2>
+<script src="nav.js"></script>
+<script>
+  document.getElementById('sidebar').innerHTML = renderNav('clientes.html');
 
-<table class="w-full bg-white shadow">
+  function toggleForm() {
+    const cont = document.getElementById('formContainer');
+    const icon = document.getElementById('formIcon');
+    const open = cont.classList.contains('hidden');
+    cont.classList.toggle('hidden', !open);
+    icon.textContent = open ? '▴' : '▾';
+  }
 
-<tr class="bg-gray-200">
-<th class="p-2">Nombre</th>
-<th>Correo</th>
-<th>Teléfono</th>
-<th>Acciones</th>
-</tr>
+  function showAlert(msg, tipo = 'success') {
+    const el = document.getElementById('alertMsg');
+    el.className = `text-sm px-4 py-3 rounded-lg mb-5 ${tipo === 'error' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
 
-<tr class="text-center">
-<td class="p-2">Juan Pérez</td>
-<td>juan@email.com</td>
-<td>8123456789</td>
+  function calcularEdad(fecha) {
+    const hoy = new Date(), nac = new Date(fecha);
+    let edad = hoy.getFullYear() - nac.getFullYear();
+    if (hoy.getMonth() - nac.getMonth() < 0 || (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())) edad--;
+    return edad;
+  }
 
-<td class="space-x-2">
-<button class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
-<button class="bg-red-600 text-white px-2 py-1 rounded">Eliminar</button>
-</td>
-</tr>
+  function guardarCliente() {
+    const reqs = ['nombre','apellidos','fechaNac','genero','correo','alias'];
+    for (const id of reqs) {
+      if (!document.getElementById(id).value.trim()) { showAlert('Completa todos los campos obligatorios.', 'error'); return; }
+    }
+    if (calcularEdad(document.getElementById('fechaNac').value) < 18) {
+      showAlert('El cliente debe ser mayor de 18 años.', 'error'); return;
+    }
+    showAlert('Cliente guardado exitosamente.');
+    toggleForm();
+  }
 
-</table>
+  function confirmarEliminar(nombre) {
+    document.getElementById('nombreEliminar').textContent = nombre;
+    document.getElementById('modalEliminar').classList.remove('hidden');
+  }
 
-</div>
+  function cerrarModal() { document.getElementById('modalEliminar').classList.add('hidden'); }
 
+  function eliminar() {
+    cerrarModal();
+    showAlert('Cliente eliminado correctamente.');
+  }
+</script>
 </body>
 </html>

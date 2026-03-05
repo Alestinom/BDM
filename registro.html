@@ -1,36 +1,291 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Usuario – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-    <h2>Registro de Usuario</h2>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
 
-    <input type="text" placeholder="Nombre">
-    <input type="text" placeholder="Apellidos">
-    <input type="date">
-    
-    <select>
-        <option>Género</option>
-        <option>Masculino</option>
-        <option>Femenino</option>
-    </select>
+  <div id="sidebar"></div>
 
-    <input type="email" placeholder="Correo">
-    <input type="password" placeholder="Contraseña">
+  <div class="flex-1 flex flex-col overflow-auto">
 
-    <select>
-        <option>Tipo de Usuario</option>
-        <option>Ajustador</option>
-        <option>Supervisor</option>
-        <option>Asegurado</option>
-    </select>
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
+        <span>›</span>
+        <span class="text-gray-800 font-medium">Registrar Usuario</span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800">Registrar Usuario</h1>
+      <p class="text-gray-500 text-sm" id="subtitulo"></p>
+    </div>
 
-    <button>Registrar</button>
+    <div class="p-8">
+      <div class="max-w-2xl mx-auto">
+
+        <!-- Banner según rol activo -->
+        <div id="bannerRol" class="rounded-xl p-4 mb-6 text-sm flex items-start gap-3"></div>
+
+        <div id="alertMsg" class="hidden text-sm px-4 py-3 rounded-lg mb-5"></div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+
+          <!-- Tipo de cuenta (restringido por rol) -->
+          <div class="mb-5 pb-4 border-b border-gray-100">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Tipo de cuenta a crear *</label>
+            <select id="tipoUsuario" onchange="onTipoChange()"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </select>
+            <p id="tipoHint" class="text-xs text-gray-400 mt-1.5 italic"></p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Nombre *</label>
+              <input id="nombre" type="text" placeholder="Juan"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Apellidos *</label>
+              <input id="apellidos" type="text" placeholder="Pérez López"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Fecha de Nacimiento * <span class="text-gray-400">(mayor de 18)</span></label>
+              <input id="fechaNac" type="date"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Género *</label>
+              <select id="genero" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Seleccionar</option>
+                <option>Masculino</option>
+                <option>Femenino</option>
+                <option>Prefiero no decir</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico *</label>
+              <input id="correo" type="email" placeholder="ejemplo@correo.com"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Alias * <span class="text-gray-400">(único)</span></label>
+              <input id="alias" type="text" placeholder="@usuario"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- Solo para Asegurados -->
+            <div id="campoTelefono" class="hidden sm:col-span-2">
+              <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
+              <input id="telefono" type="tel" placeholder="81 1234 5678"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-medium text-gray-700 mb-1">Foto de perfil <span class="text-gray-400">(opcional)</span></label>
+              <input type="file" accept="image/*"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer">
+            </div>
+
+          </div>
+
+          <!-- Contraseña temporal -->
+          <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <div class="flex items-center justify-between mb-2">
+              <p class="text-xs font-semibold text-amber-800">Contraseña temporal generada automáticamente</p>
+              <button type="button" onclick="regenerarPassword()"
+                class="text-xs text-amber-700 underline hover:text-amber-900 transition-colors">
+                Regenerar
+              </button>
+            </div>
+            <div class="flex items-center gap-3">
+              <code id="passTemp"
+                class="flex-1 bg-white border border-amber-200 rounded-lg px-3 py-2 text-sm font-mono text-gray-800 tracking-widest select-all">
+              </code>
+              <button type="button" onclick="copiarPass()"
+                class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-2 rounded-lg transition-colors font-medium whitespace-nowrap">
+                Copiar
+              </button>
+            </div>
+            <p class="text-xs text-amber-700 mt-2">
+              ⚠ El usuario deberá cambiar esta contraseña en su primer inicio de sesión.
+            </p>
+          </div>
+
+          <div class="flex gap-3 mt-6">
+            <button onclick="guardarUsuario()"
+              class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
+              Crear Usuario
+            </button>
+            <a href="dashboard.html"
+              class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors text-sm text-center">
+              Cancelar
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Nota técnica -->
+        <div class="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-700 space-y-1">
+          <p class="font-semibold">ℹ Jerarquía de usuarios</p>
+          <p>· El primer <strong>Supervisor</strong> se inserta directamente en la base de datos vía script SQL.</p>
+          <p>· El <strong>Supervisor</strong> da de alta Ajustadores y Asegurados desde esta pantalla.</p>
+          <p>· El <strong>Ajustador</strong> solo puede dar de alta Asegurados.</p>
+          <p>· Los <strong>Asegurados</strong> no tienen acceso a esta pantalla.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
+
+<script src="nav.js"></script>
+<script>
+  document.getElementById('sidebar').innerHTML = renderNav('usuarios.html');
+
+  // ─── Simula la sesión activa ────────────────────────────────────────────────
+  // En producción, este valor lo inyecta PHP desde $_SESSION['tipo_usuario']
+  const ROL_ACTIVO = 'Supervisor'; // 'Supervisor' | 'Ajustador'
+  // ────────────────────────────────────────────────────────────────────────────
+
+  const CONFIG = {
+    Supervisor: {
+      puedeCrear: ['Ajustador', 'Asegurado'],
+      banner: {
+        cls: 'bg-blue-50 border border-blue-200 text-blue-800',
+        icono: '🔵',
+        msg: 'Estás registrando como <strong>Supervisor</strong>. Puedes crear cuentas de Ajustador y Asegurado.'
+      }
+    },
+    Ajustador: {
+      puedeCrear: ['Asegurado'],
+      banner: {
+        cls: 'bg-teal-50 border border-teal-200 text-teal-800',
+        icono: '🟢',
+        msg: 'Estás registrando como <strong>Ajustador</strong>. Solo puedes dar de alta Asegurados.'
+      }
+    }
+  };
+
+  const HINTS = {
+    Ajustador: 'Podrá registrar siniestros y dar de alta asegurados.',
+    Asegurado: 'Podrá consultar y dar seguimiento a sus propios siniestros.',
+  };
+
+  function inicializar() {
+    const cfg = CONFIG[ROL_ACTIVO];
+    if (!cfg) { window.location.href = 'dashboard.html'; return; }
+
+    // Banner
+    const { cls, icono, msg } = cfg.banner;
+    const banner = document.getElementById('bannerRol');
+    banner.className = `rounded-xl p-4 mb-6 text-sm flex items-start gap-3 font-medium ${cls}`;
+    banner.innerHTML = `<span class="mt-0.5">${icono}</span><span>${msg}</span>`;
+    document.getElementById('subtitulo').textContent = `Sesión activa como ${ROL_ACTIVO}`;
+
+    // Poblar select de tipo
+    const sel = document.getElementById('tipoUsuario');
+    sel.innerHTML = '<option value="">Seleccionar tipo de cuenta</option>';
+    cfg.puedeCrear.forEach(t => sel.innerHTML += `<option value="${t}">${t}</option>`);
+  }
+
+  function onTipoChange() {
+    const tipo = document.getElementById('tipoUsuario').value;
+    document.getElementById('tipoHint').textContent = HINTS[tipo] || '';
+    document.getElementById('campoTelefono').classList.toggle('hidden', tipo !== 'Asegurado');
+  }
+
+  // Genera contraseña que cumple requisitos: mín. 8 chars, 1 mayúscula, 1 número, 1 especial
+  function generarPassword() {
+    const mayus  = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const minus  = 'abcdefghjkmnpqrstuvwxyz';
+    const nums   = '23456789';
+    const espec  = '@#$!';
+    const todos  = mayus + minus + nums + espec;
+    let p = mayus[~~(Math.random()*mayus.length)]
+          + nums[~~(Math.random()*nums.length)]
+          + espec[~~(Math.random()*espec.length)];
+    for (let i = 0; i < 6; i++) p += todos[~~(Math.random()*todos.length)];
+    return p.split('').sort(() => Math.random() - 0.5).join('');
+  }
+
+  function regenerarPassword() {
+    document.getElementById('passTemp').textContent = generarPassword();
+  }
+
+  function copiarPass() {
+    const pass = document.getElementById('passTemp').textContent.trim();
+    navigator.clipboard.writeText(pass).then(() => {
+      const btn = event.currentTarget;
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copiado';
+      setTimeout(() => btn.textContent = orig, 1600);
+    });
+  }
+
+  function showAlert(msg, tipo = 'error') {
+    const el = document.getElementById('alertMsg');
+    el.className = `text-sm px-4 py-3 rounded-lg mb-5 ${
+      tipo === 'error'
+        ? 'bg-red-50 border border-red-200 text-red-700'
+        : 'bg-green-50 border border-green-200 text-green-700'
+    }`;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function calcularEdad(fecha) {
+    const hoy = new Date(), nac = new Date(fecha);
+    let e = hoy.getFullYear() - nac.getFullYear();
+    const m = hoy.getMonth() - nac.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) e--;
+    return e;
+  }
+
+  function guardarUsuario() {
+    const tipo = document.getElementById('tipoUsuario').value;
+    if (!tipo) { showAlert('Selecciona el tipo de cuenta a crear.'); return; }
+
+    const reqs = ['nombre','apellidos','fechaNac','genero','correo','alias'];
+    for (const id of reqs) {
+      if (!document.getElementById(id).value.trim()) {
+        showAlert('Completa todos los campos obligatorios.'); return;
+      }
+    }
+
+    if (calcularEdad(document.getElementById('fechaNac').value) < 18) {
+      showAlert('El usuario debe ser mayor de 18 años.'); return;
+    }
+
+    const pass = document.getElementById('passTemp').textContent.trim();
+
+    // En producción: POST a PHP → llamada al Stored Procedure sp_CrearUsuario
+    console.log('Crear usuario:', {
+      tipo,
+      nombre: document.getElementById('nombre').value,
+      apellidos: document.getElementById('apellidos').value,
+      correo: document.getElementById('correo').value,
+      alias: document.getElementById('alias').value,
+      password_temporal: pass,
+      creado_por: ROL_ACTIVO
+    });
+
+    showAlert(`${tipo} creado exitosamente. Comparte la contraseña temporal con el usuario.`, 'success');
+  }
+
+  inicializar();
+  regenerarPassword();
+</script>
 </body>
 </html>

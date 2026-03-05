@@ -1,55 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<title>Seguimiento del Siniestro</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguimiento – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 min-h-screen">
+<div class="flex min-h-screen">
 
-<body class="bg-gray-100">
+  <div id="sidebar"></div>
 
-<div class="bg-blue-800 text-white p-4 flex justify-between">
-<h1 class="text-xl font-bold">Seguimiento del Siniestro</h1>
-<a href="detalle.html" class="bg-red-500 px-3 py-1 rounded">Volver</a>
+  <div class="flex-1 flex flex-col overflow-auto">
+
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
+        <span>›</span>
+        <a href="detalle_siniestro.html" class="hover:text-blue-600">Detalle Siniestro</a>
+        <span>›</span>
+        <span class="text-gray-800 font-medium">Seguimiento</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-gray-800">Seguimiento del Siniestro</h1>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700">
+          ● En revisión
+        </span>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div class="max-w-3xl mx-auto space-y-5">
+
+        <!-- Info resumida -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div class="flex flex-wrap gap-6">
+            <div>
+              <p class="text-xs text-gray-500">Cliente</p>
+              <p class="font-medium text-gray-800 text-sm">Juan Pérez</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Póliza</p>
+              <p class="font-medium text-gray-800 text-sm font-mono">POL-00234</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Vehículo</p>
+              <p class="font-medium text-gray-800 text-sm">Toyota Corolla · ABC-123</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Fecha compromiso</p>
+              <p class="font-medium text-blue-700 text-sm">15/03/2026</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col" style="min-height: 450px;">
+          <div class="px-5 py-3 border-b border-gray-100">
+            <h2 class="text-sm font-semibold text-gray-700">Comentarios y Seguimiento</h2>
+            <p class="text-xs text-gray-400">Conversación sobre el siniestro entre Asegurado, Ajustador y Supervisor</p>
+          </div>
+
+          <!-- Mensajes -->
+          <div id="chatMessages" class="flex-1 p-5 space-y-4 overflow-y-auto" style="max-height:400px;">
+
+            <!-- Asegurado -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">JP</div>
+              <div class="flex-1 max-w-sm">
+                <div class="flex items-baseline gap-2 mb-1">
+                  <span class="text-xs font-semibold text-gray-700">Juan Pérez</span>
+                  <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">Asegurado</span>
+                  <span class="text-xs text-gray-400">03/03 14:52</span>
+                </div>
+                <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
+                  ¿Cuándo estará lista la reparación de mi vehículo?
+                </div>
+              </div>
+            </div>
+
+            <!-- Supervisor -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">RS</div>
+              <div class="flex-1 max-w-sm">
+                <div class="flex items-baseline gap-2 mb-1">
+                  <span class="text-xs font-semibold text-gray-700">Roberto Soto</span>
+                  <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded">Supervisor</span>
+                  <span class="text-xs text-gray-400">03/03 16:10</span>
+                </div>
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
+                  Hola Juan, la unidad está en revisión. La fecha estimada de entrega es el 15 de marzo. Le avisaremos de cualquier cambio.
+                </div>
+              </div>
+            </div>
+
+            <!-- Ajustador -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">LG</div>
+              <div class="flex-1 max-w-sm">
+                <div class="flex items-baseline gap-2 mb-1">
+                  <span class="text-xs font-semibold text-gray-700">Luis Garza</span>
+                  <span class="text-xs px-1.5 py-0.5 bg-teal-100 text-teal-600 rounded">Ajustador</span>
+                  <span class="text-xs text-gray-400">04/03 09:30</span>
+                </div>
+                <div class="bg-teal-50 border border-teal-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
+                  Acabo de subir fotos del estado actual de la defensa trasera. Ya está en el taller.
+                </div>
+              </div>
+            </div>
+
+            <!-- Asegurado -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">JP</div>
+              <div class="flex-1 max-w-sm">
+                <div class="flex items-baseline gap-2 mb-1">
+                  <span class="text-xs font-semibold text-gray-700">Juan Pérez</span>
+                  <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">Asegurado</span>
+                  <span class="text-xs text-gray-400">04/03 10:05</span>
+                </div>
+                <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
+                  Perfecto, muchas gracias por la información.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Input del chat -->
+          <div class="px-5 py-4 border-t border-gray-100">
+            <div id="alertChat" class="hidden text-sm px-4 py-2 rounded-lg mb-3 bg-red-50 border border-red-200 text-red-700"></div>
+            <div class="flex gap-3">
+              <textarea id="nuevoMensaje" rows="2" placeholder="Escribe un comentario o pregunta..."
+                class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+              <button onclick="enviarMensaje()"
+                class="bg-blue-700 hover:bg-blue-800 text-white px-5 rounded-xl text-sm font-medium transition-colors self-end py-2.5">
+                Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <a href="detalle_siniestro.html"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+            ← Volver al Detalle
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="max-w-3xl mx-auto mt-6 bg-white p-6 rounded shadow">
+<script src="nav.js"></script>
+<script>
+  document.getElementById('sidebar').innerHTML = renderNav('consulta.html');
 
-<h2 class="text-xl font-bold mb-4">Comentarios</h2>
+  function enviarMensaje() {
+    const input = document.getElementById('nuevoMensaje');
+    const msg = input.value.trim();
+    const alertEl = document.getElementById('alertChat');
 
-<div class="space-y-4 mb-6">
+    if (!msg) {
+      alertEl.textContent = 'Escribe un mensaje antes de enviar.';
+      alertEl.classList.remove('hidden');
+      return;
+    }
+    alertEl.classList.add('hidden');
 
-<div class="bg-gray-200 p-3 rounded">
-<p class="font-bold">Asegurado</p>
-<p>¿Cuándo estará lista la reparación?</p>
-</div>
+    const ahora = new Date();
+    const hora = `${String(ahora.getDate()).padStart(2,'0')}/${String(ahora.getMonth()+1).padStart(2,'0')} ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
 
-<div class="bg-blue-100 p-3 rounded">
-<p class="font-bold">Supervisor</p>
-<p>La unidad está en revisión, pronto tendremos actualización.</p>
-</div>
+    const container = document.getElementById('chatMessages');
+    container.innerHTML += `
+      <div class="flex gap-3">
+        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">YO</div>
+        <div class="flex-1 max-w-sm">
+          <div class="flex items-baseline gap-2 mb-1">
+            <span class="text-xs font-semibold text-gray-700">Tú</span>
+            <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded">Supervisor</span>
+            <span class="text-xs text-gray-400">${hora}</span>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">${msg}</div>
+        </div>
+      </div>`;
 
-<div class="bg-gray-200 p-3 rounded">
-<p class="font-bold">Asegurado</p>
-<p>Perfecto, gracias.</p>
-</div>
+    input.value = '';
+    container.scrollTop = container.scrollHeight;
+  }
 
-</div>
-
-<h2 class="text-lg font-bold mb-2">Agregar Comentario</h2>
-
-<textarea
-class="w-full border p-2 rounded mb-3"
-placeholder="Escribir comentario..."></textarea>
-
-<button class="bg-green-600 text-white px-4 py-2 rounded">
-Enviar Comentario
-</button>
-
-</div>
-
+  // Enviar con Enter (Shift+Enter para nueva línea)
+  document.getElementById('nuevoMensaje').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      enviarMensaje();
+    }
+  });
+</script>
 </body>
 </html>
