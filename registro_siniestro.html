@@ -1,26 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Registro Siniestro</title>
-    <link rel="stylesheet" href="styles.css">
+
+<meta charset="UTF-8">
+<title>Registrar Siniestro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body>
-    
-    <div class="container">
-    <h2>Registrar Siniestro</h2>
 
-    <input type="text" placeholder="Número de póliza">
-    <input type="date">
-    <input type="time">
-    <input type="text" placeholder="Ubicación">
-    <textarea placeholder="Descripción"></textarea>
+<body class="bg-gray-100">
 
-    <input type="file">
-
-    <button>Guardar</button>
-    
+<div class="bg-blue-800 text-white p-4 flex justify-between">
+<h1 class="text-xl font-bold">Registrar Siniestro</h1>
+<a href="dashboard.html" class="bg-red-500 px-3 py-1 rounded">Volver</a>
 </div>
+
+<div class="max-w-2xl mx-auto bg-white p-6 mt-6 rounded shadow">
+
+<h2 class="text-xl font-bold mb-4">Datos del Siniestro</h2>
+
+<label class="block mb-1">Cliente</label>
+<select class="w-full border p-2 mb-3 rounded">
+<option>Seleccionar cliente</option>
+<option>Juan Pérez</option>
+<option>Ana López</option>
+</select>
+
+<label class="block mb-1">Vehículo</label>
+<select class="w-full border p-2 mb-3 rounded">
+<option>Seleccionar vehículo</option>
+<option>ABC-123 Toyota Corolla</option>
+<option>XYZ-789 Nissan Versa</option>
+</select>
+
+<label class="block mb-1">Número de Póliza</label>
+<input class="w-full border p-2 mb-3 rounded" placeholder="Póliza">
+
+<label class="block mb-1">Fecha</label>
+<input type="date" class="w-full border p-2 mb-3 rounded">
+
+<label class="block mb-1">Hora</label>
+<input type="time" class="w-full border p-2 mb-3 rounded">
+
+<label class="block mb-1">Ubicación</label>
+<input class="w-full border p-2 mb-3 rounded" placeholder="Ubicación">
+
+<label class="block mb-1">Descripción</label>
+<textarea class="w-full border p-2 mb-3 rounded"></textarea>
+
+<label class="block mb-1">Subir Imagen del Siniestro</label>
+<input type="file" class="w-full border p-2 mb-4 rounded">
+
+<button class="w-full bg-green-600 text-white p-2 rounded">
+Guardar Siniestro
+</button>
+
+</div>
+
 </body>
 </html>

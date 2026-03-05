@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<title>Panel del Sistema</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="flex h-screen">
+
+<!-- SIDEBAR -->
+<div class="w-64 bg-blue-900 text-white flex flex-col">
+
+<div class="p-4 text-xl font-bold border-b border-blue-700">
+Sistema Siniestros
+</div>
+
+<nav class="flex-1 p-4 space-y-2">
+
+<a href="dashboard.html"
+class="block p-2 rounded hover:bg-blue-700">
+Panel
+</a>
+
+<a href="registro_siniestro.html"
+class="block p-2 rounded hover:bg-blue-700">
+Registrar Siniestro
+</a>
+
+<a href="consulta.html"
+class="block p-2 rounded hover:bg-blue-700">
+Consultar Siniestros
+</a>
+
+<a href="clientes.html"
+class="block p-2 rounded hover:bg-blue-700">
+Clientes
+</a>
+
+<a href="usuarios.html"
+class="block p-2 rounded hover:bg-blue-700">
+Usuarios
+</a>
+
+</nav>
+
+<div class="p-4 border-t border-blue-700">
+<a href="index.html"
+class="bg-red-500 block text-center p-2 rounded">
+Cerrar Sesión
+</a>
+</div>
+
+</div>
+
+<!-- CONTENIDO -->
+<div class="flex-1 p-8 overflow-auto">
+
+<h1 class="text-3xl font-bold mb-6">
+Panel Principal
+</h1>
+
+<!-- TARJETAS -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<a href="registro_siniestro.html">
+
+<div class="bg-white p-6 rounded shadow hover:shadow-lg">
+
+<h2 class="text-xl font-bold mb-2">
+Registrar Siniestro
+</h2>
+
+<p class="text-gray-600">
+Registrar un nuevo accidente o incidente.
+</p>
+
+</div>
+
+</a>
+
+<a href="consulta.html">
+
+<div class="bg-white p-6 rounded shadow hover:shadow-lg">
+
+<h2 class="text-xl font-bold mb-2">
+Consultar Siniestros
+</h2>
+
+<p class="text-gray-600">
+Ver los siniestros registrados en el sistema.
+</p>
+
+</div>
+
+</a>
+
+<a href="clientes.html">
+
+<div class="bg-white p-6 rounded shadow hover:shadow-lg">
+
+<h2 class="text-xl font-bold mb-2">
+Gestión de Clientes
+</h2>
+
+<p class="text-gray-600">
+Agregar, modificar o eliminar clientes.
+</p>
+
+</div>
+
+</a>
+
+<a href="usuarios.html">
+
+<div class="bg-white p-6 rounded shadow hover:shadow-lg">
+
+<h2 class="text-xl font-bold mb-2">
+Usuarios
+</h2>
+
+<p class="text-gray-600">
+Administrar usuarios del sistema.
+</p>
+
+</div>
+
+</a>
+
+<a href="seguimiento.html">
+
+<div class="bg-white p-6 rounded shadow hover:shadow-lg">
+
+<h2 class="text-xl font-bold mb-2">
+Seguimiento
+</h2>
+
+<p class="text-gray-600">
+Ver comentarios y estado de los siniestros.
+</p>
+
+</div>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

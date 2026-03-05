@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Login</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body>
-    
-<div class="container">
-    <h2>Inicio de Sesión</h2>
 
-    <input type="email" placeholder="Correo">
-    <input type="password" placeholder="Contraseña">
+<body class="bg-blue-900 flex items-center justify-center h-screen">
 
-    <button>Ingresar</button>
+<div class="bg-white p-8 rounded-xl shadow-lg w-80">
 
-    <p><a href="registro.html">Registrarse</a></p>
+<h2 class="text-2xl font-bold text-center mb-6">
+Inicio de Sesión
+</h2>
+
+<input 
+type="email"
+placeholder="Correo"
+class="w-full border p-2 mb-3 rounded"
+/>
+
+<input 
+type="password"
+placeholder="Contraseña"
+class="w-full border p-2 mb-4 rounded"
+/>
+
+<a href="dashboard.html">
+<button class="w-full bg-blue-700 text-white p-2 rounded hover:bg-blue-800">
+Ingresar
+</button>
+</a>
+
+<p class="text-center mt-4 text-sm">
+<a href="registro.html" class="text-blue-600">Registrarse</a>
+</p>
+
 </div>
-
 
 </body>
 </html>
-
-
-
 
 
