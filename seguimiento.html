@@ -152,9 +152,11 @@
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
-  document.getElementById('sidebar').innerHTML = renderNav('consulta.html');
+  SESSION.requerir('seguimiento.html');
+  document.getElementById('sidebar').innerHTML = renderNav('seguimiento.html');
 
   function enviarMensaje() {
     const input = document.getElementById('nuevoMensaje');

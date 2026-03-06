@@ -160,8 +160,10 @@
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
+  SESSION.requerir('aprobaciones.html');
   document.getElementById('sidebar').innerHTML = renderNav('aprobaciones.html');
 
   function resolver(cardId, resId) {

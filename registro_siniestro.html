@@ -47,10 +47,7 @@
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Vehículo *</label>
               <select id="vehiculo" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Seleccionar vehículo</option>
-                <option value="1">ABC-123 · Toyota Corolla 2021</option>
-                <option value="2">XYZ-789 · Nissan Versa 2020</option>
-                <option value="3">MNO-456 · Honda Civic 2022</option>
+                <option value="">Selecciona primero un cliente</option>
               </select>
             </div>
 
@@ -141,15 +138,36 @@
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
+  SESSION.requerir('registro_siniestro.html');
   document.getElementById('sidebar').innerHTML = renderNav('registro_siniestro.html');
+
+  // Vehículos por cliente (en producción se cargará desde BD vía SP)
+  const vehiculosPorCliente = {
+    '1': [{ id: 1, label: 'ABC-123 · Toyota Corolla 2021', serie: '3VWFE21C04M000001' }],
+    '2': [{ id: 2, label: 'XYZ-789 · Nissan Versa 2020',  serie: '3N1BC1APXAL000002' }],
+    '3': [{ id: 3, label: 'MNO-456 · Honda Civic 2022',   serie: '2HGFG3B59DH000003' }],
+  };
 
   function cargarPoliza() {
     const sel = document.getElementById('cliente');
     const opt = sel.options[sel.selectedIndex];
     document.getElementById('poliza').value = opt.dataset.poliza || '';
     document.getElementById('compania').value = opt.dataset.compania || '';
+
+    // Cargar vehículos del cliente seleccionado
+    const selVehiculo = document.getElementById('vehiculo');
+    const clienteId = sel.value;
+    selVehiculo.innerHTML = '<option value="">Seleccionar vehículo</option>';
+    if (clienteId && vehiculosPorCliente[clienteId]) {
+      vehiculosPorCliente[clienteId].forEach(v => {
+        selVehiculo.innerHTML += `<option value="${v.id}" data-serie="${v.serie}">${v.label}</option>`;
+      });
+    } else {
+      selVehiculo.innerHTML = '<option value="">Selecciona primero un cliente</option>';
+    }
   }
 
   function previsualizarImagenes(input) {

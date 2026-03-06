@@ -96,14 +96,16 @@
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
+  SESSION.requerir('consulta.html');
   document.getElementById('sidebar').innerHTML = renderNav('consulta.html');
 
   const siniestros = [
-    { id: 1, poliza: 'POL-00234', cliente: 'Juan Pérez', vehiculo: 'Toyota Corolla ABC-123', fecha: '03/03/2026', ajustador: 'Luis Garza', estado: 'En revisión' },
-    { id: 2, poliza: 'POL-00891', cliente: 'Ana López', vehiculo: 'Nissan Versa XYZ-789', fecha: '28/02/2026', ajustador: 'María Torres', estado: 'Aprobado' },
-    { id: 3, poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic MNO-456', fecha: '20/02/2026', ajustador: 'Luis Garza', estado: 'Cerrado' },
+    { id: 1, poliza: 'POL-00234', cliente: 'Juan Pérez', vehiculo: 'Toyota Corolla ABC-123', fecha: '2026-03-03', ajustador: 'Luis Garza', estado: 'En revisión' },
+    { id: 2, poliza: 'POL-00891', cliente: 'Ana López', vehiculo: 'Nissan Versa XYZ-789', fecha: '2026-02-28', ajustador: 'María Torres', estado: 'Aprobado' },
+    { id: 3, poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic MNO-456', fecha: '2026-02-20', ajustador: 'Luis Garza', estado: 'Cerrado' },
   ];
 
   const estadoBadge = {
@@ -123,12 +125,14 @@
       tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-gray-400">No se encontraron siniestros con esos filtros.</td></tr>`;
       return;
     }
-    tbody.innerHTML = data.map(s => `
+    tbody.innerHTML = data.map(s => {
+      const fechaDisplay = s.fecha.split('-').reverse().join('/');
+      return `
       <tr class="hover:bg-gray-50 transition-colors">
         <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.poliza}</td>
         <td class="px-5 py-3 font-medium text-gray-800">${s.cliente}</td>
         <td class="px-5 py-3 text-gray-600">${s.vehiculo}</td>
-        <td class="px-5 py-3 text-gray-600">${s.fecha}</td>
+        <td class="px-5 py-3 text-gray-600">${fechaDisplay}</td>
         <td class="px-5 py-3 text-gray-600">${s.ajustador}</td>
         <td class="px-5 py-3">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${estadoBadge[s.estado] || 'bg-gray-100 text-gray-600'}">
@@ -139,15 +143,21 @@
           <a href="detalle_siniestro.html" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
         </td>
       </tr>
-    `).join('');
+    `}).join('');
   }
 
   function buscar() {
-    const estado = document.getElementById('filtroEstado').value;
+    const estado    = document.getElementById('filtroEstado').value;
     const ajustador = document.getElementById('filtroAjustador').value;
+    const fechaIni  = document.getElementById('fechaInicio').value; // YYYY-MM-DD
+    const fechaFin  = document.getElementById('fechaFin').value;    // YYYY-MM-DD
+
     let filtrado = siniestros;
-    if (estado) filtrado = filtrado.filter(s => s.estado === estado);
+    if (estado)    filtrado = filtrado.filter(s => s.estado === estado);
     if (ajustador) filtrado = filtrado.filter(s => s.ajustador === ajustador);
+    if (fechaIni)  filtrado = filtrado.filter(s => s.fecha >= fechaIni);
+    if (fechaFin)  filtrado = filtrado.filter(s => s.fecha <= fechaFin);
+
     renderTabla(filtrado);
   }
 

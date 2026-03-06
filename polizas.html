@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pólizas – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="flex min-h-screen">
+  <div id="sidebar"></div>
+  <div class="flex-1 flex flex-col overflow-auto">
+
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <h1 class="text-2xl font-bold text-gray-800">Pólizas</h1>
+      <p class="text-gray-500 text-sm mt-0.5">Registra las pólizas disponibles por compañía para asignar a los asegurados.</p>
+    </div>
+
+    <div class="p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Formulario -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-6">
+            <h2 id="formPolTitle" class="text-base font-semibold text-gray-700 mb-5 pb-3 border-b border-gray-100 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              Nueva Póliza
+            </h2>
+
+            <div id="alertPol" class="hidden mb-4 px-3 py-2.5 rounded-lg text-xs border flex items-center gap-2"></div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Compañía <span class="text-red-500">*</span></label>
+                <select id="pol_compania" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
+                  <option value="">Seleccionar compañía...</option>
+                  <option value="1">AXA Seguros</option>
+                  <option value="2">GNP Seguros</option>
+                  <option value="3">Qualitas</option>
+                  <option value="4">HDI Seguros</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Número de Póliza <span class="text-red-500">*</span></label>
+                <input id="pol_numero" type="text" placeholder="AXA-2024-001"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Tipo de Cobertura <span class="text-red-500">*</span></label>
+                <select id="pol_cobertura" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
+                  <option value="">Seleccionar...</option>
+                  <option>Cobertura Amplia</option>
+                  <option>Cobertura Básica</option>
+                  <option>Daños a Terceros</option>
+                  <option>Robo Total</option>
+                  <option>Gastos Médicos</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Monto Deducible <span class="text-red-500">*</span></label>
+                <div class="relative">
+                  <span class="absolute left-3 top-2.5 text-gray-400 text-sm font-medium">$</span>
+                  <input id="pol_deducible" type="number" placeholder="0.00" min="0" step="100"
+                    class="w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Fecha de Inicio <span class="text-red-500">*</span></label>
+                <input id="pol_fechaInicio" type="date"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Fecha de Vencimiento <span class="text-red-500">*</span></label>
+                <input id="pol_fechaVence" type="date"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+              </div>
+
+              <div class="flex gap-2 pt-1">
+                <button onclick="guardarPoliza()" id="btnGuardarPol"
+                  class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                  <span id="btnGuardarPolText">Guardar</span>
+                </button>
+                <button onclick="cancelarEdicionPol()" id="btnCancelarPol" class="hidden px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de pólizas -->
+        <div class="lg:col-span-2 space-y-4">
+
+          <!-- Filtro por compañía -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-3.5 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-gray-400 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+            <label class="text-sm text-gray-600 font-medium flex-shrink-0">Filtrar por compañía:</label>
+            <select id="filtroCompania" onchange="filtrarPolizas()" class="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+              <option value="">Todas las compañías</option>
+              <option value="1">AXA Seguros</option>
+              <option value="2">GNP Seguros</option>
+              <option value="3">Qualitas</option>
+              <option value="4">HDI Seguros</option>
+            </select>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 class="font-semibold text-gray-700 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                Pólizas registradas
+              </h2>
+              <span id="contadorPol" class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full font-medium">0 registros</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-50 border-b border-gray-100">
+                    <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Número de Póliza</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Compañía</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Cobertura</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Deducible</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Vigencia</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaPolizas"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal eliminar -->
+<div id="modalEliminarPol" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-red-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-gray-800">Eliminar póliza</h3>
+        <p class="text-gray-500 text-sm">Esta acción no se puede deshacer.</p>
+      </div>
+    </div>
+    <p class="text-gray-600 text-sm mb-5">¿Eliminar la póliza <strong id="numEliminarPol"></strong>?</p>
+    <div class="flex gap-3">
+      <button onclick="cerrarModalPol()" class="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-lg text-sm hover:bg-gray-50 transition">Cancelar</button>
+      <button onclick="confirmarEliminarPol()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg text-sm font-semibold transition">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script src="session.js"></script>
+<script src="nav.js"></script>
+<script>
+  SESSION.requerir('polizas.html');
+  document.getElementById('sidebar').innerHTML = renderNav('polizas.html');
+
+  const COMPANIAS = { '1':'AXA Seguros', '2':'GNP Seguros', '3':'Qualitas', '4':'HDI Seguros' };
+
+  let polizas = [
+    { id:1, companiaId:'1', numero:'AXA-2024-001', cobertura:'Cobertura Amplia', deducible:5000, inicio:'2024-01-01', vence:'2025-01-01' },
+    { id:2, companiaId:'1', numero:'AXA-2024-002', cobertura:'Cobertura Básica',  deducible:2500, inicio:'2024-03-01', vence:'2025-03-01' },
+    { id:3, companiaId:'2', numero:'GNP-2024-010', cobertura:'Cobertura Amplia',  deducible:4000, inicio:'2024-02-01', vence:'2025-02-01' },
+    { id:4, companiaId:'2', numero:'GNP-2024-011', cobertura:'Daños a Terceros',  deducible:1500, inicio:'2024-06-01', vence:'2025-06-01' },
+    { id:5, companiaId:'3', numero:'QUA-2024-020', cobertura:'Cobertura Amplia',  deducible:3500, inicio:'2024-04-01', vence:'2025-04-01' },
+    { id:6, companiaId:'4', numero:'HDI-2024-030', cobertura:'Cobertura Básica',  deducible:2000, inicio:'2024-05-01', vence:'2025-05-01' },
+  ];
+  let nextIdPol = 7;
+  let editandoIdPol = null;
+  let eliminandoIdPol = null;
+
+  function fmt(fechaStr) {
+    if (!fechaStr) return '—';
+    const [y,m,d] = fechaStr.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function filtrarPolizas() {
+    const filtro = document.getElementById('filtroCompania').value;
+    return filtro ? polizas.filter(p => p.companiaId === filtro) : polizas;
+  }
+
+  function renderTablaPolizas() {
+    const lista = filtrarPolizas();
+    const tbody = document.getElementById('tablaPolizas');
+    document.getElementById('contadorPol').textContent = lista.length + ' registros';
+    if (!lista.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-gray-400 text-sm">Sin pólizas registradas.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = lista.map(p => `
+      <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+        <td class="px-5 py-3.5">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-3.5 h-3.5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+            </div>
+            <span class="font-medium text-gray-800 font-mono text-xs">${p.numero}</span>
+          </div>
+        </td>
+        <td class="px-4 py-3.5 text-gray-600 text-xs">${COMPANIAS[p.companiaId] || '—'}</td>
+        <td class="px-4 py-3.5">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">${p.cobertura}</span>
+        </td>
+        <td class="px-4 py-3.5 text-gray-700 font-medium text-xs">$${p.deducible.toLocaleString()}</td>
+        <td class="px-4 py-3.5 text-gray-500 text-xs">${fmt(p.inicio)} – ${fmt(p.vence)}</td>
+        <td class="px-4 py-3.5 text-center">
+          <div class="flex items-center justify-center gap-1.5">
+            <button onclick="editarPoliza(${p.id})" title="Editar"
+              class="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg>
+            </button>
+            <button onclick="pedirEliminarPol(${p.id})" title="Eliminar"
+              class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function showAlertPol(msg, tipo = 'success') {
+    const el = document.getElementById('alertPol');
+    const ok = tipo === 'success';
+    el.className = `mb-4 px-3 py-2.5 rounded-lg text-xs border flex items-center gap-2 ${ok ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'}`;
+    el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0">${ok ? '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>' : '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'}</svg>${msg}`;
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 3500);
+  }
+
+  function guardarPoliza() {
+    const compania  = document.getElementById('pol_compania').value;
+    const numero    = document.getElementById('pol_numero').value.trim();
+    const cobertura = document.getElementById('pol_cobertura').value;
+    const deducible = parseFloat(document.getElementById('pol_deducible').value);
+    const inicio    = document.getElementById('pol_fechaInicio').value;
+    const vence     = document.getElementById('pol_fechaVence').value;
+
+    if (!compania || !numero || !cobertura || !deducible || !inicio || !vence) {
+      showAlertPol('Todos los campos son obligatorios.', 'error'); return;
+    }
+    if (new Date(vence) <= new Date(inicio)) {
+      showAlertPol('La fecha de vencimiento debe ser posterior a la de inicio.', 'error'); return;
+    }
+    // Verificar número único por compañía
+    const duplicado = polizas.find(p => p.numero === numero && p.companiaId === compania && p.id !== editandoIdPol);
+    if (duplicado) {
+      showAlertPol('Ya existe una póliza con ese número en esta compañía.', 'error'); return;
+    }
+
+    if (editandoIdPol) {
+      const p = polizas.find(x => x.id === editandoIdPol);
+      if (p) Object.assign(p, { companiaId: compania, numero, cobertura, deducible, inicio, vence });
+      editandoIdPol = null;
+      document.getElementById('btnGuardarPolText').textContent = 'Guardar';
+      document.getElementById('btnCancelarPol').classList.add('hidden');
+      showAlertPol('Póliza actualizada correctamente.');
+    } else {
+      polizas.push({ id: nextIdPol++, companiaId: compania, numero, cobertura, deducible, inicio, vence });
+      showAlertPol('Póliza registrada exitosamente.');
+    }
+    ['pol_compania','pol_numero','pol_cobertura','pol_deducible','pol_fechaInicio','pol_fechaVence']
+      .forEach(id => document.getElementById(id).value = '');
+    renderTablaPolizas();
+  }
+
+  function editarPoliza(id) {
+    const p = polizas.find(x => x.id === id);
+    if (!p) return;
+    editandoIdPol = id;
+    document.getElementById('pol_compania').value   = p.companiaId;
+    document.getElementById('pol_numero').value      = p.numero;
+    document.getElementById('pol_cobertura').value   = p.cobertura;
+    document.getElementById('pol_deducible').value   = p.deducible;
+    document.getElementById('pol_fechaInicio').value = p.inicio;
+    document.getElementById('pol_fechaVence').value  = p.vence;
+    document.getElementById('btnGuardarPolText').textContent = 'Actualizar';
+    document.getElementById('btnCancelarPol').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cancelarEdicionPol() {
+    editandoIdPol = null;
+    ['pol_compania','pol_numero','pol_cobertura','pol_deducible','pol_fechaInicio','pol_fechaVence']
+      .forEach(id => document.getElementById(id).value = '');
+    document.getElementById('btnGuardarPolText').textContent = 'Guardar';
+    document.getElementById('btnCancelarPol').classList.add('hidden');
+  }
+
+  function pedirEliminarPol(id) {
+    eliminandoIdPol = id;
+    const p = polizas.find(x => x.id === id);
+    document.getElementById('numEliminarPol').textContent = p ? p.numero : '';
+    document.getElementById('modalEliminarPol').classList.remove('hidden');
+  }
+
+  function confirmarEliminarPol() {
+    polizas = polizas.filter(x => x.id !== eliminandoIdPol);
+    cerrarModalPol();
+    renderTablaPolizas();
+  }
+
+  function cerrarModalPol() {
+    document.getElementById('modalEliminarPol').classList.add('hidden');
+    eliminandoIdPol = null;
+  }
+
+  renderTablaPolizas();
+</script>
+</body>
+</html>

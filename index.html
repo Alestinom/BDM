@@ -5,184 +5,319 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iniciar Sesión – SiniestrosAuto</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .input-field {
+      @apply w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white;
+    }
+    .input-error { border-color: #ef4444 !important; }
+  </style>
 </head>
-<body class="bg-blue-950 min-h-screen flex items-center justify-center">
+<body class="bg-slate-950 min-h-screen flex">
 
-  <div class="w-full max-w-sm px-4">
-
-    <!-- Logo -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl mb-3 shadow-lg">
-        <span class="text-white font-bold text-2xl">S</span>
+  <!-- Panel izquierdo decorativo -->
+  <div class="hidden lg:flex lg:w-1/2 bg-blue-950 flex-col items-center justify-center p-12 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 75% 75%, #1d4ed8 0%, transparent 50%);"></div>
+    <div class="relative z-10 text-center max-w-md">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-6 shadow-2xl">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-9 h-9 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+        </svg>
       </div>
-      <h1 class="text-white text-2xl font-bold">SiniestrosAuto</h1>
-      <p class="text-blue-400 text-sm mt-1">Sistema de Gestión de Siniestros</p>
-    </div>
-
-    <!-- ── PANEL LOGIN ── -->
-    <div id="panelLogin" class="bg-white rounded-2xl shadow-2xl p-8">
-      <h2 class="text-gray-800 text-xl font-bold mb-1">Bienvenido</h2>
-      <p class="text-gray-500 text-sm mb-6">Ingresa tus credenciales para continuar</p>
-
-      <div id="alertLogin" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg mb-4"></div>
-
-      <div class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
-          <input id="correo" type="email" placeholder="ejemplo@correo.com"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-          <div class="relative">
-            <input id="password" type="password" placeholder="••••••••"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition pr-10">
-            <button type="button" onclick="togglePass('password')"
-              class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 text-xs select-none">👁</button>
+      <h1 class="text-white text-4xl font-bold mb-3 tracking-tight">SiniestrosAuto</h1>
+      <p class="text-blue-300 text-lg mb-10">Sistema de Gestión de Siniestros Automotrices</p>
+      <div class="grid grid-cols-1 gap-4 text-left">
+        <div class="flex items-start gap-3 bg-blue-900/40 rounded-xl p-4 border border-blue-800/50">
+          <div class="w-8 h-8 bg-blue-600/50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-blue-200"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <p class="text-white text-sm font-semibold">Gestión completa de siniestros</p>
+            <p class="text-blue-300 text-xs mt-0.5">Registro, seguimiento y resolución en un solo lugar.</p>
           </div>
         </div>
-        <button onclick="handleLogin()"
-          class="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
-          Ingresar
-        </button>
-      </div>
-
-      <p class="text-center text-xs text-gray-400 mt-5">
-        ¿No tienes acceso? Contacta a tu supervisor o ajustador.
-      </p>
-    </div>
-
-    <!-- ── PANEL CAMBIO DE CONTRASEÑA TEMPORAL ── -->
-    <div id="panelCambioPass" class="hidden bg-white rounded-2xl shadow-2xl p-8">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-amber-500 text-lg">⚠</span>
-        <h2 class="text-gray-800 text-xl font-bold">Contraseña temporal</h2>
-      </div>
-      <p class="text-gray-500 text-sm mb-5">
-        Tu cuenta fue creada recientemente. Debes establecer una contraseña nueva antes de continuar.
-      </p>
-
-      <div id="alertCambio" class="hidden text-sm px-4 py-3 rounded-lg mb-4"></div>
-
-      <div class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nueva contraseña</label>
-          <div class="relative">
-            <input id="passNueva" type="password" placeholder="Mínimo 8 caracteres"
-              oninput="validarReqs(this.value)"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10">
-            <button type="button" onclick="togglePass('passNueva')"
-              class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 text-xs select-none">👁</button>
+        <div class="flex items-start gap-3 bg-blue-900/40 rounded-xl p-4 border border-blue-800/50">
+          <div class="w-8 h-8 bg-blue-600/50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-blue-200"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+          </div>
+          <div>
+            <p class="text-white text-sm font-semibold">Control de acceso por roles</p>
+            <p class="text-blue-300 text-xs mt-0.5">Supervisor, Ajustador y Asegurado con vistas diferenciadas.</p>
           </div>
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar contraseña</label>
-          <input id="passConfirm" type="password" placeholder="Repite tu contraseña"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="flex items-start gap-3 bg-blue-900/40 rounded-xl p-4 border border-blue-800/50">
+          <div class="w-8 h-8 bg-blue-600/50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-blue-200"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+          </div>
+          <div>
+            <p class="text-white text-sm font-semibold">Gestión de pólizas y compañías</p>
+            <p class="text-blue-300 text-xs mt-0.5">Catálogo de seguros vinculado a cada asegurado.</p>
+          </div>
         </div>
-
-        <!-- Requisitos -->
-        <div class="bg-gray-50 rounded-lg p-3 text-xs space-y-1">
-          <p id="rLen"   class="text-red-400">✗ Mínimo 8 caracteres</p>
-          <p id="rMay"   class="text-red-400">✗ Al menos una mayúscula</p>
-          <p id="rNum"   class="text-red-400">✗ Al menos un número</p>
-          <p id="rEspec" class="text-red-400">✗ Al menos un carácter especial (@#$!)</p>
-        </div>
-
-        <button onclick="cambiarPassword()"
-          class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
-          Establecer contraseña y entrar
-        </button>
       </div>
     </div>
-
-    <p class="text-center text-blue-600 text-xs mt-6 opacity-50">© 2026 SiniestrosAuto</p>
   </div>
 
+  <!-- Panel derecho — Login -->
+  <div class="flex-1 flex items-center justify-center p-6 bg-white">
+    <div class="w-full max-w-md">
+
+      <!-- Logo móvil -->
+      <div class="lg:hidden text-center mb-8">
+        <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-700 rounded-xl mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+          </svg>
+        </div>
+        <h1 class="text-gray-900 text-2xl font-bold">SiniestrosAuto</h1>
+      </div>
+
+      <!-- FORMULARIO LOGIN -->
+      <div id="panelLogin">
+        <h2 class="text-gray-900 text-2xl font-bold mb-1">Bienvenido</h2>
+        <p class="text-gray-500 text-sm mb-7">Ingresa tus credenciales para acceder al sistema.</p>
+
+        <div id="alertLogin" class="hidden bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg mb-5 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 flex-shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+          </svg>
+          <span id="alertLoginMsg"></span>
+        </div>
+
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Correo electrónico</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              </span>
+              <input id="correo" type="email" placeholder="correo@ejemplo.com"
+                class="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                onkeydown="if(event.key==='Enter') document.getElementById('password').focus()">
+              <p id="errCorreo" class="hidden text-red-500 text-xs mt-1"></p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Contraseña</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+              </span>
+              <input id="password" type="password" placeholder="••••••••"
+                class="w-full border border-gray-200 rounded-lg pl-9 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                onkeydown="if(event.key==='Enter') handleLogin()">
+              <button type="button" onclick="togglePass('password','eyeLogin')"
+                class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 transition">
+                <svg id="eyeLogin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </button>
+            </div>
+            <p id="errPassword" class="hidden text-red-500 text-xs mt-1"></p>
+          </div>
+
+          <button id="btnLogin" onclick="handleLogin()"
+            class="w-full bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
+            <span id="btnLoginText">Iniciar sesión</span>
+            <svg id="btnLoginIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            <svg id="btnLoginSpinner" class="hidden animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Credenciales de demo -->
+        <div class="mt-8">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex-1 h-px bg-gray-200"></div>
+            <span class="text-gray-400 text-xs font-medium">Acceso de demostración</span>
+            <div class="flex-1 h-px bg-gray-200"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="llenar('supervisor@demo.com','Super1@')"
+              class="flex flex-col items-center gap-1.5 p-3 border-2 border-amber-200 bg-amber-50 hover:bg-amber-100 rounded-xl transition-colors group">
+              <div class="w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center text-white font-bold text-xs">RS</div>
+              <span class="text-amber-800 font-semibold text-xs">Supervisor</span>
+              <span class="text-amber-600 font-mono text-xs opacity-70">Super1@</span>
+            </button>
+            <button onclick="llenar('ajustador@demo.com','Ajust1@')"
+              class="flex flex-col items-center gap-1.5 p-3 border-2 border-teal-200 bg-teal-50 hover:bg-teal-100 rounded-xl transition-colors group">
+              <div class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-xs">LG</div>
+              <span class="text-teal-800 font-semibold text-xs">Ajustador</span>
+              <span class="text-teal-600 font-mono text-xs opacity-70">Ajust1@</span>
+            </button>
+            <button onclick="llenar('asegurado@demo.com','Asegu1@')"
+              class="flex flex-col items-center gap-1.5 p-3 border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors group">
+              <div class="w-8 h-8 bg-slate-400 rounded-full flex items-center justify-center text-white font-bold text-xs">JP</div>
+              <span class="text-slate-700 font-semibold text-xs">Asegurado</span>
+              <span class="text-slate-500 font-mono text-xs opacity-70">Asegu1@</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL CAMBIO DE CONTRASEÑA TEMPORAL -->
+      <div id="panelCambioPass" class="hidden">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-amber-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+          </div>
+          <div>
+            <h2 class="text-gray-900 text-xl font-bold">Contraseña temporal</h2>
+            <p class="text-gray-500 text-sm">Debes establecer una nueva contraseña.</p>
+          </div>
+        </div>
+
+        <div id="alertCambio" class="hidden text-sm px-4 py-3 rounded-lg mt-5"></div>
+
+        <div class="space-y-4 mt-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nueva contraseña</label>
+            <div class="relative">
+              <input id="passNueva" type="password" placeholder="Mínimo 8 caracteres"
+                oninput="validarReqs(this.value)"
+                class="w-full border border-gray-200 rounded-lg px-3 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+              <button type="button" onclick="togglePass('passNueva','eyeNueva')"
+                class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                <svg id="eyeNueva" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirmar contraseña</label>
+            <input id="passConfirm" type="password" placeholder="Repite tu contraseña"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+
+          <!-- Requisitos -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 grid grid-cols-2 gap-1.5">
+            <div id="rLen"   class="flex items-center gap-1.5 text-xs text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              Mínimo 8 caracteres
+            </div>
+            <div id="rMay"   class="flex items-center gap-1.5 text-xs text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              Una mayúscula
+            </div>
+            <div id="rNum"   class="flex items-center gap-1.5 text-xs text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              Un número
+            </div>
+            <div id="rEspec" class="flex items-center gap-1.5 text-xs text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              Carácter especial (@#$!)
+            </div>
+          </div>
+
+          <button onclick="cambiarPassword()"
+            class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
+            Establecer contraseña y entrar
+          </button>
+        </div>
+      </div>
+
+      <p class="text-center text-gray-300 text-xs mt-8">© 2026 SiniestrosAuto · Bases de Datos Multimedia</p>
+    </div>
+  </div>
+
+  <script src="session.js"></script>
   <script>
-    function togglePass(id) {
-      const el = document.getElementById(id);
+    if (SESSION.tipo) window.location.href = SESSION.home;
+
+    function llenar(correo, pass) {
+      document.getElementById('correo').value = correo;
+      document.getElementById('password').value = pass;
+      clearErrors();
+    }
+
+    function togglePass(inputId, iconId) {
+      const el = document.getElementById(inputId);
       el.type = el.type === 'password' ? 'text' : 'password';
     }
 
-    function showAlertLogin(msg) {
+    function clearErrors() {
+      document.getElementById('alertLogin').classList.add('hidden');
+      ['correo','password'].forEach(id => {
+        const err = document.getElementById('err' + id.charAt(0).toUpperCase() + id.slice(1));
+        if (err) err.classList.add('hidden');
+      });
+    }
+
+    function showAlert(msg) {
       const el = document.getElementById('alertLogin');
-      el.textContent = msg;
+      document.getElementById('alertLoginMsg').textContent = msg;
       el.classList.remove('hidden');
+    }
+
+    function setLoading(on) {
+      document.getElementById('btnLoginText').textContent = on ? 'Verificando...' : 'Iniciar sesión';
+      document.getElementById('btnLoginIcon').classList.toggle('hidden', on);
+      document.getElementById('btnLoginSpinner').classList.toggle('hidden', !on);
+      document.getElementById('btnLogin').disabled = on;
+    }
+
+    function handleLogin() {
+      clearErrors();
+      const correo = document.getElementById('correo').value.trim();
+      const pass   = document.getElementById('password').value;
+      let valid = true;
+
+      if (!correo) {
+        document.getElementById('errCorreo').textContent = 'Ingresa tu correo electrónico.';
+        document.getElementById('errCorreo').classList.remove('hidden');
+        valid = false;
+      }
+      if (!pass) {
+        document.getElementById('errPassword').textContent = 'Ingresa tu contraseña.';
+        document.getElementById('errPassword').classList.remove('hidden');
+        valid = false;
+      }
+      if (!valid) return;
+
+      setLoading(true);
+      setTimeout(() => {
+        const res = SESSION.login(correo, pass);
+        setLoading(false);
+        if (!res.ok) { showAlert('Correo o contraseña incorrectos. Verifica tus datos.'); return; }
+        window.location.href = SESSION.home;
+      }, 600);
+    }
+
+    const CHECK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0 text-green-500"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>`;
+    const X_SVG    = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`;
+
+    function validarReqs(v) {
+      setR('rLen',   v.length >= 8,      'Mínimo 8 caracteres');
+      setR('rMay',   /[A-Z]/.test(v),    'Una mayúscula');
+      setR('rNum',   /[0-9]/.test(v),    'Un número');
+      setR('rEspec', /[@#$!]/.test(v),   'Carácter especial (@#$!)');
+    }
+
+    function setR(id, ok, label) {
+      const el = document.getElementById(id);
+      el.className = `flex items-center gap-1.5 text-xs ${ok ? 'text-green-600' : 'text-gray-400'}`;
+      el.innerHTML = `${ok ? CHECK_SVG : X_SVG} ${label}`;
     }
 
     function showAlertCambio(msg, tipo = 'error') {
       const el = document.getElementById('alertCambio');
-      el.className = `text-sm px-4 py-3 rounded-lg mb-4 ${
-        tipo === 'error'
-          ? 'bg-red-50 border border-red-200 text-red-700'
-          : 'bg-green-50 border border-green-200 text-green-700'
-      }`;
+      el.className = `text-sm px-4 py-3 rounded-lg mt-5 ${tipo === 'error' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`;
       el.textContent = msg;
       el.classList.remove('hidden');
-    }
-
-    function handleLogin() {
-      const correo = document.getElementById('correo').value.trim();
-      const pass   = document.getElementById('password').value.trim();
-      const alert  = document.getElementById('alertLogin');
-      alert.classList.add('hidden');
-
-      if (!correo || !pass) {
-        showAlertLogin('Por favor completa todos los campos.');
-        return;
-      }
-
-      // ── Simulación de respuesta del servidor ──────────────────────────────
-      // En producción: POST a PHP → sp_Login → devuelve { ok, contrasena_temporal, tipo_usuario }
-      // Aquí simulamos dos casos para mostrar el flujo:
-      const esPasswordTemporal = pass.includes('@') || pass.includes('#') || pass.includes('$') || pass.includes('!');
-
-      if (esPasswordTemporal) {
-        // Primer login: mostrar panel de cambio de contraseña
-        document.getElementById('panelLogin').classList.add('hidden');
-        document.getElementById('panelCambioPass').classList.remove('hidden');
-      } else {
-        // Login normal: ir al dashboard
-        window.location.href = 'dashboard.html';
-      }
-    }
-
-    function validarReqs(v) {
-      setR('rLen',   v.length >= 8);
-      setR('rMay',   /[A-Z]/.test(v));
-      setR('rNum',   /[0-9]/.test(v));
-      setR('rEspec', /[@#$!]/.test(v));
-    }
-
-    function setR(id, ok) {
-      const el = document.getElementById(id);
-      el.className = ok ? 'text-green-500' : 'text-red-400';
-      el.textContent = (ok ? '✓' : '✗') + el.textContent.slice(1);
     }
 
     function cambiarPassword() {
       const nueva   = document.getElementById('passNueva').value;
       const confirm = document.getElementById('passConfirm').value;
-
       if (!nueva || !confirm) { showAlertCambio('Completa ambos campos.'); return; }
       if (nueva !== confirm)  { showAlertCambio('Las contraseñas no coinciden.'); return; }
       if (nueva.length < 8 || !/[A-Z]/.test(nueva) || !/[0-9]/.test(nueva) || !/[@#$!]/.test(nueva)) {
         showAlertCambio('La contraseña no cumple todos los requisitos.'); return;
       }
-
       showAlertCambio('Contraseña actualizada. Redirigiendo...', 'success');
-      // En producción: POST a PHP → sp_CambiarPasswordTemporal
-      setTimeout(() => window.location.href = 'dashboard.html', 1500);
+      setTimeout(() => window.location.href = SESSION.home, 1200);
     }
-
-    // Permitir Enter en el login
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        if (!document.getElementById('panelCambioPass').classList.contains('hidden')) cambiarPassword();
-        else handleLogin();
-      }
-    });
   </script>
 </body>
 </html>

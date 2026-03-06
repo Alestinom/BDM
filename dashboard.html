@@ -8,23 +8,15 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 <div class="flex min-h-screen">
-
-  <!-- SIDEBAR -->
   <div id="sidebar"></div>
-
-  <!-- CONTENIDO -->
   <div class="flex-1 flex flex-col overflow-auto">
 
-    <!-- Header -->
     <div class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Panel Principal</h1>
-        <p class="text-gray-500 text-sm">Bienvenido, <span id="nombreUsuario" class="font-medium text-blue-700">Usuario</span></p>
+        <p class="text-gray-500 text-sm">Bienvenido, <span id="nombreUsuario" class="font-medium text-blue-700"></span></p>
       </div>
-      <div class="flex items-center gap-2 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded-full border border-blue-200">
-        <span class="w-2 h-2 bg-green-400 rounded-full"></span>
-        <span id="rolLabel">Supervisor</span>
-      </div>
+      <div id="rolBadge" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border"></div>
     </div>
 
     <div class="p-8">
@@ -53,66 +45,54 @@
         </div>
       </div>
 
-      <!-- Tarjetas de acceso rápido -->
+      <!-- Acceso rápido — se filtra por rol -->
       <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Acceso Rápido</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div id="accesoRapido" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 
-        <a href="registro_siniestro.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
-            <span class="text-blue-600 group-hover:text-white text-xl">＋</span>
-          </div>
-          <h3 class="font-semibold text-gray-800 mb-1">Registrar Siniestro</h3>
-          <p class="text-gray-500 text-sm">Captura un nuevo accidente o incidente.</p>
-        </a>
-
-        <a href="consulta.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
-          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-green-600 transition-colors">
-            <span class="text-green-600 group-hover:text-white text-xl">☰</span>
-          </div>
-          <h3 class="font-semibold text-gray-800 mb-1">Consultar Siniestros</h3>
-          <p class="text-gray-500 text-sm">Listado completo con filtros por fecha.</p>
-        </a>
-
-        <a href="busqueda.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
-          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-purple-600 transition-colors">
-            <span class="text-purple-600 group-hover:text-white text-xl">⌕</span>
-          </div>
-          <h3 class="font-semibold text-gray-800 mb-1">Búsqueda</h3>
-          <p class="text-gray-500 text-sm">Busca por póliza, placas o cliente.</p>
-        </a>
-
-        <a href="aprobaciones.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
-          <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-yellow-500 transition-colors">
-            <span class="text-yellow-600 group-hover:text-white text-xl">✓</span>
-          </div>
-          <h3 class="font-semibold text-gray-800 mb-1">Aprobaciones</h3>
-          <p class="text-gray-500 text-sm">Autoriza o rechaza siniestros pendientes.</p>
-        </a>
-
-        <a href="clientes.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
-          <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-teal-600 transition-colors">
-            <span class="text-teal-600 group-hover:text-white text-xl">♟</span>
-          </div>
-          <h3 class="font-semibold text-gray-800 mb-1">Gestión de Clientes</h3>
-          <p class="text-gray-500 text-sm">Administra los asegurados del sistema.</p>
-        </a>
-
-        <a href="usuarios.html" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
-          <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gray-700 transition-colors">
-            <span class="text-gray-600 group-hover:text-white text-xl">⚙</span>
-          </div>
-          <h3 class="font-semibold text-gray-800 mb-1">Usuarios del Sistema</h3>
-          <p class="text-gray-500 text-sm">Gestiona ajustadores y supervisores.</p>
-        </a>
-
-      </div>
     </div>
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
+  SESSION.requerir('dashboard.html');
   document.getElementById('sidebar').innerHTML = renderNav('dashboard.html');
+  document.getElementById('nombreUsuario').textContent = SESSION.nombre;
+
+  // Badge de rol
+  const colores = { Supervisor: 'bg-yellow-50 text-yellow-700 border-yellow-200', Ajustador: 'bg-teal-50 text-teal-700 border-teal-200' };
+  const rb = document.getElementById('rolBadge');
+  rb.className = `flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border ${colores[SESSION.tipo] || 'bg-gray-50 text-gray-600 border-gray-200'}`;
+  rb.innerHTML = `<span class="w-2 h-2 bg-green-400 rounded-full"></span>${SESSION.tipo}`;
+
+  // Tarjetas según rol
+  const TARJETAS = {
+    Supervisor: [
+      { href:'registro_siniestro.html', icon:'＋', iconBg:'bg-blue-100', iconColor:'text-blue-600', iconHover:'group-hover:bg-blue-600', title:'Registrar Siniestro', desc:'Captura un nuevo accidente o incidente.' },
+      { href:'consulta.html',           icon:'☰', iconBg:'bg-green-100', iconColor:'text-green-600', iconHover:'group-hover:bg-green-600', title:'Consultar Siniestros', desc:'Listado completo con filtros por fecha.' },
+      { href:'busqueda.html',           icon:'⌕', iconBg:'bg-purple-100', iconColor:'text-purple-600', iconHover:'group-hover:bg-purple-600', title:'Búsqueda', desc:'Busca por póliza, placas o cliente.' },
+      { href:'aprobaciones.html',       icon:'✓', iconBg:'bg-yellow-100', iconColor:'text-yellow-600', iconHover:'group-hover:bg-yellow-500', title:'Aprobaciones', desc:'Autoriza o rechaza siniestros pendientes.' },
+      { href:'clientes.html',           icon:'♟', iconBg:'bg-teal-100',   iconColor:'text-teal-600',   iconHover:'group-hover:bg-teal-600',   title:'Gestión de Clientes', desc:'Administra los asegurados del sistema.' },
+      { href:'usuarios.html',           icon:'⚙', iconBg:'bg-gray-100',   iconColor:'text-gray-600',   iconHover:'group-hover:bg-gray-700',   title:'Usuarios del Sistema', desc:'Gestiona ajustadores y supervisores.' },
+    ],
+    Ajustador: [
+      { href:'registro_siniestro.html', icon:'＋', iconBg:'bg-blue-100', iconColor:'text-blue-600', iconHover:'group-hover:bg-blue-600', title:'Registrar Siniestro', desc:'Captura un nuevo accidente o incidente.' },
+      { href:'consulta.html',           icon:'☰', iconBg:'bg-green-100', iconColor:'text-green-600', iconHover:'group-hover:bg-green-600', title:'Mis Siniestros', desc:'Consulta los siniestros que has registrado.' },
+      { href:'busqueda.html',           icon:'⌕', iconBg:'bg-purple-100', iconColor:'text-purple-600', iconHover:'group-hover:bg-purple-600', title:'Búsqueda', desc:'Busca por póliza, placas o cliente.' },
+    ],
+  };
+
+  const tarjetas = TARJETAS[SESSION.tipo] || [];
+  document.getElementById('accesoRapido').innerHTML = tarjetas.map(t => `
+    <a href="${t.href}" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all group">
+      <div class="w-10 h-10 ${t.iconBg} rounded-lg flex items-center justify-center mb-3 ${t.iconHover} transition-colors">
+        <span class="${t.iconColor} group-hover:text-white text-xl">${t.icon}</span>
+      </div>
+      <h3 class="font-semibold text-gray-800 mb-1">${t.title}</h3>
+      <p class="text-gray-500 text-sm">${t.desc}</p>
+    </a>
+  `).join('');
 </script>
 </body>
 </html>

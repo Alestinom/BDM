@@ -78,6 +78,14 @@
               <input id="numCliente" type="text" placeholder="CLI-0001"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-medium text-gray-700 mb-1">Foto de perfil <span class="text-gray-400">(opcional)</span></label>
+              <input id="foto" type="file" accept="image/*" onchange="previsualizarFoto(this)"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer">
+              <div id="previewFoto" class="mt-2 hidden">
+                <img id="imgPreview" class="w-16 h-16 rounded-full object-cover border-2 border-blue-200" src="" alt="Preview">
+              </div>
+            </div>
           </div>
           <div class="flex gap-3 mt-4">
             <button onclick="guardarCliente()"
@@ -111,21 +119,21 @@
             <tbody class="divide-y divide-gray-50">
               <tr class="hover:bg-gray-50">
                 <td class="px-5 py-3 font-medium text-gray-800">Juan Pérez</td>
-                <td class="px-5 py-3 text-gray-600">juan@email.com</td>
+                <td class="px-5 py-3 text-gray-600"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="87edf2e6e9c7e2eae6eeeba9e4e8ea">[email&#160;protected]</a></td>
                 <td class="px-5 py-3 text-gray-600">81 2345 6789</td>
                 <td class="px-5 py-3 text-gray-500 font-mono text-xs">@jperez</td>
                 <td class="px-5 py-3 space-x-2">
-                  <button onclick="confirmarEliminar('Juan Pérez')" class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-lg hover:bg-yellow-100 transition-colors">Editar</button>
+                  <button onclick="editarCliente('Juan Pérez', 'juan@email.com', '81 2345 6789')" class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-lg hover:bg-yellow-100 transition-colors">Editar</button>
                   <button onclick="confirmarEliminar('Juan Pérez')" class="text-xs bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-lg hover:bg-red-100 transition-colors">Eliminar</button>
                 </td>
               </tr>
               <tr class="hover:bg-gray-50">
                 <td class="px-5 py-3 font-medium text-gray-800">Ana López</td>
-                <td class="px-5 py-3 text-gray-600">ana@email.com</td>
+                <td class="px-5 py-3 text-gray-600"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="18797679587d75797174367b7775">[email&#160;protected]</a></td>
                 <td class="px-5 py-3 text-gray-600">81 9876 5432</td>
                 <td class="px-5 py-3 text-gray-500 font-mono text-xs">@alopez</td>
                 <td class="px-5 py-3 space-x-2">
-                  <button class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-lg hover:bg-yellow-100 transition-colors">Editar</button>
+                  <button onclick="editarCliente('Ana López', 'ana@email.com', '81 9876 5432')" class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-lg hover:bg-yellow-100 transition-colors">Editar</button>
                   <button onclick="confirmarEliminar('Ana López')" class="text-xs bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-lg hover:bg-red-100 transition-colors">Eliminar</button>
                 </td>
               </tr>
@@ -150,9 +158,60 @@
   </div>
 </div>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- Modal editar cliente -->
+<div id="modalEditar" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-2xl p-6 w-96 max-h-[90vh] overflow-y-auto">
+    <h3 class="font-bold text-gray-800 mb-4">Editar Cliente</h3>
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">Nombre completo</label>
+        <input id="editNombre" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico</label>
+        <input id="editCorreo" type="email" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
+        <input id="editTelefono" type="tel" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+    </div>
+    <div class="flex gap-3 mt-5">
+      <button onclick="cerrarModalEditar()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-semibold">Cancelar</button>
+      <button onclick="guardarEdicion()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
+  SESSION.requerir('clientes.html');
   document.getElementById('sidebar').innerHTML = renderNav('clientes.html');
+
+  function previsualizarFoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const url = URL.createObjectURL(input.files[0]);
+    document.getElementById('imgPreview').src = url;
+    document.getElementById('previewFoto').classList.remove('hidden');
+  }
+
+  function editarCliente(nombre, correo, telefono) {
+    document.getElementById('editNombre').value = nombre;
+    document.getElementById('editCorreo').value = correo;
+    document.getElementById('editTelefono').value = telefono;
+    document.getElementById('modalEditar').classList.remove('hidden');
+  }
+
+  function cerrarModalEditar() { document.getElementById('modalEditar').classList.add('hidden'); }
+
+  function guardarEdicion() {
+    const nombre = document.getElementById('editNombre').value.trim();
+    const correo = document.getElementById('editCorreo').value.trim();
+    if (!nombre || !correo) { showAlert('Completa los campos obligatorios.', 'error'); cerrarModalEditar(); return; }
+    cerrarModalEditar();
+    showAlert('Cliente actualizado correctamente.');
+  }
 
   function toggleForm() {
     const cont = document.getElementById('formContainer');
@@ -189,16 +248,4 @@
   }
 
   function confirmarEliminar(nombre) {
-    document.getElementById('nombreEliminar').textContent = nombre;
-    document.getElementById('modalEliminar').classList.remove('hidden');
-  }
-
-  function cerrarModal() { document.getElementById('modalEliminar').classList.add('hidden'); }
-
-  function eliminar() {
-    cerrarModal();
-    showAlert('Cliente eliminado correctamente.');
-  }
-</script>
-</body>
-</html>
+    document.getElementBy

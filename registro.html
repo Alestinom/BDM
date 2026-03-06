@@ -3,289 +3,421 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registrar Usuario – SiniestrosAuto</title>
+  <title>Registro de Usuario – SiniestrosAuto</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-50 min-h-screen">
 <div class="flex min-h-screen">
-
   <div id="sidebar"></div>
-
   <div class="flex-1 flex flex-col overflow-auto">
 
+    <!-- Header -->
     <div class="bg-white border-b border-gray-200 px-8 py-4">
-      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
-        <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
-        <span>›</span>
-        <span class="text-gray-800 font-medium">Registrar Usuario</span>
-      </div>
-      <h1 class="text-2xl font-bold text-gray-800">Registrar Usuario</h1>
-      <p class="text-gray-500 text-sm" id="subtitulo"></p>
+      <h1 id="pageTitle" class="text-2xl font-bold text-gray-800">Registrar Usuario</h1>
+      <p id="pageSubtitle" class="text-gray-500 text-sm mt-0.5">Completa los datos del nuevo usuario.</p>
     </div>
 
-    <div class="p-8">
-      <div class="max-w-2xl mx-auto">
+    <div class="p-8 max-w-3xl w-full mx-auto">
 
-        <!-- Banner según rol activo -->
-        <div id="bannerRol" class="rounded-xl p-4 mb-6 text-sm flex items-start gap-3"></div>
+      <!-- Alerta resultado -->
+      <div id="alertResult" class="hidden mb-6 px-4 py-3 rounded-lg text-sm flex items-center gap-2 border"></div>
 
-        <div id="alertMsg" class="hidden text-sm px-4 py-3 rounded-lg mb-5"></div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-
-          <!-- Tipo de cuenta (restringido por rol) -->
-          <div class="mb-5 pb-4 border-b border-gray-100">
-            <label class="block text-xs font-medium text-gray-700 mb-1">Tipo de cuenta a crear *</label>
-            <select id="tipoUsuario" onchange="onTipoChange()"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </select>
-            <p id="tipoHint" class="text-xs text-gray-400 mt-1.5 italic"></p>
+      <!-- FORM AJUSTADOR (solo Supervisor) -->
+      <div id="formAjustador" class="hidden bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 class="text-base font-semibold text-gray-700 mb-5 pb-3 border-b border-gray-100 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+          Datos del Ajustador
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre <span class="text-red-500">*</span></label>
+            <input id="aj_nombre" type="text" placeholder="Nombre(s)"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Nombre *</label>
-              <input id="nombre" type="text" placeholder="Juan"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Apellidos <span class="text-red-500">*</span></label>
+            <input id="aj_apellidos" type="text" placeholder="Apellido Paterno Materno"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Fecha de Nacimiento <span class="text-red-500">*</span></label>
+            <input id="aj_fechaNac" type="date"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Género <span class="text-red-500">*</span></label>
+            <select id="aj_genero" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
+              <option value="">Seleccionar...</option>
+              <option>Masculino</option>
+              <option>Femenino</option>
+              <option>Prefiero no indicar</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Correo electrónico <span class="text-red-500">*</span></label>
+            <input id="aj_correo" type="email" placeholder="correo@empresa.com"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Alias <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-gray-400 text-sm">@</span>
+              <input id="aj_alias" type="text" placeholder="usuario123"
+                class="w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             </div>
-
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Apellidos *</label>
-              <input id="apellidos" type="text" placeholder="Pérez López"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Fotografía</label>
+            <div class="flex items-center gap-4">
+              <div id="aj_fotoPreview" class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-gray-300"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+              </div>
+              <label class="flex-1 cursor-pointer border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                Seleccionar imagen...
+                <input type="file" accept="image/*" class="hidden" onchange="previewFoto(this,'aj_fotoPreview')">
+              </label>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Fecha de Nacimiento * <span class="text-gray-400">(mayor de 18)</span></label>
-              <input id="fechaNac" type="date"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <!-- Contraseña temporal generada -->
+        <div class="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-sm font-medium text-blue-800">Contraseña temporal generada</label>
+            <button onclick="generarPassword('aj_passTemp')" type="button"
+              class="text-xs text-blue-600 hover:text-blue-800 underline">Regenerar</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="aj_passTemp" type="text" readonly
+              class="flex-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm font-mono text-blue-900">
+            <button onclick="copiar('aj_passTemp')" type="button"
+              class="p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition text-blue-700" title="Copiar">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.375"/></svg>
+            </button>
+          </div>
+          <p class="text-xs text-blue-600 mt-2">El ajustador deberá cambiar esta contraseña en su primer inicio de sesión.</p>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button onclick="registrarAjustador()"
+            class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>
+            Registrar Ajustador
+          </button>
+        </div>
+      </div>
+
+      <!-- FORM ASEGURADO (Supervisor y Ajustador) -->
+      <div id="formAsegurado" class="hidden bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-base font-semibold text-gray-700 mb-5 pb-3 border-b border-gray-100 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-teal-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+          Datos Personales del Asegurado
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre <span class="text-red-500">*</span></label>
+            <input id="as_nombre" type="text" placeholder="Nombre(s)"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Apellidos <span class="text-red-500">*</span></label>
+            <input id="as_apellidos" type="text" placeholder="Apellido Paterno Materno"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Fecha de Nacimiento <span class="text-red-500">*</span></label>
+            <input id="as_fechaNac" type="date"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Género <span class="text-red-500">*</span></label>
+            <select id="as_genero" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
+              <option value="">Seleccionar...</option>
+              <option>Masculino</option>
+              <option>Femenino</option>
+              <option>Prefiero no indicar</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Correo electrónico <span class="text-red-500">*</span></label>
+            <input id="as_correo" type="email" placeholder="correo@ejemplo.com"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Alias <span class="text-red-500">*</span></label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-gray-400 text-sm">@</span>
+              <input id="as_alias" type="text" placeholder="usuario123"
+                class="w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Teléfono <span class="text-red-500">*</span></label>
+            <input id="as_telefono" type="tel" placeholder="81 1234 5678"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Número de Cliente <span class="text-red-500">*</span></label>
+            <input id="as_numCliente" type="text" placeholder="CLI-0001"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Fotografía</label>
+            <div class="flex items-center gap-4">
+              <div id="as_fotoPreview" class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-gray-300"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+              </div>
+              <label class="flex-1 cursor-pointer border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                Seleccionar imagen...
+                <input type="file" accept="image/*" class="hidden" onchange="previewFoto(this,'as_fotoPreview')">
+              </label>
+            </div>
+          </div>
+        </div>
 
+        <!-- Sección Póliza -->
+        <div class="mt-6 pt-5 border-t border-gray-100">
+          <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-teal-600"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+            Asignación de Póliza
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Género *</label>
-              <select id="genero" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Seleccionar</option>
-                <option>Masculino</option>
-                <option>Femenino</option>
-                <option>Prefiero no decir</option>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Compañía de Seguros <span class="text-red-500">*</span></label>
+              <select id="as_compania" onchange="cargarPolizas(this.value)"
+                class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
+                <option value="">Seleccionar compañía...</option>
+                <option value="1">AXA Seguros</option>
+                <option value="2">GNP Seguros</option>
+                <option value="3">Qualitas</option>
+                <option value="4">HDI Seguros</option>
               </select>
             </div>
-
             <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico *</label>
-              <input id="correo" type="email" placeholder="ejemplo@correo.com"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Póliza <span class="text-red-500">*</span></label>
+              <select id="as_poliza" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white" disabled>
+                <option value="">Selecciona primero una compañía</option>
+              </select>
             </div>
-
+          </div>
+          <!-- Detalle de la póliza seleccionada -->
+          <div id="detallePoliza" class="hidden mt-4 p-4 bg-teal-50 border border-teal-200 rounded-lg grid grid-cols-3 gap-3 text-sm">
             <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Alias * <span class="text-gray-400">(único)</span></label>
-              <input id="alias" type="text" placeholder="@usuario"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <p class="text-xs text-teal-600 font-medium mb-0.5">Tipo de cobertura</p>
+              <p id="dp_tipo" class="text-teal-900 font-semibold">—</p>
             </div>
-
-            <!-- Solo para Asegurados -->
-            <div id="campoTelefono" class="hidden sm:col-span-2">
-              <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
-              <input id="telefono" type="tel" placeholder="81 1234 5678"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div>
+              <p class="text-xs text-teal-600 font-medium mb-0.5">Deducible</p>
+              <p id="dp_deducible" class="text-teal-900 font-semibold">—</p>
             </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-medium text-gray-700 mb-1">Foto de perfil <span class="text-gray-400">(opcional)</span></label>
-              <input type="file" accept="image/*"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer">
+            <div>
+              <p class="text-xs text-teal-600 font-medium mb-0.5">Vigencia</p>
+              <p id="dp_vigencia" class="text-teal-900 font-semibold">—</p>
             </div>
-
           </div>
+        </div>
 
-          <!-- Contraseña temporal -->
-          <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <div class="flex items-center justify-between mb-2">
-              <p class="text-xs font-semibold text-amber-800">Contraseña temporal generada automáticamente</p>
-              <button type="button" onclick="regenerarPassword()"
-                class="text-xs text-amber-700 underline hover:text-amber-900 transition-colors">
-                Regenerar
-              </button>
-            </div>
-            <div class="flex items-center gap-3">
-              <code id="passTemp"
-                class="flex-1 bg-white border border-amber-200 rounded-lg px-3 py-2 text-sm font-mono text-gray-800 tracking-widest select-all">
-              </code>
-              <button type="button" onclick="copiarPass()"
-                class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-2 rounded-lg transition-colors font-medium whitespace-nowrap">
-                Copiar
-              </button>
-            </div>
-            <p class="text-xs text-amber-700 mt-2">
-              ⚠ El usuario deberá cambiar esta contraseña en su primer inicio de sesión.
-            </p>
+        <!-- Contraseña temporal -->
+        <div class="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-sm font-medium text-blue-800">Contraseña temporal generada</label>
+            <button onclick="generarPassword('as_passTemp')" type="button"
+              class="text-xs text-blue-600 hover:text-blue-800 underline">Regenerar</button>
           </div>
-
-          <div class="flex gap-3 mt-6">
-            <button onclick="guardarUsuario()"
-              class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
-              Crear Usuario
+          <div class="flex items-center gap-2">
+            <input id="as_passTemp" type="text" readonly
+              class="flex-1 bg-white border border-blue-200 rounded-lg px-3 py-2 text-sm font-mono text-blue-900">
+            <button onclick="copiar('as_passTemp')" type="button"
+              class="p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition text-blue-700">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.375"/></svg>
             </button>
-            <a href="dashboard.html"
-              class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors text-sm text-center">
-              Cancelar
-            </a>
           </div>
-
+          <p class="text-xs text-blue-600 mt-2">El asegurado deberá cambiar esta contraseña en su primer inicio de sesión.</p>
         </div>
 
-        <!-- Nota técnica -->
-        <div class="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-700 space-y-1">
-          <p class="font-semibold">ℹ Jerarquía de usuarios</p>
-          <p>· El primer <strong>Supervisor</strong> se inserta directamente en la base de datos vía script SQL.</p>
-          <p>· El <strong>Supervisor</strong> da de alta Ajustadores y Asegurados desde esta pantalla.</p>
-          <p>· El <strong>Ajustador</strong> solo puede dar de alta Asegurados.</p>
-          <p>· Los <strong>Asegurados</strong> no tienen acceso a esta pantalla.</p>
+        <div class="flex justify-end mt-6">
+          <button onclick="registrarAsegurado()"
+            class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>
+            Registrar Asegurado
+          </button>
         </div>
-
       </div>
+
     </div>
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
-  document.getElementById('sidebar').innerHTML = renderNav('usuarios.html');
+  SESSION.requerir('registro.html');
+  document.getElementById('sidebar').innerHTML = renderNav('registro.html');
 
-  // ─── Simula la sesión activa ────────────────────────────────────────────────
-  // En producción, este valor lo inyecta PHP desde $_SESSION['tipo_usuario']
-  const ROL_ACTIVO = 'Supervisor'; // 'Supervisor' | 'Ajustador'
-  // ────────────────────────────────────────────────────────────────────────────
+  // Mostrar formulario(s) según rol
+  const rol = SESSION.tipo;
+  if (rol === 'Supervisor') {
+    document.getElementById('pageTitle').textContent    = 'Registrar Ajustador';
+    document.getElementById('pageSubtitle').textContent = 'Crea una cuenta de ajustador para el sistema.';
+    document.getElementById('formAjustador').classList.remove('hidden');
+    generarPassword('aj_passTemp');
+  } else if (rol === 'Ajustador') {
+    document.getElementById('pageTitle').textContent    = 'Registrar Asegurado';
+    document.getElementById('pageSubtitle').textContent = 'Crea la cuenta del cliente y asígnale su póliza.';
+    document.getElementById('formAsegurado').classList.remove('hidden');
+    generarPassword('as_passTemp');
+  }
 
-  const CONFIG = {
-    Supervisor: {
-      puedeCrear: ['Ajustador', 'Asegurado'],
-      banner: {
-        cls: 'bg-blue-50 border border-blue-200 text-blue-800',
-        icono: '🔵',
-        msg: 'Estás registrando como <strong>Supervisor</strong>. Puedes crear cuentas de Ajustador y Asegurado.'
-      }
-    },
-    Ajustador: {
-      puedeCrear: ['Asegurado'],
-      banner: {
-        cls: 'bg-teal-50 border border-teal-200 text-teal-800',
-        icono: '🟢',
-        msg: 'Estás registrando como <strong>Ajustador</strong>. Solo puedes dar de alta Asegurados.'
-      }
-    }
+  // Pólizas demo por compañía
+  const POLIZAS = {
+    '1': [
+      { id:'P001', num:'AXA-2024-001', tipo:'Cobertura Amplia',  deducible:'$5,000', vigencia:'Ene 2024 – Ene 2025' },
+      { id:'P002', num:'AXA-2024-002', tipo:'Cobertura Básica',  deducible:'$2,500', vigencia:'Mar 2024 – Mar 2025' },
+    ],
+    '2': [
+      { id:'P003', num:'GNP-2024-010', tipo:'Cobertura Amplia',  deducible:'$4,000', vigencia:'Feb 2024 – Feb 2025' },
+      { id:'P004', num:'GNP-2024-011', tipo:'Daños a Terceros',  deducible:'$1,500', vigencia:'Jun 2024 – Jun 2025' },
+    ],
+    '3': [
+      { id:'P005', num:'QUA-2024-020', tipo:'Cobertura Amplia',  deducible:'$3,500', vigencia:'Abr 2024 – Abr 2025' },
+    ],
+    '4': [
+      { id:'P006', num:'HDI-2024-030', tipo:'Cobertura Básica',  deducible:'$2,000', vigencia:'May 2024 – May 2025' },
+      { id:'P007', num:'HDI-2024-031', tipo:'Cobertura Amplia',  deducible:'$6,000', vigencia:'Jul 2024 – Jul 2025' },
+    ],
   };
 
-  const HINTS = {
-    Ajustador: 'Podrá registrar siniestros y dar de alta asegurados.',
-    Asegurado: 'Podrá consultar y dar seguimiento a sus propios siniestros.',
-  };
-
-  function inicializar() {
-    const cfg = CONFIG[ROL_ACTIVO];
-    if (!cfg) { window.location.href = 'dashboard.html'; return; }
-
-    // Banner
-    const { cls, icono, msg } = cfg.banner;
-    const banner = document.getElementById('bannerRol');
-    banner.className = `rounded-xl p-4 mb-6 text-sm flex items-start gap-3 font-medium ${cls}`;
-    banner.innerHTML = `<span class="mt-0.5">${icono}</span><span>${msg}</span>`;
-    document.getElementById('subtitulo').textContent = `Sesión activa como ${ROL_ACTIVO}`;
-
-    // Poblar select de tipo
-    const sel = document.getElementById('tipoUsuario');
-    sel.innerHTML = '<option value="">Seleccionar tipo de cuenta</option>';
-    cfg.puedeCrear.forEach(t => sel.innerHTML += `<option value="${t}">${t}</option>`);
-  }
-
-  function onTipoChange() {
-    const tipo = document.getElementById('tipoUsuario').value;
-    document.getElementById('tipoHint').textContent = HINTS[tipo] || '';
-    document.getElementById('campoTelefono').classList.toggle('hidden', tipo !== 'Asegurado');
-  }
-
-  // Genera contraseña que cumple requisitos: mín. 8 chars, 1 mayúscula, 1 número, 1 especial
-  function generarPassword() {
-    const mayus  = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const minus  = 'abcdefghjkmnpqrstuvwxyz';
-    const nums   = '23456789';
-    const espec  = '@#$!';
-    const todos  = mayus + minus + nums + espec;
-    let p = mayus[~~(Math.random()*mayus.length)]
-          + nums[~~(Math.random()*nums.length)]
-          + espec[~~(Math.random()*espec.length)];
-    for (let i = 0; i < 6; i++) p += todos[~~(Math.random()*todos.length)];
-    return p.split('').sort(() => Math.random() - 0.5).join('');
-  }
-
-  function regenerarPassword() {
-    document.getElementById('passTemp').textContent = generarPassword();
-  }
-
-  function copiarPass() {
-    const pass = document.getElementById('passTemp').textContent.trim();
-    navigator.clipboard.writeText(pass).then(() => {
-      const btn = event.currentTarget;
-      const orig = btn.textContent;
-      btn.textContent = '✓ Copiado';
-      setTimeout(() => btn.textContent = orig, 1600);
+  function cargarPolizas(compId) {
+    const sel = document.getElementById('as_poliza');
+    document.getElementById('detallePoliza').classList.add('hidden');
+    sel.innerHTML = '<option value="">Seleccionar póliza...</option>';
+    if (!compId) { sel.disabled = true; return; }
+    const lista = POLIZAS[compId] || [];
+    lista.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.num + ' — ' + p.tipo;
+      opt.dataset.tipo      = p.tipo;
+      opt.dataset.deducible = p.deducible;
+      opt.dataset.vigencia  = p.vigencia;
+      sel.appendChild(opt);
     });
+    sel.disabled = false;
+    sel.onchange = mostrarDetallePoliza;
   }
 
-  function showAlert(msg, tipo = 'error') {
-    const el = document.getElementById('alertMsg');
-    el.className = `text-sm px-4 py-3 rounded-lg mb-5 ${
-      tipo === 'error'
-        ? 'bg-red-50 border border-red-200 text-red-700'
-        : 'bg-green-50 border border-green-200 text-green-700'
-    }`;
-    el.textContent = msg;
+  function mostrarDetallePoliza() {
+    const sel = document.getElementById('as_poliza');
+    const opt = sel.options[sel.selectedIndex];
+    if (!opt.value) { document.getElementById('detallePoliza').classList.add('hidden'); return; }
+    document.getElementById('dp_tipo').textContent     = opt.dataset.tipo;
+    document.getElementById('dp_deducible').textContent = opt.dataset.deducible;
+    document.getElementById('dp_vigencia').textContent  = opt.dataset.vigencia;
+    document.getElementById('detallePoliza').classList.remove('hidden');
+  }
+
+  function generarPassword(id) {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#$!';
+    let pass = '';
+    pass += 'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)];
+    pass += '23456789'[Math.floor(Math.random()*8)];
+    pass += '@#$!'[Math.floor(Math.random()*4)];
+    for (let i = 0; i < 5; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+    pass = pass.split('').sort(() => Math.random() - 0.5).join('');
+    document.getElementById(id).value = pass;
+  }
+
+  function copiar(id) {
+    navigator.clipboard.writeText(document.getElementById(id).value);
+  }
+
+  function previewFoto(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function showAlert(msg, tipo = 'success') {
+    const el = document.getElementById('alertResult');
+    const esOk = tipo === 'success';
+    el.className = `mb-6 px-4 py-3 rounded-lg text-sm flex items-center gap-2 border ${esOk ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'}`;
+    el.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 flex-shrink-0">
+        ${esOk
+          ? '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+          : '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>'}
+      </svg>
+      ${msg}`;
     el.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => el.classList.add('hidden'), 4000);
   }
 
-  function calcularEdad(fecha) {
-    const hoy = new Date(), nac = new Date(fecha);
-    let e = hoy.getFullYear() - nac.getFullYear();
-    const m = hoy.getMonth() - nac.getMonth();
-    if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) e--;
-    return e;
+  function validarEdad(fechaStr) {
+    if (!fechaStr) return false;
+    const hoy  = new Date();
+    const nac  = new Date(fechaStr);
+    const edad = hoy.getFullYear() - nac.getFullYear() -
+      (hoy < new Date(hoy.getFullYear(), nac.getMonth(), nac.getDate()) ? 1 : 0);
+    return edad >= 18;
   }
 
-  function guardarUsuario() {
-    const tipo = document.getElementById('tipoUsuario').value;
-    if (!tipo) { showAlert('Selecciona el tipo de cuenta a crear.'); return; }
-
-    const reqs = ['nombre','apellidos','fechaNac','genero','correo','alias'];
-    for (const id of reqs) {
-      if (!document.getElementById(id).value.trim()) {
-        showAlert('Completa todos los campos obligatorios.'); return;
+  function registrarAjustador() {
+    const campos = [
+      { id:'aj_nombre',   label:'Nombre' },
+      { id:'aj_apellidos',label:'Apellidos' },
+      { id:'aj_fechaNac', label:'Fecha de nacimiento' },
+      { id:'aj_genero',   label:'Género' },
+      { id:'aj_correo',   label:'Correo' },
+      { id:'aj_alias',    label:'Alias' },
+    ];
+    for (const c of campos) {
+      if (!document.getElementById(c.id).value) {
+        showAlert(`El campo "${c.label}" es obligatorio.`, 'error'); return;
       }
     }
-
-    if (calcularEdad(document.getElementById('fechaNac').value) < 18) {
-      showAlert('El usuario debe ser mayor de 18 años.'); return;
+    if (!validarEdad(document.getElementById('aj_fechaNac').value)) {
+      showAlert('El ajustador debe ser mayor de 18 años.', 'error'); return;
     }
-
-    const pass = document.getElementById('passTemp').textContent.trim();
-
-    // En producción: POST a PHP → llamada al Stored Procedure sp_CrearUsuario
-    console.log('Crear usuario:', {
-      tipo,
-      nombre: document.getElementById('nombre').value,
-      apellidos: document.getElementById('apellidos').value,
-      correo: document.getElementById('correo').value,
-      alias: document.getElementById('alias').value,
-      password_temporal: pass,
-      creado_por: ROL_ACTIVO
-    });
-
-    showAlert(`${tipo} creado exitosamente. Comparte la contraseña temporal con el usuario.`, 'success');
+    showAlert('Ajustador registrado exitosamente. La contraseña temporal ha sido generada.');
+    setTimeout(() => generarPassword('aj_passTemp'), 4500);
   }
 
-  inicializar();
-  regenerarPassword();
+  function registrarAsegurado() {
+    const campos = [
+      { id:'as_nombre',     label:'Nombre' },
+      { id:'as_apellidos',  label:'Apellidos' },
+      { id:'as_fechaNac',   label:'Fecha de nacimiento' },
+      { id:'as_genero',     label:'Género' },
+      { id:'as_correo',     label:'Correo' },
+      { id:'as_alias',      label:'Alias' },
+      { id:'as_telefono',   label:'Teléfono' },
+      { id:'as_numCliente', label:'Número de cliente' },
+    ];
+    for (const c of campos) {
+      if (!document.getElementById(c.id).value) {
+        showAlert(`El campo "${c.label}" es obligatorio.`, 'error'); return;
+      }
+    }
+    if (!validarEdad(document.getElementById('as_fechaNac').value)) {
+      showAlert('El asegurado debe ser mayor de 18 años.', 'error'); return;
+    }
+    if (!document.getElementById('as_compania').value) {
+      showAlert('Selecciona una compañía de seguros.', 'error'); return;
+    }
+    if (!document.getElementById('as_poliza').value) {
+      showAlert('Selecciona una póliza para el asegurado.', 'error'); return;
+    }
+    showAlert('Asegurado registrado exitosamente con su póliza asignada.');
+    setTimeout(() => generarPassword('as_passTemp'), 4500);
+  }
 </script>
 </body>
 </html>

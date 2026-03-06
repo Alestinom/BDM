@@ -112,32 +112,53 @@
   </div>
 </div>
 
+<script src="session.js"></script>
 <script src="nav.js"></script>
 <script>
+  SESSION.requerir('busqueda.html');
   document.getElementById('sidebar').innerHTML = renderNav('busqueda.html');
 
   const datos = [
-    { poliza: 'POL-00234', cliente: 'Juan Pérez',    vehiculo: 'Toyota Corolla · ABC-123', fecha: '03/03/2026', estado: 'En revisión',   estadoClass: 'bg-yellow-100 text-yellow-700' },
-    { poliza: 'POL-00891', cliente: 'Ana López',      vehiculo: 'Nissan Versa · XYZ-789',  fecha: '28/02/2026', estado: 'Aprobado',       estadoClass: 'bg-green-100 text-green-700' },
-    { poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic · MNO-456',   fecha: '20/02/2026', estado: 'Cerrado',        estadoClass: 'bg-purple-100 text-purple-700' },
+    { poliza: 'POL-00234', cliente: 'Juan Pérez',    vehiculo: 'Toyota Corolla · ABC-123', serie: '3VWFE21C04M000001', compania: 'AXA Seguros',  fecha: '2026-03-03', estado: 'En revisión',   estadoClass: 'bg-yellow-100 text-yellow-700' },
+    { poliza: 'POL-00891', cliente: 'Ana López',      vehiculo: 'Nissan Versa · XYZ-789',  serie: '3N1BC1APXAL000002', compania: 'GNP Seguros',  fecha: '2026-02-28', estado: 'Aprobado',       estadoClass: 'bg-green-100 text-green-700' },
+    { poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic · MNO-456',   serie: '2HGFG3B59DH000003', compania: 'Qualitas',      fecha: '2026-02-20', estado: 'Cerrado',        estadoClass: 'bg-purple-100 text-purple-700' },
   ];
+
+  // Convierte fecha DD/MM/YYYY o YYYY-MM-DD a objeto Date para comparación
+  function toDate(str) {
+    if (!str) return null;
+    // Si viene en formato YYYY-MM-DD (input date)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return new Date(str);
+    // Si viene en formato DD/MM/YYYY (display)
+    const [d, m, y] = str.split('/');
+    return new Date(`${y}-${m}-${d}`);
+  }
 
   function buscar() {
     const poliza   = document.getElementById('busPoliza').value.trim().toLowerCase();
     const cliente  = document.getElementById('busCliente').value.trim().toLowerCase();
     const placas   = document.getElementById('busPlacas').value.trim().toLowerCase();
+    const serie    = document.getElementById('busSerie').value.trim().toLowerCase();
     const compania = document.getElementById('busCompania').value;
+    const fecha    = document.getElementById('busFecha').value; // YYYY-MM-DD
 
-    const tieneCritero = poliza || cliente || placas || compania || document.getElementById('busFecha').value;
+    const tieneCritero = poliza || cliente || placas || serie || compania || fecha;
     if (!tieneCritero) {
       renderResultados(datos);
       return;
     }
 
     const filtrado = datos.filter(s => {
-      if (poliza  && !s.poliza.toLowerCase().includes(poliza))   return false;
-      if (cliente && !s.cliente.toLowerCase().includes(cliente)) return false;
-      if (placas  && !s.vehiculo.toLowerCase().includes(placas)) return false;
+      if (poliza   && !s.poliza.toLowerCase().includes(poliza))    return false;
+      if (cliente  && !s.cliente.toLowerCase().includes(cliente))  return false;
+      if (placas   && !s.vehiculo.toLowerCase().includes(placas))  return false;
+      if (serie    && !s.serie.toLowerCase().includes(serie))      return false;
+      if (compania && s.compania !== compania)                      return false;
+      if (fecha) {
+        const fechaSiniestro = toDate(s.fecha);
+        const fechaBusqueda  = toDate(fecha);
+        if (!fechaSiniestro || fechaSiniestro.toDateString() !== fechaBusqueda.toDateString()) return false;
+      }
       return true;
     });
 
@@ -159,12 +180,14 @@
     cont.classList.remove('hidden');
     document.getElementById('countBus').textContent = `(${data.length} encontrados)`;
 
-    tbody.innerHTML = data.map(s => `
+    tbody.innerHTML = data.map(s => {
+      const fechaDisplay = s.fecha.split('-').reverse().join('/');
+      return `
       <tr class="hover:bg-gray-50 transition-colors">
         <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.poliza}</td>
         <td class="px-5 py-3 font-medium text-gray-800">${s.cliente}</td>
         <td class="px-5 py-3 text-gray-600">${s.vehiculo}</td>
-        <td class="px-5 py-3 text-gray-600">${s.fecha}</td>
+        <td class="px-5 py-3 text-gray-600">${fechaDisplay}</td>
         <td class="px-5 py-3">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${s.estadoClass}">${s.estado}</span>
         </td>
@@ -172,7 +195,7 @@
           <a href="detalle_siniestro.html" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
         </td>
       </tr>
-    `).join('');
+    `}).join('');
   }
 
   function limpiar() {

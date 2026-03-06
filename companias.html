@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compañías – SiniestrosAuto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="flex min-h-screen">
+  <div id="sidebar"></div>
+  <div class="flex-1 flex flex-col overflow-auto">
+
+    <div class="bg-white border-b border-gray-200 px-8 py-4">
+      <h1 class="text-2xl font-bold text-gray-800">Compañías de Seguros</h1>
+      <p class="text-gray-500 text-sm mt-0.5">Administra el catálogo de aseguradoras disponibles en el sistema.</p>
+    </div>
+
+    <div class="p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Formulario -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-6">
+            <h2 id="formCompTitle" class="text-base font-semibold text-gray-700 mb-5 pb-3 border-b border-gray-100 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              Nueva Compañía
+            </h2>
+
+            <div id="alertComp" class="hidden mb-4 px-3 py-2.5 rounded-lg text-xs border flex items-center gap-2"></div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre de la Compañía <span class="text-red-500">*</span></label>
+                <input id="comp_nombre" type="text" placeholder="Ej. AXA Seguros"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Teléfono <span class="text-red-500">*</span></label>
+                <input id="comp_telefono" type="tel" placeholder="800 123 4567"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Dirección <span class="text-red-500">*</span></label>
+                <textarea id="comp_direccion" rows="3" placeholder="Calle, Colonia, Ciudad"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"></textarea>
+              </div>
+              <div class="flex gap-2 pt-1">
+                <button onclick="guardarCompania()" id="btnGuardarComp"
+                  class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                  <span id="btnGuardarCompText">Guardar</span>
+                </button>
+                <button onclick="cancelarEdicion()" id="btnCancelarComp" class="hidden px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 class="font-semibold text-gray-700 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+                Compañías registradas
+              </h2>
+              <span id="contadorComp" class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full font-medium">4 registros</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-50 border-b border-gray-100">
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Compañía</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Teléfono</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Dirección</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaCompanias"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmar eliminación -->
+<div id="modalEliminar" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-red-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-gray-800">Eliminar compañía</h3>
+        <p class="text-gray-500 text-sm">Esta acción no se puede deshacer.</p>
+      </div>
+    </div>
+    <p class="text-gray-600 text-sm mb-5">¿Estás seguro de que deseas eliminar <strong id="nombreEliminar"></strong>?</p>
+    <div class="flex gap-3">
+      <button onclick="cerrarModal()" class="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-lg text-sm hover:bg-gray-50 transition">Cancelar</button>
+      <button onclick="confirmarEliminar()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg text-sm font-semibold transition">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script src="session.js"></script>
+<script src="nav.js"></script>
+<script>
+  SESSION.requerir('companias.html');
+  document.getElementById('sidebar').innerHTML = renderNav('companias.html');
+
+  let companias = [
+    { id:1, nombre:'AXA Seguros',  telefono:'800 900 3900', direccion:'Av. Santa Fe 485, CDMX' },
+    { id:2, nombre:'GNP Seguros',  telefono:'800 400 4000', direccion:'Insurgentes Sur 3900, CDMX' },
+    { id:3, nombre:'Qualitas',     telefono:'800 288 9090', direccion:'José Vasconcelos 101, CDMX' },
+    { id:4, nombre:'HDI Seguros',  telefono:'800 800 4343', direccion:'Blvd. Manuel Ávila Camacho 164, CDMX' },
+  ];
+  let nextId = 5;
+  let editandoId = null;
+  let eliminandoId = null;
+
+  function renderTabla() {
+    const tbody = document.getElementById('tablaCompanias');
+    document.getElementById('contadorComp').textContent = companias.length + ' registros';
+    if (!companias.length) {
+      tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-gray-400 text-sm">Sin compañías registradas.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = companias.map(c => `
+      <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+        <td class="px-6 py-3.5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+            </div>
+            <span class="font-medium text-gray-800">${c.nombre}</span>
+          </div>
+        </td>
+        <td class="px-4 py-3.5 text-gray-600">${c.telefono}</td>
+        <td class="px-4 py-3.5 text-gray-500 text-xs max-w-xs truncate">${c.direccion}</td>
+        <td class="px-4 py-3.5 text-center">
+          <div class="flex items-center justify-center gap-1.5">
+            <button onclick="editarCompania(${c.id})" title="Editar"
+              class="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg>
+            </button>
+            <button onclick="pedirEliminar(${c.id})" title="Eliminar"
+              class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function showAlertComp(msg, tipo = 'success') {
+    const el = document.getElementById('alertComp');
+    const ok = tipo === 'success';
+    el.className = `mb-4 px-3 py-2.5 rounded-lg text-xs border flex items-center gap-2 ${ok ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'}`;
+    el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0">${ok ? '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>' : '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'}</svg>${msg}`;
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 3500);
+  }
+
+  function guardarCompania() {
+    const nombre    = document.getElementById('comp_nombre').value.trim();
+    const telefono  = document.getElementById('comp_telefono').value.trim();
+    const direccion = document.getElementById('comp_direccion').value.trim();
+    if (!nombre || !telefono || !direccion) { showAlertComp('Todos los campos son obligatorios.', 'error'); return; }
+
+    if (editandoId) {
+      const c = companias.find(x => x.id === editandoId);
+      if (c) { c.nombre = nombre; c.telefono = telefono; c.direccion = direccion; }
+      editandoId = null;
+      document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg> Nueva Compañía`;
+      document.getElementById('btnGuardarCompText').textContent = 'Guardar';
+      document.getElementById('btnCancelarComp').classList.add('hidden');
+      showAlertComp('Compañía actualizada correctamente.');
+    } else {
+      companias.push({ id: nextId++, nombre, telefono, direccion });
+      showAlertComp('Compañía registrada exitosamente.');
+    }
+    document.getElementById('comp_nombre').value = '';
+    document.getElementById('comp_telefono').value = '';
+    document.getElementById('comp_direccion').value = '';
+    renderTabla();
+  }
+
+  function editarCompania(id) {
+    const c = companias.find(x => x.id === id);
+    if (!c) return;
+    editandoId = id;
+    document.getElementById('comp_nombre').value    = c.nombre;
+    document.getElementById('comp_telefono').value  = c.telefono;
+    document.getElementById('comp_direccion').value = c.direccion;
+    document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-amber-600"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg> Editar Compañía`;
+    document.getElementById('btnGuardarCompText').textContent = 'Actualizar';
+    document.getElementById('btnCancelarComp').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cancelarEdicion() {
+    editandoId = null;
+    document.getElementById('comp_nombre').value = '';
+    document.getElementById('comp_telefono').value = '';
+    document.getElementById('comp_direccion').value = '';
+    document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg> Nueva Compañía`;
+    document.getElementById('btnGuardarCompText').textContent = 'Guardar';
+    document.getElementById('btnCancelarComp').classList.add('hidden');
+  }
+
+  function pedirEliminar(id) {
+    eliminandoId = id;
+    const c = companias.find(x => x.id === id);
+    document.getElementById('nombreEliminar').textContent = c ? c.nombre : '';
+    document.getElementById('modalEliminar').classList.remove('hidden');
+  }
+
+  function confirmarEliminar() {
+    companias = companias.filter(x => x.id !== eliminandoId);
+    cerrarModal();
+    renderTabla();
+  }
+
+  function cerrarModal() {
+    document.getElementById('modalEliminar').classList.add('hidden');
+    eliminandoId = null;
+  }
+
+  renderTabla();
+</script>
+</body>
+</html>
