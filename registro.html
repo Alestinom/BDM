@@ -219,6 +219,69 @@
           </div>
         </div>
 
+        <!-- Sección Vehículo -->
+        <div class="mt-6 pt-5 border-t border-gray-100">
+          <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-indigo-500"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+            Datos del Vehículo
+            <span id="unidadContador" class="ml-auto text-xs font-normal text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">0 unidades</span>
+          </h3>
+
+          <!-- Lista de unidades ya agregadas -->
+          <div id="listaUnidades" class="space-y-2 mb-4"></div>
+
+          <!-- Formulario para agregar una unidad -->
+          <div id="formUnidad" class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Nueva unidad</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Marca <span class="text-red-500">*</span></label>
+                <input id="veh_marca" type="text" placeholder="Ej. Toyota"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Modelo <span class="text-red-500">*</span></label>
+                <input id="veh_modelo" type="text" placeholder="Ej. Corolla"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Año <span class="text-red-500">*</span></label>
+                <input id="veh_anio" type="number" placeholder="Ej. 2022" min="1990" max="2030"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Placas <span class="text-red-500">*</span></label>
+                <input id="veh_placas" type="text" placeholder="Ej. ABC-123"
+                  oninput="this.value=this.value.toUpperCase()"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Número de Serie (VIN) <span class="text-red-500">*</span></label>
+                <input id="veh_serie" type="text" placeholder="17 caracteres alfanuméricos" maxlength="17"
+                  oninput="this.value=this.value.toUpperCase()"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white font-mono">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Color <span class="text-red-500">*</span></label>
+                <input id="veh_color" type="text" placeholder="Ej. Blanco"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white">
+              </div>
+            </div>
+            <div id="alertUnidad" class="hidden mt-3 px-3 py-2 rounded-lg text-xs border bg-red-50 border-red-200 text-red-700"></div>
+            <div class="flex justify-end mt-4 gap-2">
+              <button onclick="limpiarFormUnidad()" type="button"
+                class="px-4 py-2 text-sm text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-100 transition">
+                Limpiar
+              </button>
+              <button onclick="agregarUnidad()" type="button"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                Agregar vehículo
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Contraseña temporal -->
         <div class="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <div class="flex items-center justify-between mb-2">
@@ -390,6 +453,105 @@
     setTimeout(() => generarPassword('aj_passTemp'), 4500);
   }
 
+  // ── Gestión de unidades (tabla Unidades) ──────────────────────────────────
+  let unidades = [];
+
+  function actualizarContador() {
+    const c = document.getElementById('unidadContador');
+    c.textContent = `${unidades.length} unidad${unidades.length !== 1 ? 'es' : ''}`;
+    c.className = `ml-auto text-xs font-normal px-2 py-0.5 rounded-full border ${
+      unidades.length > 0
+        ? 'text-indigo-600 bg-indigo-50 border-indigo-200'
+        : 'text-gray-400 bg-gray-50 border-gray-200'}`;
+  }
+
+  function renderUnidades() {
+    const lista = document.getElementById('listaUnidades');
+    if (!unidades.length) { lista.innerHTML = ''; return; }
+    lista.innerHTML = unidades.map((u, i) => `
+      <div class="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-lg px-4 py-3">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-indigo-900">${u.marca} ${u.modelo} ${u.anio} · <span class="font-mono">${u.placas}</span></p>
+          <p class="text-xs text-indigo-500">VIN: <span class="font-mono">${u.serie}</span> · Color: ${u.color}</p>
+        </div>
+        <button onclick="eliminarUnidad(${i})" type="button" title="Eliminar"
+          class="p-1.5 rounded-lg text-indigo-400 hover:text-red-600 hover:bg-red-50 transition flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+        </button>
+      </div>`).join('');
+  }
+
+  function agregarUnidad() {
+    const alertEl = document.getElementById('alertUnidad');
+    const campos = [
+      { id:'veh_marca',  label:'Marca'   },
+      { id:'veh_modelo', label:'Modelo'  },
+      { id:'veh_anio',   label:'Año'     },
+      { id:'veh_placas', label:'Placas'  },
+      { id:'veh_serie',  label:'Número de serie' },
+      { id:'veh_color',  label:'Color'   },
+    ];
+    for (const c of campos) {
+      if (!document.getElementById(c.id).value.trim()) {
+        alertEl.textContent = `El campo "${c.label}" es obligatorio.`;
+        alertEl.classList.remove('hidden');
+        return;
+      }
+    }
+    const anio = parseInt(document.getElementById('veh_anio').value);
+    if (isNaN(anio) || anio < 1990 || anio > new Date().getFullYear() + 1) {
+      alertEl.textContent = 'Ingresa un año de fabricación válido.';
+      alertEl.classList.remove('hidden');
+      return;
+    }
+    const serie = document.getElementById('veh_serie').value.trim();
+    if (serie.length !== 17) {
+      alertEl.textContent = 'El número de serie (VIN) debe tener exactamente 17 caracteres.';
+      alertEl.classList.remove('hidden');
+      return;
+    }
+    // Verificar placas o serie duplicadas en la lista actual
+    const placas = document.getElementById('veh_placas').value.trim().toUpperCase();
+    if (unidades.some(u => u.placas === placas)) {
+      alertEl.textContent = 'Ya existe un vehículo con esas placas en la lista.';
+      alertEl.classList.remove('hidden');
+      return;
+    }
+    if (unidades.some(u => u.serie === serie)) {
+      alertEl.textContent = 'Ya existe un vehículo con ese número de serie en la lista.';
+      alertEl.classList.remove('hidden');
+      return;
+    }
+    alertEl.classList.add('hidden');
+    unidades.push({
+      marca:  document.getElementById('veh_marca').value.trim(),
+      modelo: document.getElementById('veh_modelo').value.trim(),
+      anio,
+      placas,
+      serie,
+      color:  document.getElementById('veh_color').value.trim(),
+    });
+    limpiarFormUnidad();
+    renderUnidades();
+    actualizarContador();
+  }
+
+  function eliminarUnidad(index) {
+    unidades.splice(index, 1);
+    renderUnidades();
+    actualizarContador();
+  }
+
+  function limpiarFormUnidad() {
+    ['veh_marca','veh_modelo','veh_anio','veh_placas','veh_serie','veh_color']
+      .forEach(id => document.getElementById(id).value = '');
+    document.getElementById('alertUnidad').classList.add('hidden');
+  }
+  // ── Fin gestión de unidades ───────────────────────────────────────────────
+
   function registrarAsegurado() {
     const campos = [
       { id:'as_nombre',     label:'Nombre' },
@@ -415,7 +577,13 @@
     if (!document.getElementById('as_poliza').value) {
       showAlert('Selecciona una póliza para el asegurado.', 'error'); return;
     }
-    showAlert('Asegurado registrado exitosamente con su póliza asignada.');
+    if (unidades.length === 0) {
+      showAlert('Debes agregar al menos un vehículo para el asegurado.', 'error'); return;
+    }
+    showAlert(`Asegurado registrado exitosamente con su póliza y ${unidades.length} vehículo(s) asignado(s).`);
+    unidades = [];
+    renderUnidades();
+    actualizarContador();
     setTimeout(() => generarPassword('as_passTemp'), 4500);
   }
 </script>
