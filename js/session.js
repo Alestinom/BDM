@@ -33,6 +33,22 @@ const SESSION = (() => {
     Asegurado:  'mis_siniestros.html',
   };
 
+  /** Rutas relativas: index en raíz, resto en pages/ */
+  function _inPages() {
+    try {
+      return window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+    } catch {
+      return false;
+    }
+  }
+  function _pathIndex() {
+    return _inPages() ? '../index.html' : 'index.html';
+  }
+  function _pathPage(filename) {
+    if (!filename || filename === 'index.html') return _pathIndex();
+    return _inPages() ? filename : 'pages/' + filename;
+  }
+
   function _get() {
     try { return JSON.parse(sessionStorage.getItem('siniestros_session')) || null; }
     catch { return null; }
@@ -47,7 +63,7 @@ const SESSION = (() => {
     get tipo()      { return (_get() || {}).tipo || null; },
     get nombre()    { return (_get() || {}).nombre || 'Usuario'; },
     get iniciales() { return (_get() || {}).iniciales || 'US'; },
-    get home()      { return HOME[this.tipo] || 'index.html'; },
+    get home()      { return _pathPage(HOME[this.tipo] || 'index.html'); },
 
     login(correo, password) {
       const u = USUARIOS_DEMO.find(
@@ -60,10 +76,10 @@ const SESSION = (() => {
 
     requerir(pagina) {
       const sesion = _get();
-      if (!sesion) { window.location.href = 'index.html'; return; }
+      if (!sesion) { window.location.href = _pathIndex(); return; }
       const lista = PERMISOS[sesion.tipo] || [];
       if (!lista.includes(pagina)) {
-        window.location.href = HOME[sesion.tipo] || 'index.html';
+        window.location.href = _pathPage(HOME[sesion.tipo] || 'index.html');
       }
     },
 
@@ -76,7 +92,7 @@ const SESSION = (() => {
 
     cerrar() {
       sessionStorage.removeItem('siniestros_session');
-      window.location.href = 'index.html';
+      window.location.href = _pathIndex();
     },
 
     get usuariosDemo() { return USUARIOS_DEMO; },
