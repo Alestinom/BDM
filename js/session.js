@@ -4,12 +4,6 @@
  */
 const SESSION = (() => {
 
-  const USUARIOS_DEMO = [
-    { correo: 'supervisor@demo.com', password: 'Super1@', tipo: 'Supervisor', nombre: 'Roberto Soto',   iniciales: 'RS' },
-    { correo: 'ajustador@demo.com',  password: 'Ajust1@', tipo: 'Ajustador',  nombre: 'Luis Garza',     iniciales: 'LG' },
-    { correo: 'asegurado@demo.com',  password: 'Asegu1@', tipo: 'Asegurado',  nombre: 'Juan Pérez',     iniciales: 'JP' },
-  ];
-
   const PERMISOS = {
     Supervisor: [
       'dashboard.html','aprobaciones.html','consulta.html','busqueda.html',
@@ -65,15 +59,6 @@ const SESSION = (() => {
     get iniciales() { return (_get() || {}).iniciales || 'US'; },
     get home()      { return _pathPage(HOME[this.tipo] || 'index.html'); },
 
-    login(correo, password) {
-      const u = USUARIOS_DEMO.find(
-        u => u.correo === correo.trim().toLowerCase() && u.password === password
-      );
-      if (!u) return { ok: false };
-      _set({ tipo: u.tipo, nombre: u.nombre, iniciales: u.iniciales, correo: u.correo });
-      return { ok: true };
-    },
-
     requerir(pagina) {
       const sesion = _get();
       if (!sesion) { window.location.href = _pathIndex(); return; }
@@ -94,7 +79,5 @@ const SESSION = (() => {
       sessionStorage.removeItem('siniestros_session');
       window.location.href = _pathIndex();
     },
-
-    get usuariosDemo() { return USUARIOS_DEMO; },
   };
 })();

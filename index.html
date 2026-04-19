@@ -126,35 +126,6 @@
             </svg>
           </button>
         </div>
-
-        <!-- Credenciales de demo -->
-        <div class="mt-8">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="flex-1 h-px bg-gray-200"></div>
-            <span class="text-gray-400 text-xs font-medium">Acceso de demostración</span>
-            <div class="flex-1 h-px bg-gray-200"></div>
-          </div>
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="llenar('supervisor@demo.com','Super1@')"
-              class="flex flex-col items-center gap-1.5 p-3 border-2 border-amber-200 bg-amber-50 hover:bg-amber-100 rounded-xl transition-colors group">
-              <div class="w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center text-white font-bold text-xs">RS</div>
-              <span class="text-amber-800 font-semibold text-xs">Supervisor</span>
-              <span class="text-amber-600 font-mono text-xs opacity-70">Super1@</span>
-            </button>
-            <button onclick="llenar('ajustador@demo.com','Ajust1@')"
-              class="flex flex-col items-center gap-1.5 p-3 border-2 border-teal-200 bg-teal-50 hover:bg-teal-100 rounded-xl transition-colors group">
-              <div class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-xs">LG</div>
-              <span class="text-teal-800 font-semibold text-xs">Ajustador</span>
-              <span class="text-teal-600 font-mono text-xs opacity-70">Ajust1@</span>
-            </button>
-            <button onclick="llenar('asegurado@demo.com','Asegu1@')"
-              class="flex flex-col items-center gap-1.5 p-3 border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors group">
-              <div class="w-8 h-8 bg-slate-400 rounded-full flex items-center justify-center text-white font-bold text-xs">JP</div>
-              <span class="text-slate-700 font-semibold text-xs">Asegurado</span>
-              <span class="text-slate-500 font-mono text-xs opacity-70">Asegu1@</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       <!-- PANEL CAMBIO DE CONTRASEÑA TEMPORAL -->
@@ -225,12 +196,6 @@
   <script>
     if (SESSION.tipo) window.location.href = SESSION.home;
 
-    function llenar(correo, pass) {
-      document.getElementById('correo').value = correo;
-      document.getElementById('password').value = pass;
-      clearErrors();
-    }
-
     function togglePass(inputId, iconId) {
       const el = document.getElementById(inputId);
       el.type = el.type === 'password' ? 'text' : 'password';
@@ -257,7 +222,7 @@
       document.getElementById('btnLogin').disabled = on;
     }
 
-    function handleLogin() {
+    async function handleLogin() {
       clearErrors();
       const correo = document.getElementById('correo').value.trim();
       const pass   = document.getElementById('password').value;
@@ -276,12 +241,36 @@
       if (!valid) return;
 
       setLoading(true);
-      setTimeout(() => {
-        const res = SESSION.login(correo, pass);
+      try {
+        const formData = new FormData();
+        formData.append('correo', correo);
+        formData.append('password', pass);
+
+        const response = await fetch('login.php', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        if (!data.ok) {
+          showAlert('Correo o contraseña incorrectos. Verifica tus datos.');
+          return;
+        }
+
+        sessionStorage.setItem('siniestros_session', JSON.stringify({
+          tipo: data.tipo,
+          nombre: data.nombre,
+          iniciales: data.iniciales,
+          correo: data.correo
+        }));
+
+        if (data.tipo === 'Asegurado') {
+          window.location.href = 'pages/mis_siniestros.html';
+        } else {
+          window.location.href = 'pages/dashboard.html';
+        }
+      } catch (e) {
+        showAlert('Correo o contraseña incorrectos. Verifica tus datos.');
+      } finally {
         setLoading(false);
-        if (!res.ok) { showAlert('Correo o contraseña incorrectos. Verifica tus datos.'); return; }
-        window.location.href = SESSION.home;
-      }, 600);
+      }
     }
 
     const CHECK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0 text-green-500"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>`;
