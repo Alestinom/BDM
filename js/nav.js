@@ -29,7 +29,7 @@ function renderNav(activeLink = '') {
       { href: 'consulta.html',            label: 'Consultar Siniestros', icon: ICON.list     },
       { href: 'busqueda.html',            label: 'Búsqueda',             icon: ICON.search   },
       { href: 'clientes.html',            label: 'Clientes',             icon: ICON.users    },
-      { href: 'registro.html',            label: 'Gestión de Usuarios',  icon: ICON.users    },
+      { href: 'registro.html',            label: 'Gestión de Usuarios',  icon: ICON.cog      },
       { href: 'companias.html',           label: 'Compañías',            icon: ICON.building },
       { href: 'polizas.html',             label: 'Pólizas',              icon: ICON.document },
     ],
@@ -70,7 +70,7 @@ function renderNav(activeLink = '') {
   const badge = rolStyles[tipo] || rolStyles['Asegurado'];
 
   return `
-    <div class="w-64 min-h-screen bg-blue-950 flex flex-col shadow-xl flex-shrink-0 border-r border-blue-900">
+    <div class="w-64 h-screen bg-blue-950 flex flex-col shadow-xl flex-shrink-0 border-r border-blue-900 sticky top-0">
       <div class="p-5 border-b border-blue-900">
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">

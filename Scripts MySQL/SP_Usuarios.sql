@@ -1,4 +1,6 @@
-use BDM
+USE BDM;
+
+DROP PROCEDURE IF EXISTS SP_Usuarios;
 
 DELIMITER $$
 
@@ -12,7 +14,7 @@ CREATE PROCEDURE SP_Usuarios(
     IN p_correo VARCHAR(100),
     IN p_contrasena VARCHAR(100),
     IN p_alias VARCHAR(50),
-    IN p_foto VARCHAR(255),
+    IN p_foto LONGBLOB,
     IN p_tipo_usuario VARCHAR(50),
     IN p_numero_cliente VARCHAR(50),
     IN p_telefono VARCHAR(20)
@@ -21,23 +23,22 @@ BEGIN
     CASE p_accion
 
         -- LOGIN
-        WHEN 'LOGIN' THEN
-            SELECT 
-                u.id_usuario,
-                u.nombre,
-                u.apellidos,
-                u.tipo_usuario,
-                u.correo,
-                u.alias,
-                u.foto
-            FROM Usuarios u
-            WHERE u.correo = p_correo
-              AND u.contrasena = p_contrasena
-              AND u.activo = 1;
+        -- LOGIN
+	WHEN 'LOGIN' THEN
+		SELECT 
+			u.id_usuario,
+			u.nombre,
+			u.apellidos,
+			u.tipo_usuario,
+			u.correo,
+			u.alias
+		FROM Usuarios u
+		WHERE u.correo = p_correo
+		AND u.contrasena = p_contrasena
+		AND u.activo = 1;
 
         -- ALTA
         WHEN 'ALTA' THEN
-            -- Verificar que el correo y alias no existan ya
             IF EXISTS (SELECT 1 FROM Usuarios WHERE correo = p_correo) THEN
                 SELECT 'ERROR' AS resultado, 'El correo ya está registrado' AS mensaje;
             ELSEIF EXISTS (SELECT 1 FROM Usuarios WHERE alias = p_alias) THEN
@@ -51,7 +52,6 @@ BEGIN
                     p_correo, p_contrasena, p_alias, p_foto, p_tipo_usuario, 1
                 );
 
-                -- Si es Asegurado, insertar también en tabla Asegurados
                 IF p_tipo_usuario = 'Asegurado' THEN
                     INSERT INTO Asegurados(id_usuario, numero_cliente, telefono)
                     VALUES (LAST_INSERT_ID(), p_numero_cliente, p_telefono);
@@ -60,7 +60,7 @@ BEGIN
                 SELECT 'OK' AS resultado, 'Usuario registrado correctamente' AS mensaje;
             END IF;
 
-        -- BAJA (lógica, no física)
+        -- BAJA (lógica)
         WHEN 'BAJA' THEN
             IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE id_usuario = p_id_usuario) THEN
                 SELECT 'ERROR' AS resultado, 'Usuario no encontrado' AS mensaje;
@@ -90,7 +90,6 @@ BEGIN
                     tipo_usuario     = IFNULL(p_tipo_usuario, tipo_usuario)
                 WHERE id_usuario = p_id_usuario;
 
-                -- Si es Asegurado, actualizar también sus datos extra
                 IF p_tipo_usuario = 'Asegurado' THEN
                     UPDATE Asegurados
                     SET
@@ -102,7 +101,7 @@ BEGIN
                 SELECT 'OK' AS resultado, 'Usuario modificado correctamente' AS mensaje;
             END IF;
 
-        -- CONSULTAR UN USUARIO
+        -- CONSULTAR
         WHEN 'CONSULTAR' THEN
             SELECT 
                 u.id_usuario,
@@ -121,7 +120,7 @@ BEGIN
             LEFT JOIN Asegurados a ON a.id_usuario = u.id_usuario
             WHERE u.id_usuario = p_id_usuario;
 
-        -- LISTAR TODOS LOS USUARIOS ACTIVOS
+        -- LISTAR
         WHEN 'LISTAR' THEN
             SELECT 
                 u.id_usuario,
@@ -161,3 +160,4 @@ CALL SP_Usuarios('ALTA', NULL, 'Luis', 'Garza', '1992-05-10',
 CALL SP_Usuarios('ALTA', NULL, 'Juan', 'Perez', '1995-03-20', 
 'Masculino', 'asegurado@demo.com', 'Asegu1@', 'jperez', NULL, 
 'Asegurado', 'CLI-0001', '81 1234 5678');
+

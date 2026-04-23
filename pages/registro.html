@@ -15,10 +15,17 @@
       <p class="text-gray-500 text-sm mt-0.5">Administra Supervisores y Ajustadores del sistema.</p>
     </div>
 
-    <div class="p-8">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-1">
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-6">
+    <div class="p-8 space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <button type="button" onclick="toggleFormSection()" class="w-full px-6 py-4 cursor-pointer flex items-center justify-between">
+          <h2 class="font-semibold text-gray-700 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+            Formulario de Usuario
+          </h2>
+          <span id="formSectionArrow" class="text-gray-400 text-lg leading-none">▴</span>
+        </button>
+        <div id="formSectionContent" class="overflow-hidden transition-all duration-300 max-h-[4000px] opacity-100">
+          <div class="px-6 pb-6 pt-4 max-w-3xl mx-auto">
             <h2 id="formCompTitle" class="text-base font-semibold text-gray-700 mb-5 pb-3 border-b border-gray-100 flex items-center gap-2">
               <svg id="formCompIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
               <span id="formCompTitleText">Datos del Ajustador</span>
@@ -116,30 +123,33 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="lg:col-span-2">
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 class="font-semibold text-gray-700 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-                Usuarios activos
-              </h2>
-              <span id="contadorComp" class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full font-medium">0 registros</span>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="bg-gray-50 border-b border-gray-100">
-                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nombre completo</th>
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Correo</th>
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Alias</th>
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tipo</th>
-                    <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide text-center">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="tablaUsuarios"></tbody>
-              </table>
-            </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <button type="button" onclick="toggleTableSection()" class="w-full px-6 py-4 cursor-pointer flex items-center justify-between border-b border-gray-100">
+          <h2 class="font-semibold text-gray-700 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+            Usuarios activos
+          </h2>
+          <div class="flex items-center gap-3">
+            <span id="contadorComp" class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full font-medium">0 registros</span>
+            <span id="tableSectionArrow" class="text-gray-400 text-lg leading-none">▾</span>
+          </div>
+        </button>
+        <div id="tableSectionContent" class="overflow-hidden transition-all duration-300 max-h-0 opacity-0">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-50 border-b border-gray-100">
+                  <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nombre completo</th>
+                  <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Correo</th>
+                  <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Alias</th>
+                  <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tipo</th>
+                  <th class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaUsuarios"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -254,7 +264,7 @@
     generarPassword('aj_passTemp');
   }
 
-  function renderTabla() {
+  function cargarUsuarios() {
     const tbody = document.getElementById('tablaUsuarios');
     document.getElementById('contadorComp').textContent = usuarios.length + ' registros';
 
@@ -294,7 +304,7 @@
     `).join('');
   }
 
-  function guardarUsuario() {
+  async function guardarUsuario() {
     const tipo = document.getElementById('aj_tipo_usuario').value;
     const campos = [
       { id: 'aj_nombre', label: 'Nombre' },
@@ -330,13 +340,52 @@
       if (idx >= 0) usuarios[idx] = { ...usuarios[idx], ...payload };
       showAlertComp(`${tipo} actualizado correctamente.`);
       cancelarEdicion();
+      cargarUsuarios();
     } else {
-      usuarios.push({ id: nextId++, ...payload });
-      showAlertComp(`${tipo} registrado exitosamente.`);
-      limpiarFormulario();
-      actualizarTipoUsuario();
+      const btnGuardar = document.getElementById('btnGuardarComp');
+      const btnTextoOriginal = document.getElementById('btnGuardarCompText').textContent;
+      const formData = new FormData();
+      formData.append('nombre', payload.nombre);
+      formData.append('apellidos', payload.apellidos);
+      formData.append('fecha_nacimiento', payload.fechaNac);
+      formData.append('genero', payload.genero);
+      formData.append('correo', payload.correo);
+      formData.append('contrasena', document.getElementById('aj_passTemp').value);
+      formData.append('alias', payload.alias);
+      formData.append('tipo_usuario', payload.tipo);
+
+      const fotoInput = document.getElementById('aj_foto');
+      if (fotoInput.files && fotoInput.files[0]) {
+        formData.append('foto', fotoInput.files[0]);
+      }
+
+      btnGuardar.disabled = true;
+      btnGuardar.classList.add('opacity-60', 'cursor-not-allowed');
+      document.getElementById('btnGuardarCompText').textContent = 'Guardando...';
+
+      try {
+        const resp = await fetch('../php/registro_usuario.php', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          usuarios.push({ id: nextId++, ...payload });
+          showAlertComp(data.mensaje || `${tipo} registrado exitosamente.`);
+          limpiarFormulario();
+          actualizarTipoUsuario();
+          cargarUsuarios();
+        } else {
+          showAlertComp(data.mensaje || 'Error al registrar el usuario.', 'error');
+        }
+      } catch (err) {
+        showAlertComp('No se pudo registrar el usuario. Inténtalo nuevamente.', 'error');
+      } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.classList.remove('opacity-60', 'cursor-not-allowed');
+        document.getElementById('btnGuardarCompText').textContent = btnTextoOriginal;
+      }
     }
-    renderTabla();
   }
 
   function editarUsuario(id) {
@@ -378,7 +427,7 @@
     usuarios = usuarios.filter(x => x.id !== eliminandoId);
     cerrarModal();
     if (editandoId === eliminandoId) cancelarEdicion();
-    renderTabla();
+    cargarUsuarios();
     showAlertComp('Usuario dado de baja correctamente.');
   }
 
@@ -387,9 +436,31 @@
     eliminandoId = null;
   }
 
+  function toggleFormSection() {
+    const content = document.getElementById('formSectionContent');
+    const arrow = document.getElementById('formSectionArrow');
+    const abierto = !content.classList.contains('max-h-0');
+    content.classList.toggle('max-h-0', abierto);
+    content.classList.toggle('opacity-0', abierto);
+    content.classList.toggle('max-h-[4000px]', !abierto);
+    content.classList.toggle('opacity-100', !abierto);
+    arrow.textContent = abierto ? '▾' : '▴';
+  }
+
+  function toggleTableSection() {
+    const content = document.getElementById('tableSectionContent');
+    const arrow = document.getElementById('tableSectionArrow');
+    const abierto = !content.classList.contains('max-h-0');
+    content.classList.toggle('max-h-0', abierto);
+    content.classList.toggle('opacity-0', abierto);
+    content.classList.toggle('max-h-[4000px]', !abierto);
+    content.classList.toggle('opacity-100', !abierto);
+    arrow.textContent = abierto ? '▾' : '▴';
+  }
+
   generarPassword('aj_passTemp');
   actualizarTipoUsuario();
-  renderTabla();
+  cargarUsuarios();
 </script>
 </body>
 </html>
