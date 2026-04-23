@@ -294,10 +294,7 @@
     ],
   };
 
-  let clientes = [
-    { id: 1, nombre: 'Daniel', apellidos: 'Torres Gámez', fechaNac: '1991-11-20', genero: 'Masculino', correo: 'daniel.torres@email.com', alias: 'dtorres', telefono: '81 1234 5678', numCliente: 'CLI-1001', compania: '1', poliza: 'P001', unidades: [] },
-    { id: 2, nombre: 'Andrea', apellidos: 'Castillo Pérez', fechaNac: '1994-05-08', genero: 'Femenino', correo: 'andrea.castillo@email.com', alias: 'acastillo', telefono: '81 9876 5432', numCliente: 'CLI-1002', compania: '2', poliza: 'P004', unidades: [] },
-  ];
+  let clientes = [];
   let unidades = [];
   let nextId = 3;
   let editandoId = null;
@@ -518,6 +515,27 @@
     `).join('');
   }
 
+  async function cargarClientes() {
+    try {
+      const resp = await fetch('../php/listar_clientes.php');
+      const data = await resp.json();
+      if (data.ok) {
+        clientes = (data.clientes || []).map(c => ({
+          id: c.id_usuario,
+          nombre: c.nombre,
+          apellidos: c.apellidos,
+          correo: c.correo,
+          alias: c.alias,
+          telefono: c.telefono,
+          numCliente: c.numero_cliente,
+        }));
+        renderTabla();
+      }
+    } catch (err) {
+      console.error('Error al cargar clientes:', err);
+    }
+  }
+
   async function guardarCliente() {
     const campos = [
       { id: 'as_nombre', label: 'Nombre' },
@@ -606,7 +624,7 @@
           clientes.push({ id: nextId++, ...payload });
           showAlertComp(data.mensaje || `Asegurado registrado exitosamente con su póliza y ${unidades.length} vehículo(s) asignado(s).`);
           limpiarFormularioCliente();
-          renderTabla();
+          cargarClientes();
         } else {
           showAlertComp(data.mensaje || 'Error al registrar el asegurado.', 'error');
         }
@@ -700,7 +718,7 @@
   generarPassword('as_passTemp');
   actualizarContador();
   renderUnidades();
-  renderTabla();
+  cargarClientes();
 </script>
 </body>
 </html>

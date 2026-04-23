@@ -182,11 +182,7 @@
   SESSION.requerir('registro.html');
   document.getElementById('sidebar').innerHTML = renderNav('registro.html');
 
-  let usuarios = [
-    { id: 1, tipo: 'Supervisor', nombre: 'Lucía', apellidos: 'Morales Vega', fechaNac: '1989-03-12', genero: 'Femenino', correo: 'lucia.morales@empresa.com', alias: 'lmorales' },
-    { id: 2, tipo: 'Ajustador', nombre: 'Carlos', apellidos: 'Santos Ruiz', fechaNac: '1992-09-04', genero: 'Masculino', correo: 'carlos.santos@empresa.com', alias: 'csantos' },
-    { id: 3, tipo: 'Ajustador', nombre: 'Brenda', apellidos: 'Ramírez León', fechaNac: '1995-02-18', genero: 'Femenino', correo: 'brenda.ramirez@empresa.com', alias: 'bramirez' },
-  ];
+  let usuarios = [];
   let nextId = 4;
   let editandoId = null;
   let eliminandoId = null;
@@ -264,7 +260,7 @@
     generarPassword('aj_passTemp');
   }
 
-  function cargarUsuarios() {
+  function renderTabla() {
     const tbody = document.getElementById('tablaUsuarios');
     document.getElementById('contadorComp').textContent = usuarios.length + ' registros';
 
@@ -304,6 +300,26 @@
     `).join('');
   }
 
+  async function cargarUsuarios() {
+    try {
+      const resp = await fetch('../php/listar_usuarios.php');
+      const data = await resp.json();
+      if (data.ok) {
+        usuarios = (data.usuarios || []).map(u => ({
+          id: u.id_usuario,
+          nombre: u.nombre,
+          apellidos: u.apellidos,
+          correo: u.correo,
+          alias: u.alias,
+          tipo: u.tipo_usuario,
+        }));
+        renderTabla();
+      }
+    } catch (err) {
+      console.error('Error al cargar usuarios:', err);
+    }
+  }
+
   async function guardarUsuario() {
     const tipo = document.getElementById('aj_tipo_usuario').value;
     const campos = [
@@ -340,7 +356,7 @@
       if (idx >= 0) usuarios[idx] = { ...usuarios[idx], ...payload };
       showAlertComp(`${tipo} actualizado correctamente.`);
       cancelarEdicion();
-      cargarUsuarios();
+      renderTabla();
     } else {
       const btnGuardar = document.getElementById('btnGuardarComp');
       const btnTextoOriginal = document.getElementById('btnGuardarCompText').textContent;
@@ -427,7 +443,7 @@
     usuarios = usuarios.filter(x => x.id !== eliminandoId);
     cerrarModal();
     if (editandoId === eliminandoId) cancelarEdicion();
-    cargarUsuarios();
+    renderTabla();
     showAlertComp('Usuario dado de baja correctamente.');
   }
 
