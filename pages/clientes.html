@@ -518,7 +518,7 @@
     `).join('');
   }
 
-  function guardarCliente() {
+  async function guardarCliente() {
     const campos = [
       { id: 'as_nombre', label: 'Nombre' },
       { id: 'as_apellidos', label: 'Apellidos' },
@@ -571,12 +571,53 @@
       if (idx >= 0) clientes[idx] = { ...clientes[idx], ...payload };
       showAlertComp('Asegurado actualizado correctamente.');
       cancelarEdicion();
+      renderTabla();
     } else {
-      clientes.push({ id: nextId++, ...payload });
-      showAlertComp(`Asegurado registrado exitosamente con su póliza y ${unidades.length} vehículo(s) asignado(s).`);
-      limpiarFormularioCliente();
+      const btnGuardar = document.getElementById('btnGuardarComp');
+      const btnTexto = document.getElementById('btnGuardarCompText');
+      const textoOriginal = btnTexto.textContent;
+      const formData = new FormData();
+      formData.append('nombre', payload.nombre);
+      formData.append('apellidos', payload.apellidos);
+      formData.append('fecha_nacimiento', payload.fechaNac);
+      formData.append('genero', payload.genero);
+      formData.append('correo', payload.correo);
+      formData.append('contrasena', document.getElementById('as_passTemp').value);
+      formData.append('alias', payload.alias);
+      formData.append('numero_cliente', payload.numCliente);
+      formData.append('telefono', payload.telefono);
+
+      const fotoInput = document.getElementById('as_foto');
+      if (fotoInput.files && fotoInput.files[0]) {
+        formData.append('foto', fotoInput.files[0]);
+      }
+
+      btnGuardar.disabled = true;
+      btnTexto.textContent = 'Guardando...';
+      btnGuardar.classList.add('opacity-60', 'cursor-not-allowed');
+
+      try {
+        const resp = await fetch('../php/registro_cliente.php', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          clientes.push({ id: nextId++, ...payload });
+          showAlertComp(data.mensaje || `Asegurado registrado exitosamente con su póliza y ${unidades.length} vehículo(s) asignado(s).`);
+          limpiarFormularioCliente();
+          renderTabla();
+        } else {
+          showAlertComp(data.mensaje || 'Error al registrar el asegurado.', 'error');
+        }
+      } catch (e) {
+        showAlertComp('No se pudo registrar el asegurado. Intenta nuevamente.', 'error');
+      } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.classList.remove('opacity-60', 'cursor-not-allowed');
+        btnTexto.textContent = textoOriginal;
+      }
     }
-    renderTabla();
   }
 
   function editarCliente(id) {

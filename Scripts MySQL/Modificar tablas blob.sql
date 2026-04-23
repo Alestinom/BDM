@@ -18,6 +18,12 @@ CREATE TABLE Usuarios(
 
 select * FROM Usuarios;
 
+SELECT u.nombre, u.apellidos, u.tipo_usuario, a.numero_cliente, a.telefono
+FROM Usuarios u
+JOIN Asegurados a ON a.id_usuario = u.id_usuario;
+
+SELECT id_usuario, nombre, apellidos, tipo_usuario, activo 
+FROM Usuarios;
 -- Asegurados
 CREATE TABLE Asegurados(
     id_asegurado INT AUTO_INCREMENT PRIMARY KEY,

@@ -2,34 +2,30 @@
 header('Content-Type: application/json');
 include("../conexion.php");
 
-// Recibir datos del POST
-$accion        = 'ALTA';
-$id_usuario    = null;
-$nombre        = $_POST['nombre'] ?? '';
-$apellidos     = $_POST['apellidos'] ?? '';
-$fecha_nac     = $_POST['fecha_nacimiento'] ?? '';
-$genero        = $_POST['genero'] ?? '';
-$correo        = $_POST['correo'] ?? '';
-$contrasena    = $_POST['contrasena'] ?? '';
-$alias         = $_POST['alias'] ?? '';
-$tipo_usuario  = $_POST['tipo_usuario'] ?? '';
-$num_cliente   = null;
-$telefono      = null;
+$accion       = 'ALTA';
+$id_usuario   = null;
+$nombre       = $_POST['nombre'] ?? '';
+$apellidos    = $_POST['apellidos'] ?? '';
+$fecha_nac    = $_POST['fecha_nacimiento'] ?? '';
+$genero       = $_POST['genero'] ?? '';
+$correo       = $_POST['correo'] ?? '';
+$contrasena   = $_POST['contrasena'] ?? '';
+$alias        = $_POST['alias'] ?? '';
+$tipo_usuario = 'Asegurado';
+$num_cliente  = $_POST['numero_cliente'] ?? '';
+$telefono     = $_POST['telefono'] ?? '';
 
-// Procesar foto como BLOB
 $foto = null;
 if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
     $foto = file_get_contents($_FILES['foto']['tmp_name']);
 }
 
-// Validaciones basicas
 if (!$nombre || !$apellidos || !$fecha_nac || !$genero ||
-    !$correo || !$contrasena || !$alias || !$tipo_usuario) {
+    !$correo || !$contrasena || !$alias || !$num_cliente || !$telefono) {
     echo json_encode(["ok" => false, "mensaje" => "Todos los campos son obligatorios."]);
     exit;
 }
 
-// Llamar al SP
 $sql = "CALL SP_Usuarios(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
@@ -60,6 +56,7 @@ $result = $stmt->get_result();
 $row = $result ? $result->fetch_assoc() : null;
 
 while ($conn->more_results() && $conn->next_result()) {}
+
 $stmt->close();
 
 if ($row) {
@@ -69,7 +66,7 @@ if ($row) {
         echo json_encode(["ok" => false, "mensaje" => $row['mensaje']]);
     }
 } else {
-    echo json_encode(["ok" => false, "mensaje" => "Error al registrar el usuario."]);
+    echo json_encode(["ok" => false, "mensaje" => "Error al registrar el asegurado."]);
 }
 
 $conn->close();
