@@ -7,14 +7,14 @@ const SESSION = (() => {
   const PERMISOS = {
     Supervisor: [
       'dashboard.html','aprobaciones.html','consulta.html','busqueda.html',
-      'clientes.html','usuarios.html','registro.html','registro_siniestro.html',
+      'clientes.html','registro.html','registro_siniestro.html',
       'detalle_siniestro.html','seguimiento.html','perfil.html',
       'companias.html','polizas.html',
     ],
     Ajustador: [
       'dashboard.html','registro_siniestro.html','consulta.html',
       'busqueda.html','detalle_siniestro.html','seguimiento.html','perfil.html',
-      'clientes.html','registro.html',
+      'clientes.html',
     ],
     Asegurado: [
       'mis_siniestros.html','seguimiento.html','perfil.html',
