@@ -246,7 +246,7 @@
         formData.append('correo', correo);
         formData.append('password', pass);
 
-        const response = await fetch('login.php', { method: 'POST', body: formData });
+        const response = await fetch('php/login.php', { method: 'POST', body: formData });
         const data = await response.json();
 
         if (!data.ok) {
