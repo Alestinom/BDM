@@ -189,7 +189,7 @@
                 </div>
               </div>
 
-              <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div id="as_divPassTemp" class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div class="flex items-center justify-between mb-2">
                   <label class="text-sm font-medium text-blue-800">Contraseña temporal generada</label>
                   <button onclick="generarPassword('as_passTemp')" type="button"
@@ -204,6 +204,13 @@
                   </button>
                 </div>
                 <p class="text-xs text-blue-600 mt-2">El asegurado deberá cambiar esta contraseña en su primer inicio de sesión.</p>
+              </div>
+
+              <div id="as_divPassNueva" class="hidden p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <label class="text-sm font-medium text-amber-800">Nueva contraseña (opcional)</label>
+                <p class="text-xs text-amber-600 mb-2">Solo completa este campo si deseas cambiar la contraseña del usuario.</p>
+                <input id="as_passNueva" type="password" placeholder="Dejar vacío para no cambiar"
+                  class="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-sm">
               </div>
 
               <div class="flex gap-2 pt-1">
@@ -298,6 +305,7 @@
   let unidades = [];
   let nextId = 3;
   let editandoId = null;
+  let editandoTipoUsuario = null;
   let eliminandoId = null;
 
   function generarPassword(id) {
@@ -557,17 +565,19 @@
       showAlertComp('El asegurado debe ser mayor de 18 años.', 'error');
       return;
     }
-    if (!document.getElementById('as_compania').value) {
-      showAlertComp('Selecciona una compañía de seguros.', 'error');
-      return;
-    }
-    if (!document.getElementById('as_poliza').value) {
-      showAlertComp('Selecciona una póliza para el asegurado.', 'error');
-      return;
-    }
-    if (unidades.length === 0) {
-      showAlertComp('Debes agregar al menos un vehículo para el asegurado.', 'error');
-      return;
+    if (!editandoId) {
+      if (!document.getElementById('as_compania').value) {
+        showAlertComp('Selecciona una compañía de seguros.', 'error');
+        return;
+      }
+      if (!document.getElementById('as_poliza').value) {
+        showAlertComp('Selecciona una póliza para el asegurado.', 'error');
+        return;
+      }
+      if (unidades.length === 0) {
+        showAlertComp('Debes agregar al menos un vehículo para el asegurado.', 'error');
+        return;
+      }
     }
 
     const payload = {
@@ -585,11 +595,44 @@
     };
 
     if (editandoId) {
-      const idx = clientes.findIndex(x => x.id === editandoId);
-      if (idx >= 0) clientes[idx] = { ...clientes[idx], ...payload };
-      showAlertComp('Asegurado actualizado correctamente.');
-      cancelarEdicion();
-      renderTabla();
+      const btnGuardar = document.getElementById('btnGuardarComp');
+      const btnTexto = document.getElementById('btnGuardarCompText');
+      const textoOriginal = btnTexto.textContent;
+      const formData = new FormData();
+      formData.append('id_usuario', editandoId);
+      formData.append('nombre', payload.nombre);
+      formData.append('apellidos', payload.apellidos);
+      formData.append('fecha_nacimiento', payload.fechaNac);
+      formData.append('genero', payload.genero);
+      formData.append('correo', payload.correo);
+      formData.append('alias', payload.alias);
+      formData.append('numero_cliente', payload.numCliente);
+      formData.append('telefono', payload.telefono);
+      formData.append('tipo_usuario', editandoTipoUsuario || 'Asegurado');
+      const passNueva = document.getElementById('as_passNueva').value;
+      if (passNueva) formData.append('contrasena', passNueva);
+      const fotoInput = document.getElementById('as_foto');
+      if (fotoInput.files && fotoInput.files[0]) formData.append('foto', fotoInput.files[0]);
+      btnGuardar.disabled = true;
+      btnGuardar.classList.add('opacity-60', 'cursor-not-allowed');
+      btnTexto.textContent = 'Guardando...';
+      try {
+        const resp = await fetch('../php/modificar_cliente.php', { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (data.ok) {
+          showAlertComp(data.mensaje || 'Asegurado actualizado correctamente.');
+          cancelarEdicion();
+          cargarClientes();
+        } else {
+          showAlertComp(data.mensaje || 'Error al actualizar el asegurado.', 'error');
+        }
+      } catch (err) {
+        showAlertComp('No se pudo actualizar el asegurado. Intenta nuevamente.', 'error');
+      } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.classList.remove('opacity-60', 'cursor-not-allowed');
+        btnTexto.textContent = textoOriginal;
+      }
     } else {
       const btnGuardar = document.getElementById('btnGuardarComp');
       const btnTexto = document.getElementById('btnGuardarCompText');
@@ -638,35 +681,39 @@
     }
   }
 
-  function editarCliente(id) {
-    const c = clientes.find(x => x.id === id);
-    if (!c) return;
-    editandoId = id;
-
-    document.getElementById('as_nombre').value = c.nombre;
-    document.getElementById('as_apellidos').value = c.apellidos;
-    document.getElementById('as_fechaNac').value = c.fechaNac;
-    document.getElementById('as_genero').value = c.genero;
-    document.getElementById('as_correo').value = c.correo;
-    document.getElementById('as_alias').value = c.alias;
-    document.getElementById('as_telefono').value = c.telefono;
-    document.getElementById('as_numCliente').value = c.numCliente;
-    document.getElementById('as_compania').value = c.compania;
-    cargarPolizas(c.compania);
-    document.getElementById('as_poliza').value = c.poliza;
-    mostrarDetallePoliza();
-    unidades = [...c.unidades];
-    renderUnidades();
-    actualizarContador();
-
-    document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-amber-600"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg> Editar Asegurado`;
-    document.getElementById('btnGuardarCompText').textContent = 'Actualizar';
-    document.getElementById('btnCancelarComp').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  async function editarCliente(id) {
+    try {
+      const resp = await fetch(`../php/consultar_usuario.php?id=${id}`);
+      const data = await resp.json();
+      if (!data.ok) { showAlertComp('No se pudo cargar el asegurado.', 'error'); return; }
+      const u = data.usuario;
+      editandoId = id;
+      editandoTipoUsuario = u.tipo_usuario;
+      document.getElementById('as_nombre').value = u.nombre;
+      document.getElementById('as_apellidos').value = u.apellidos;
+      document.getElementById('as_fechaNac').value = u.fecha_nacimiento;
+      document.getElementById('as_genero').value = u.genero;
+      document.getElementById('as_correo').value = u.correo;
+      document.getElementById('as_alias').value = u.alias;
+      document.getElementById('as_telefono').value = u.telefono ?? '';
+      document.getElementById('as_numCliente').value = u.numero_cliente ?? '';
+      document.getElementById('as_divPassTemp').classList.add('hidden');
+      document.getElementById('as_divPassNueva').classList.remove('hidden');
+      document.getElementById('as_passNueva').value = '';
+      document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-amber-600"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg> Editar Asegurado`;
+      document.getElementById('btnGuardarCompText').textContent = 'Actualizar';
+      document.getElementById('btnCancelarComp').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      showAlertComp('Error al cargar el asegurado.', 'error');
+    }
   }
 
   function cancelarEdicion() {
     editandoId = null;
+    editandoTipoUsuario = null;
+    document.getElementById('as_divPassTemp').classList.remove('hidden');
+    document.getElementById('as_divPassNueva').classList.add('hidden');
     document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-teal-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg> Datos del Asegurado`;
     document.getElementById('btnGuardarCompText').textContent = 'Registrar Asegurado';
     document.getElementById('btnCancelarComp').classList.add('hidden');
@@ -680,12 +727,24 @@
     document.getElementById('modalEliminar').classList.remove('hidden');
   }
 
-  function confirmarEliminar() {
-    clientes = clientes.filter(x => x.id !== eliminandoId);
-    if (editandoId === eliminandoId) cancelarEdicion();
-    cerrarModal();
-    renderTabla();
-    showAlertComp('Asegurado dado de baja correctamente.');
+  async function confirmarEliminar() {
+    const formData = new FormData();
+    formData.append('id_usuario', eliminandoId);
+    try {
+      const resp = await fetch('../php/baja_usuario.php', { method: 'POST', body: formData });
+      const data = await resp.json();
+      cerrarModal();
+      if (data.ok) {
+        if (editandoId === eliminandoId) cancelarEdicion();
+        showAlertComp(data.mensaje || 'Asegurado dado de baja correctamente.');
+        cargarClientes();
+      } else {
+        showAlertComp(data.mensaje || 'Error al dar de baja al asegurado.', 'error');
+      }
+    } catch (err) {
+      cerrarModal();
+      showAlertComp('No se pudo dar de baja al asegurado. Intenta nuevamente.', 'error');
+    }
   }
 
   function cerrarModal() {

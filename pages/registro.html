@@ -93,7 +93,7 @@
                 </div>
               </div>
 
-              <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div id="aj_divPassTemp" class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div class="flex items-center justify-between mb-2">
                   <label class="text-sm font-medium text-blue-800">Contraseña temporal generada</label>
                   <button onclick="generarPassword('aj_passTemp')" type="button"
@@ -108,6 +108,13 @@
                   </button>
                 </div>
                 <p class="text-xs text-blue-600 mt-2">El usuario deberá cambiar esta contraseña en su primer inicio de sesión.</p>
+              </div>
+
+              <div id="aj_divPassNueva" class="hidden p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <label class="text-sm font-medium text-amber-800">Nueva contraseña (opcional)</label>
+                <p class="text-xs text-amber-600 mb-2">Solo completa este campo si deseas cambiar la contraseña del usuario.</p>
+                <input id="aj_passNueva" type="password" placeholder="Dejar vacío para no cambiar"
+                  class="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-sm">
               </div>
 
               <div class="flex gap-2 pt-1">
@@ -352,11 +359,41 @@
     };
 
     if (editandoId) {
-      const idx = usuarios.findIndex(x => x.id === editandoId);
-      if (idx >= 0) usuarios[idx] = { ...usuarios[idx], ...payload };
-      showAlertComp(`${tipo} actualizado correctamente.`);
-      cancelarEdicion();
-      renderTabla();
+      const btnGuardar = document.getElementById('btnGuardarComp');
+      const btnTextoOriginal = document.getElementById('btnGuardarCompText').textContent;
+      const formData = new FormData();
+      formData.append('id_usuario', editandoId);
+      formData.append('nombre', payload.nombre);
+      formData.append('apellidos', payload.apellidos);
+      formData.append('fecha_nacimiento', payload.fechaNac);
+      formData.append('genero', payload.genero);
+      formData.append('correo', payload.correo);
+      formData.append('alias', payload.alias);
+      formData.append('tipo_usuario', payload.tipo);
+      const passNueva = document.getElementById('aj_passNueva').value;
+      if (passNueva) formData.append('contrasena', passNueva);
+      const fotoInput = document.getElementById('aj_foto');
+      if (fotoInput.files && fotoInput.files[0]) formData.append('foto', fotoInput.files[0]);
+      btnGuardar.disabled = true;
+      btnGuardar.classList.add('opacity-60', 'cursor-not-allowed');
+      document.getElementById('btnGuardarCompText').textContent = 'Guardando...';
+      try {
+        const resp = await fetch('../php/modificar_usuario.php', { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (data.ok) {
+          showAlertComp(data.mensaje || `${tipo} actualizado correctamente.`);
+          cancelarEdicion();
+          cargarUsuarios();
+        } else {
+          showAlertComp(data.mensaje || 'Error al actualizar el usuario.', 'error');
+        }
+      } catch (err) {
+        showAlertComp('No se pudo actualizar el usuario. Intenta nuevamente.', 'error');
+      } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.classList.remove('opacity-60', 'cursor-not-allowed');
+        document.getElementById('btnGuardarCompText').textContent = btnTextoOriginal;
+      }
     } else {
       const btnGuardar = document.getElementById('btnGuardarComp');
       const btnTextoOriginal = document.getElementById('btnGuardarCompText').textContent;
@@ -404,26 +441,36 @@
     }
   }
 
-  function editarUsuario(id) {
-    const u = usuarios.find(x => x.id === id);
-    if (!u) return;
-    editandoId = id;
-    document.getElementById('aj_tipo_usuario').value = u.tipo;
-    document.getElementById('aj_nombre').value = u.nombre;
-    document.getElementById('aj_apellidos').value = u.apellidos;
-    document.getElementById('aj_fechaNac').value = u.fechaNac;
-    document.getElementById('aj_genero').value = u.genero;
-    document.getElementById('aj_correo').value = u.correo;
-    document.getElementById('aj_alias').value = u.alias;
-
-    document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-amber-600"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg> Editar ${u.tipo}`;
-    document.getElementById('btnGuardarCompText').textContent = 'Actualizar';
-    document.getElementById('btnCancelarComp').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  async function editarUsuario(id) {
+    try {
+      const resp = await fetch(`../php/consultar_usuario.php?id=${id}`);
+      const data = await resp.json();
+      if (!data.ok) { showAlertComp('No se pudo cargar el usuario.', 'error'); return; }
+      const u = data.usuario;
+      editandoId = id;
+      document.getElementById('aj_tipo_usuario').value = u.tipo_usuario;
+      document.getElementById('aj_nombre').value = u.nombre;
+      document.getElementById('aj_apellidos').value = u.apellidos;
+      document.getElementById('aj_fechaNac').value = u.fecha_nacimiento;
+      document.getElementById('aj_genero').value = u.genero;
+      document.getElementById('aj_correo').value = u.correo;
+      document.getElementById('aj_alias').value = u.alias;
+      document.getElementById('aj_divPassTemp').classList.add('hidden');
+      document.getElementById('aj_divPassNueva').classList.remove('hidden');
+      document.getElementById('aj_passNueva').value = '';
+      document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-amber-600"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg> Editar ${u.tipo_usuario}`;
+      document.getElementById('btnGuardarCompText').textContent = 'Actualizar';
+      document.getElementById('btnCancelarComp').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      showAlertComp('Error al cargar el usuario.', 'error');
+    }
   }
 
   function cancelarEdicion() {
     editandoId = null;
+    document.getElementById('aj_divPassTemp').classList.remove('hidden');
+    document.getElementById('aj_divPassNueva').classList.add('hidden');
     document.getElementById('formCompTitle').innerHTML = `<svg id="formCompIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg><span id="formCompTitleText">Datos del Ajustador</span>`;
     document.getElementById('btnGuardarCompText').textContent = 'Registrar Ajustador';
     document.getElementById('btnCancelarComp').classList.add('hidden');
@@ -439,12 +486,24 @@
     document.getElementById('modalEliminar').classList.remove('hidden');
   }
 
-  function confirmarEliminar() {
-    usuarios = usuarios.filter(x => x.id !== eliminandoId);
-    cerrarModal();
-    if (editandoId === eliminandoId) cancelarEdicion();
-    renderTabla();
-    showAlertComp('Usuario dado de baja correctamente.');
+  async function confirmarEliminar() {
+    const formData = new FormData();
+    formData.append('id_usuario', eliminandoId);
+    try {
+      const resp = await fetch('../php/baja_usuario.php', { method: 'POST', body: formData });
+      const data = await resp.json();
+      cerrarModal();
+      if (data.ok) {
+        if (editandoId === eliminandoId) cancelarEdicion();
+        showAlertComp(data.mensaje || 'Usuario dado de baja correctamente.');
+        cargarUsuarios();
+      } else {
+        showAlertComp(data.mensaje || 'Error al dar de baja al usuario.', 'error');
+      }
+    } catch (err) {
+      cerrarModal();
+      showAlertComp('No se pudo dar de baja al usuario. Intenta nuevamente.', 'error');
+    }
   }
 
   function cerrarModal() {
