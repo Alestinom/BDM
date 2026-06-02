@@ -20,29 +20,35 @@ CREATE PROCEDURE SP_Usuarios(
     IN p_telefono VARCHAR(20)
 )
 BEGIN
+    DECLARE v_id_usuario INT;
+    DECLARE v_id_asegurado INT;
+
     CASE p_accion
 
-        -- LOGIN
-        -- LOGIN
-	WHEN 'LOGIN' THEN
-		SELECT 
-			u.id_usuario,
-			u.nombre,
-			u.apellidos,
-			u.tipo_usuario,
-			u.correo,
-			u.alias
-		FROM Usuarios u
-		WHERE u.correo = p_correo
-		AND u.contrasena = p_contrasena
-		AND u.activo = 1;
+        WHEN 'LOGIN' THEN
+            SELECT 
+                u.id_usuario,
+                u.nombre,
+                u.apellidos,
+                u.tipo_usuario,
+                u.correo,
+                u.alias
+            FROM Usuarios u
+            WHERE u.correo = p_correo
+              AND u.contrasena = p_contrasena
+              AND u.activo = 1;
 
-        -- ALTA
         WHEN 'ALTA' THEN
             IF EXISTS (SELECT 1 FROM Usuarios WHERE correo = p_correo) THEN
-                SELECT 'ERROR' AS resultado, 'El correo ya está registrado' AS mensaje;
+                SELECT 'ERROR' AS resultado, 
+                       'El correo ya está registrado' AS mensaje,
+                       NULL AS id_usuario,
+                       NULL AS id_asegurado;
             ELSEIF EXISTS (SELECT 1 FROM Usuarios WHERE alias = p_alias) THEN
-                SELECT 'ERROR' AS resultado, 'El alias ya está en uso' AS mensaje;
+                SELECT 'ERROR' AS resultado, 
+                       'El alias ya está en uso' AS mensaje,
+                       NULL AS id_usuario,
+                       NULL AS id_asegurado;
             ELSE
                 INSERT INTO Usuarios(
                     nombre, apellidos, fecha_nacimiento, genero,
@@ -52,30 +58,45 @@ BEGIN
                     p_correo, p_contrasena, p_alias, p_foto, p_tipo_usuario, 1
                 );
 
+                SET v_id_usuario = LAST_INSERT_ID();
+
                 IF p_tipo_usuario = 'Asegurado' THEN
                     INSERT INTO Asegurados(id_usuario, numero_cliente, telefono)
-                    VALUES (LAST_INSERT_ID(), p_numero_cliente, p_telefono);
+                    VALUES (v_id_usuario, F_GenerarNumeroCliente(), p_telefono);
+                    
+                    SET v_id_asegurado = LAST_INSERT_ID();
                 END IF;
 
-                SELECT 'OK' AS resultado, 'Usuario registrado correctamente' AS mensaje;
+                SELECT 'OK' AS resultado, 
+                       'Usuario registrado correctamente' AS mensaje,
+                       v_id_usuario AS id_usuario,
+                       v_id_asegurado AS id_asegurado;
             END IF;
 
-        -- BAJA (lógica)
         WHEN 'BAJA' THEN
-            IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE id_usuario = p_id_usuario) THEN
-                SELECT 'ERROR' AS resultado, 'Usuario no encontrado' AS mensaje;
+            IF NOT EXISTS (SELECT 1 FROM Usuarios 
+                          WHERE id_usuario = p_id_usuario) THEN
+                SELECT 'ERROR' AS resultado, 
+                       'Usuario no encontrado' AS mensaje,
+                       NULL AS id_usuario,
+                       NULL AS id_asegurado;
             ELSE
                 UPDATE Usuarios
                 SET activo = 0
                 WHERE id_usuario = p_id_usuario;
-
-                SELECT 'OK' AS resultado, 'Usuario dado de baja correctamente' AS mensaje;
+                SELECT 'OK' AS resultado, 
+                       'Usuario dado de baja correctamente' AS mensaje,
+                       p_id_usuario AS id_usuario,
+                       NULL AS id_asegurado;
             END IF;
 
-        -- MODIFICAR
         WHEN 'MODIFICAR' THEN
-            IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE id_usuario = p_id_usuario) THEN
-                SELECT 'ERROR' AS resultado, 'Usuario no encontrado' AS mensaje;
+            IF NOT EXISTS (SELECT 1 FROM Usuarios 
+                          WHERE id_usuario = p_id_usuario) THEN
+                SELECT 'ERROR' AS resultado, 
+                       'Usuario no encontrado' AS mensaje,
+                       NULL AS id_usuario,
+                       NULL AS id_asegurado;
             ELSE
                 UPDATE Usuarios
                 SET 
@@ -93,15 +114,16 @@ BEGIN
                 IF p_tipo_usuario = 'Asegurado' THEN
                     UPDATE Asegurados
                     SET
-                        numero_cliente = IFNULL(p_numero_cliente, numero_cliente),
-                        telefono       = IFNULL(p_telefono, telefono)
+                        telefono = IFNULL(p_telefono, telefono)
                     WHERE id_usuario = p_id_usuario;
                 END IF;
 
-                SELECT 'OK' AS resultado, 'Usuario modificado correctamente' AS mensaje;
+                SELECT 'OK' AS resultado, 
+                       'Usuario modificado correctamente' AS mensaje,
+                       p_id_usuario AS id_usuario,
+                       NULL AS id_asegurado;
             END IF;
 
-        -- CONSULTAR
         WHEN 'CONSULTAR' THEN
             SELECT 
                 u.id_usuario,
@@ -114,13 +136,13 @@ BEGIN
                 u.foto,
                 u.tipo_usuario,
                 u.activo,
+                a.id_asegurado,
                 a.numero_cliente,
                 a.telefono
             FROM Usuarios u
             LEFT JOIN Asegurados a ON a.id_usuario = u.id_usuario
             WHERE u.id_usuario = p_id_usuario;
 
-        -- LISTAR
         WHEN 'LISTAR' THEN
             SELECT 
                 u.id_usuario,
@@ -130,6 +152,7 @@ BEGIN
                 u.alias,
                 u.tipo_usuario,
                 u.activo,
+                a.id_asegurado,
                 a.numero_cliente,
                 a.telefono
             FROM Usuarios u
@@ -138,7 +161,10 @@ BEGIN
             ORDER BY u.tipo_usuario, u.nombre;
 
         ELSE
-            SELECT 'ERROR' AS resultado, 'Acción no reconocida' AS mensaje;
+            SELECT 'ERROR' AS resultado, 
+                   'Acción no reconocida' AS mensaje,
+                   NULL AS id_usuario,
+                   NULL AS id_asegurado;
 
     END CASE;
 END$$

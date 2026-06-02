@@ -1,0 +1,38 @@
+[02-Jun-2026 10:06:40 Europe/Berlin] === INICIO REGISTRO CLIENTE ===
+[02-Jun-2026 10:06:40 Europe/Berlin] POST recibido: {"nombre":"Jaziel","apellidos":"Balderas","fecha_nacimiento":"2003-02-07","genero":"Masculino","correo":"jaz@gmail.com","contrasena":"Dp7s@ezQ","alias":"Jaziel123","telefono":"8784503450","vehiculos":"[{\"marca\":\"toyota\",\"modelo\":\"corolla\",\"anio\":2003,\"placas\":\"ABE-72HB\",\"serie\":\"71237847621827827\",\"color\":\"blanco\",\"id_compania\":\"2\",\"companiaName\":\"CHUBB\",\"tipo_cobertura\":\"Cobertura B\u00e1sica\",\"monto_deducible\":\"1200\",\"fecha_inicio\":\"2026-06-02\",\"fecha_vencimiento\":\"2026-12-31\"}]"}
+[02-Jun-2026 10:06:40 Europe/Berlin] Vehiculos JSON: [{"marca":"toyota","modelo":"corolla","anio":2003,"placas":"ABE-72HB","serie":"71237847621827827","color":"blanco","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Básica","monto_deducible":"1200","fecha_inicio":"2026-06-02","fecha_vencimiento":"2026-12-31"}]
+[02-Jun-2026 10:06:40 Europe/Berlin] registro_cliente.php: Vehiculos recibidos: [{"marca":"toyota","modelo":"corolla","anio":2003,"placas":"ABE-72HB","serie":"71237847621827827","color":"blanco","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Básica","monto_deducible":"1200","fecha_inicio":"2026-06-02","fecha_vencimiento":"2026-12-31"}]
+[02-Jun-2026 10:06:40 Europe/Berlin] Resultado SP_Usuarios: {"resultado":"OK","mensaje":"Usuario registrado correctamente"}
+[02-Jun-2026 10:06:40 Europe/Berlin] id_asegurado: NULL
+[02-Jun-2026 10:06:40 Europe/Berlin] registro_cliente.php: id_asegurado obtenido: 
+[02-Jun-2026 10:06:40 Europe/Berlin] registro_cliente.php: ALTA exitosa pero id_asegurado no devuelto. Fila: {"resultado":"OK","mensaje":"Usuario registrado correctamente"}
+[02-Jun-2026 10:10:48 Europe/Berlin] === INICIO REGISTRO CLIENTE ===
+[02-Jun-2026 10:10:48 Europe/Berlin] POST recibido: {"nombre":"Manuel","apellidos":"Balderas","fecha_nacimiento":"2003-02-07","genero":"Masculino","correo":"manu@gmail.com","contrasena":"Dp7s@ezQ","alias":"manu12","telefono":"8784503453","vehiculos":"[{\"marca\":\"toyota\",\"modelo\":\"camry\",\"anio\":2003,\"placas\":\"HBDD-73Q\",\"serie\":\"73487483923782739\",\"color\":\"blanco\",\"id_compania\":\"2\",\"companiaName\":\"CHUBB\",\"tipo_cobertura\":\"Cobertura Amplia\",\"monto_deducible\":\"800\",\"fecha_inicio\":\"2026-06-02\",\"fecha_vencimiento\":\"2026-06-24\"}]"}
+[02-Jun-2026 10:10:48 Europe/Berlin] Vehiculos JSON: [{"marca":"toyota","modelo":"camry","anio":2003,"placas":"HBDD-73Q","serie":"73487483923782739","color":"blanco","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"800","fecha_inicio":"2026-06-02","fecha_vencimiento":"2026-06-24"}]
+[02-Jun-2026 10:10:48 Europe/Berlin] registro_cliente.php: Vehiculos recibidos: [{"marca":"toyota","modelo":"camry","anio":2003,"placas":"HBDD-73Q","serie":"73487483923782739","color":"blanco","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"800","fecha_inicio":"2026-06-02","fecha_vencimiento":"2026-06-24"}]
+[02-Jun-2026 10:10:48 Europe/Berlin] Resultado SP_Usuarios: {"resultado":"OK","mensaje":"Usuario registrado correctamente","id_usuario":14,"id_asegurado":9}
+[02-Jun-2026 10:10:48 Europe/Berlin] id_asegurado: 9
+[02-Jun-2026 10:10:48 Europe/Berlin] registro_cliente.php: id_asegurado obtenido: 9
+[02-Jun-2026 10:10:48 Europe/Berlin] Procesando vehiculo: {"marca":"toyota","modelo":"camry","anio":2003,"placas":"HBDD-73Q","serie":"73487483923782739","color":"blanco","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"800","fecha_inicio":"2026-06-02","fecha_vencimiento":"2026-06-24"}
+[02-Jun-2026 10:10:48 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: PROCEDURE bdm.SP_Unidades does not exist in C:\xampp\htdocs\BDM\php\VehiculoModel.php:32
+Stack trace:
+#0 C:\xampp\htdocs\BDM\php\VehiculoModel.php(32): mysqli_stmt->execute()
+#1 C:\xampp\htdocs\BDM\php\VehiculoModel.php(54): VehiculoModel->ejecutarSP('ALTA', NULL, 9, 'toyota', 'camry', 2003, 'HBDD-73Q', '734874839237827...', 'blanco')
+#2 C:\xampp\htdocs\BDM\php\registro_cliente.php(92): VehiculoModel->alta(9, 'toyota', 'camry', 2003, 'HBDD-73Q', '734874839237827...', 'blanco')
+#3 {main}
+  thrown in C:\xampp\htdocs\BDM\php\VehiculoModel.php on line 32
+[02-Jun-2026 10:12:41 Europe/Berlin] === INICIO REGISTRO CLIENTE ===
+[02-Jun-2026 10:12:41 Europe/Berlin] POST recibido: {"nombre":"Lionel","apellidos":"Messi","fecha_nacimiento":"1987-07-24","genero":"Masculino","correo":"messi@gmail.com","contrasena":"C!w3@QFf","alias":"messi10","telefono":"7667546745","vehiculos":"[{\"marca\":\"Toyota\",\"modelo\":\"Corolla\",\"anio\":2027,\"placas\":\"GERB-YQ7\",\"serie\":\"78789798798897981\",\"color\":\"NEGRO\",\"id_compania\":\"2\",\"companiaName\":\"CHUBB\",\"tipo_cobertura\":\"Cobertura Amplia\",\"monto_deducible\":\"13000\",\"fecha_inicio\":\"2026-06-02\",\"fecha_vencimiento\":\"2029-10-25\"}]"}
+[02-Jun-2026 10:12:41 Europe/Berlin] Vehiculos JSON: [{"marca":"Toyota","modelo":"Corolla","anio":2027,"placas":"GERB-YQ7","serie":"78789798798897981","color":"NEGRO","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"13000","fecha_inicio":"2026-06-02","fecha_vencimiento":"2029-10-25"}]
+[02-Jun-2026 10:12:41 Europe/Berlin] registro_cliente.php: Vehiculos recibidos: [{"marca":"Toyota","modelo":"Corolla","anio":2027,"placas":"GERB-YQ7","serie":"78789798798897981","color":"NEGRO","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"13000","fecha_inicio":"2026-06-02","fecha_vencimiento":"2029-10-25"}]
+[02-Jun-2026 10:12:41 Europe/Berlin] Resultado SP_Usuarios: {"resultado":"OK","mensaje":"Usuario registrado correctamente","id_usuario":15,"id_asegurado":10}
+[02-Jun-2026 10:12:41 Europe/Berlin] id_asegurado: 10
+[02-Jun-2026 10:12:41 Europe/Berlin] registro_cliente.php: id_asegurado obtenido: 10
+[02-Jun-2026 10:12:41 Europe/Berlin] Procesando vehiculo: {"marca":"Toyota","modelo":"Corolla","anio":2027,"placas":"GERB-YQ7","serie":"78789798798897981","color":"NEGRO","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"13000","fecha_inicio":"2026-06-02","fecha_vencimiento":"2029-10-25"}
+[02-Jun-2026 10:12:41 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: PROCEDURE bdm.SP_Unidades does not exist in C:\xampp\htdocs\BDM\php\VehiculoModel.php:32
+Stack trace:
+#0 C:\xampp\htdocs\BDM\php\VehiculoModel.php(32): mysqli_stmt->execute()
+#1 C:\xampp\htdocs\BDM\php\VehiculoModel.php(54): VehiculoModel->ejecutarSP('ALTA', NULL, 10, 'Toyota', 'Corolla', 2027, 'GERB-YQ7', '787897987988979...', 'NEGRO')
+#2 C:\xampp\htdocs\BDM\php\registro_cliente.php(92): VehiculoModel->alta(10, 'Toyota', 'Corolla', 2027, 'GERB-YQ7', '787897987988979...', 'NEGRO')
+#3 {main}
+  thrown in C:\xampp\htdocs\BDM\php\VehiculoModel.php on line 32

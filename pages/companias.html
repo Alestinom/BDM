@@ -116,15 +116,27 @@
   SESSION.requerir('companias.html');
   document.getElementById('sidebar').innerHTML = renderNav('companias.html');
 
-  let companias = [
-    { id:1, nombre:'AXA Seguros',  telefono:'800 900 3900', direccion:'Av. Santa Fe 485, CDMX' },
-    { id:2, nombre:'GNP Seguros',  telefono:'800 400 4000', direccion:'Insurgentes Sur 3900, CDMX' },
-    { id:3, nombre:'Qualitas',     telefono:'800 288 9090', direccion:'José Vasconcelos 101, CDMX' },
-    { id:4, nombre:'HDI Seguros',  telefono:'800 800 4343', direccion:'Blvd. Manuel Ávila Camacho 164, CDMX' },
-  ];
-  let nextId = 5;
+  let companias = [];
   let editandoId = null;
   let eliminandoId = null;
+
+  async function cargarCompanias() {
+    try {
+      const resp = await fetch('../php/listar_companias.php');
+      const data = await resp.json();
+      if (data.ok) {
+        companias = (data.companias || []).map(c => ({
+          id:        c.id_compania,
+          nombre:    c.nombre,
+          telefono:  c.telefono,
+          direccion: c.direccion,
+        }));
+        renderTabla();
+      }
+    } catch (err) {
+      console.error('Error al cargar compañías:', err);
+    }
+  }
 
   function renderTabla() {
     const tbody = document.getElementById('tablaCompanias');
@@ -170,28 +182,50 @@
     setTimeout(() => el.classList.add('hidden'), 3500);
   }
 
-  function guardarCompania() {
+  async function guardarCompania() {
     const nombre    = document.getElementById('comp_nombre').value.trim();
     const telefono  = document.getElementById('comp_telefono').value.trim();
     const direccion = document.getElementById('comp_direccion').value.trim();
     if (!nombre || !telefono || !direccion) { showAlertComp('Todos los campos son obligatorios.', 'error'); return; }
 
-    if (editandoId) {
-      const c = companias.find(x => x.id === editandoId);
-      if (c) { c.nombre = nombre; c.telefono = telefono; c.direccion = direccion; }
-      editandoId = null;
-      document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg> Nueva Compañía`;
-      document.getElementById('btnGuardarCompText').textContent = 'Guardar';
-      document.getElementById('btnCancelarComp').classList.add('hidden');
-      showAlertComp('Compañía actualizada correctamente.');
-    } else {
-      companias.push({ id: nextId++, nombre, telefono, direccion });
-      showAlertComp('Compañía registrada exitosamente.');
+    const esEdicion = !!editandoId;
+    const formData  = new FormData();
+    formData.append('nombre', nombre);
+    formData.append('telefono', telefono);
+    formData.append('direccion', direccion);
+    if (esEdicion) formData.append('id_compania', editandoId);
+
+    const btn    = document.getElementById('btnGuardarComp');
+    const btnTxt = document.getElementById('btnGuardarCompText');
+    btn.disabled = true;
+    btn.classList.add('opacity-60', 'cursor-not-allowed');
+    btnTxt.textContent = 'Guardando...';
+
+    try {
+      const url  = esEdicion ? '../php/modificar_compania.php' : '../php/alta_compania.php';
+      const resp = await fetch(url, { method: 'POST', body: formData });
+      const data = await resp.json();
+      if (data.ok) {
+        editandoId = null;
+        document.getElementById('comp_nombre').value    = '';
+        document.getElementById('comp_telefono').value  = '';
+        document.getElementById('comp_direccion').value = '';
+        document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg> Nueva Compañía`;
+        btnTxt.textContent = 'Guardar';
+        document.getElementById('btnCancelarComp').classList.add('hidden');
+        showAlertComp(data.mensaje || (esEdicion ? 'Compañía actualizada correctamente.' : 'Compañía registrada exitosamente.'));
+        await cargarCompanias();
+      } else {
+        btnTxt.textContent = esEdicion ? 'Actualizar' : 'Guardar';
+        showAlertComp(data.mensaje || 'Error al guardar la compañía.', 'error');
+      }
+    } catch (err) {
+      btnTxt.textContent = esEdicion ? 'Actualizar' : 'Guardar';
+      showAlertComp('No se pudo guardar la compañía. Intenta nuevamente.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('opacity-60', 'cursor-not-allowed');
     }
-    document.getElementById('comp_nombre').value = '';
-    document.getElementById('comp_telefono').value = '';
-    document.getElementById('comp_direccion').value = '';
-    renderTabla();
   }
 
   function editarCompania(id) {
@@ -209,8 +243,8 @@
 
   function cancelarEdicion() {
     editandoId = null;
-    document.getElementById('comp_nombre').value = '';
-    document.getElementById('comp_telefono').value = '';
+    document.getElementById('comp_nombre').value    = '';
+    document.getElementById('comp_telefono').value  = '';
     document.getElementById('comp_direccion').value = '';
     document.getElementById('formCompTitle').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="w-5 h-5 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg> Nueva Compañía`;
     document.getElementById('btnGuardarCompText').textContent = 'Guardar';
@@ -224,10 +258,23 @@
     document.getElementById('modalEliminar').classList.remove('hidden');
   }
 
-  function confirmarEliminar() {
-    companias = companias.filter(x => x.id !== eliminandoId);
-    cerrarModal();
-    renderTabla();
+  async function confirmarEliminar() {
+    const formData = new FormData();
+    formData.append('id_compania', eliminandoId);
+    try {
+      const resp = await fetch('../php/baja_compania.php', { method: 'POST', body: formData });
+      const data = await resp.json();
+      cerrarModal();
+      if (data.ok) {
+        showAlertComp(data.mensaje || 'Compañía eliminada correctamente.');
+        await cargarCompanias();
+      } else {
+        showAlertComp(data.mensaje || 'Error al eliminar la compañía.', 'error');
+      }
+    } catch (err) {
+      cerrarModal();
+      showAlertComp('No se pudo eliminar la compañía. Intenta nuevamente.', 'error');
+    }
   }
 
   function cerrarModal() {
@@ -235,7 +282,7 @@
     eliminandoId = null;
   }
 
-  renderTabla();
+  cargarCompanias();
 </script>
 </body>
 </html>

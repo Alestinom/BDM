@@ -1,0 +1,21 @@
+USE BDM;
+
+ALTER TABLE Polizas
+ADD COLUMN activo BOOLEAN DEFAULT 1;
+
+UPDATE Polizas
+SET activo = 1
+WHERE id_poliza > 0;
+
+SELECT COLUMN_NAME 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'Polizas' 
+AND TABLE_SCHEMA = 'BDM';
+
+select * FROM Polizas;
+
+
+ALTER TABLE Unidades
+ADD COLUMN activo BOOLEAN DEFAULT 1;
+
+UPDATE Unidades SET activo = 1 WHERE id_unidad > 0;
