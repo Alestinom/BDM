@@ -54,9 +54,6 @@
               <label class="block text-xs font-medium text-gray-600 mb-1">Compañía de seguros</label>
               <select id="busCompania" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Todas</option>
-                <option>AXA Seguros</option>
-                <option>GNP Seguros</option>
-                <option>Qualitas</option>
               </select>
             </div>
             <div>
@@ -118,55 +115,45 @@
   SESSION.requerir('busqueda.html');
   document.getElementById('sidebar').innerHTML = renderNav('busqueda.html');
 
-  const datos = [
-    { poliza: 'POL-00234', cliente: 'Juan Pérez',    vehiculo: 'Toyota Corolla · ABC-123', serie: '3VWFE21C04M000001', compania: 'AXA Seguros',  fecha: '2026-03-03', estado: 'En revisión',   estadoClass: 'bg-yellow-100 text-yellow-700' },
-    { poliza: 'POL-00891', cliente: 'Ana López',      vehiculo: 'Nissan Versa · XYZ-789',  serie: '3N1BC1APXAL000002', compania: 'GNP Seguros',  fecha: '2026-02-28', estado: 'Aprobado',       estadoClass: 'bg-green-100 text-green-700' },
-    { poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic · MNO-456',   serie: '2HGFG3B59DH000003', compania: 'Qualitas',      fecha: '2026-02-20', estado: 'Cerrado',        estadoClass: 'bg-purple-100 text-purple-700' },
-  ];
+  const sesion       = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+  const ID_USUARIO   = sesion.id_usuario || '';
+  const TIPO_USUARIO = sesion.tipo       || '';
 
-  // Convierte fecha DD/MM/YYYY o YYYY-MM-DD a objeto Date para comparación
-  function toDate(str) {
-    if (!str) return null;
-    // Si viene en formato YYYY-MM-DD (input date)
-    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return new Date(str);
-    // Si viene en formato DD/MM/YYYY (display)
-    const [d, m, y] = str.split('/');
-    return new Date(`${y}-${m}-${d}`);
+  const estadoBadge = {
+    'Registrado':             'bg-gray-100 text-gray-700',
+    'En revisión':            'bg-yellow-100 text-yellow-700',
+    'Aceptado':               'bg-green-100 text-green-700',
+    'Aceptado con deducible': 'bg-green-100 text-green-700',
+    'Aceptado sin deducible': 'bg-green-100 text-green-700',
+    'Aplica reparación':      'bg-blue-100 text-blue-700',
+    'Rechazado':              'bg-red-100 text-red-700',
+    'Pérdida total':          'bg-orange-100 text-orange-700',
+    'Cerrado':                'bg-purple-100 text-purple-700',
+  };
+
+  function formatSiniestro(id) {
+    return 'SIN-' + String(id).padStart(4, '0');
   }
 
-  function buscar() {
-    const poliza   = document.getElementById('busPoliza').value.trim().toLowerCase();
-    const cliente  = document.getElementById('busCliente').value.trim().toLowerCase();
-    const placas   = document.getElementById('busPlacas').value.trim().toLowerCase();
-    const serie    = document.getElementById('busSerie').value.trim().toLowerCase();
-    const compania = document.getElementById('busCompania').value;
-    const fecha    = document.getElementById('busFecha').value; // YYYY-MM-DD
-
-    const tieneCritero = poliza || cliente || placas || serie || compania || fecha;
-    if (!tieneCritero) {
-      renderResultados(datos);
-      return;
-    }
-
-    const filtrado = datos.filter(s => {
-      if (poliza   && !s.poliza.toLowerCase().includes(poliza))    return false;
-      if (cliente  && !s.cliente.toLowerCase().includes(cliente))  return false;
-      if (placas   && !s.vehiculo.toLowerCase().includes(placas))  return false;
-      if (serie    && !s.serie.toLowerCase().includes(serie))      return false;
-      if (compania && s.compania !== compania)                      return false;
-      if (fecha) {
-        const fechaSiniestro = toDate(s.fecha);
-        const fechaBusqueda  = toDate(fecha);
-        if (!fechaSiniestro || fechaSiniestro.toDateString() !== fechaBusqueda.toDateString()) return false;
+  async function cargarCompanias() {
+    try {
+      const resp = await fetch('../php/listar_companias.php');
+      const data = await resp.json();
+      const sel  = document.getElementById('busCompania');
+      sel.innerHTML = '<option value="">Todas</option>';
+      if (data.ok && data.companias) {
+        data.companias.forEach(c => {
+          const opt       = document.createElement('option');
+          opt.value       = c.nombre;
+          opt.textContent = c.nombre;
+          sel.appendChild(opt);
+        });
       }
-      return true;
-    });
-
-    renderResultados(filtrado);
+    } catch (e) {}
   }
 
   function renderResultados(data) {
-    const cont = document.getElementById('resultados');
+    const cont  = document.getElementById('resultados');
     const empty = document.getElementById('sinResultados');
     const tbody = document.getElementById('tablaResultados');
 
@@ -181,29 +168,69 @@
     document.getElementById('countBus').textContent = `(${data.length} encontrados)`;
 
     tbody.innerHTML = data.map(s => {
-      const fechaDisplay = s.fecha.split('-').reverse().join('/');
+      const fechaDisplay = (s.fecha || '').split('-').reverse().join('/');
+      const vehiculo = `${s.marca || ''} ${s.modelo || ''} · ${s.placas || ''}`;
+      const estado   = s.estado_actual || 'Sin estado';
       return `
       <tr class="hover:bg-gray-50 transition-colors">
-        <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.poliza}</td>
-        <td class="px-5 py-3 font-medium text-gray-800">${s.cliente}</td>
-        <td class="px-5 py-3 text-gray-600">${s.vehiculo}</td>
+        <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.numero_poliza || ''}</td>
+        <td class="px-5 py-3 font-medium text-gray-800">${s.nombre_asegurado || ''}</td>
+        <td class="px-5 py-3 text-gray-600">${vehiculo}</td>
         <td class="px-5 py-3 text-gray-600">${fechaDisplay}</td>
         <td class="px-5 py-3">
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${s.estadoClass}">${s.estado}</span>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${estadoBadge[estado] || 'bg-gray-100 text-gray-600'}">
+            ${estado}
+          </span>
         </td>
         <td class="px-5 py-3">
-          <a href="detalle_siniestro.html" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
+          <a href="detalle_siniestro.html?id=${s.id_siniestro}" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
         </td>
       </tr>
-    `}).join('');
+      `;
+    }).join('');
+  }
+
+  async function cargarTodos() {
+    const qs = new URLSearchParams({ id_usuario: ID_USUARIO, tipo_usuario: TIPO_USUARIO }).toString();
+    try {
+      const resp = await fetch(`../php/listar_siniestros.php?${qs}`);
+      const data = await resp.json();
+      renderResultados(data.ok ? data.siniestros : []);
+    } catch (e) { renderResultados([]); }
+  }
+
+  async function buscar() {
+    const poliza   = document.getElementById('busPoliza').value.trim();
+    const cliente  = document.getElementById('busCliente').value.trim();
+    const placas   = document.getElementById('busPlacas').value.trim();
+    const serie    = document.getElementById('busSerie').value.trim();
+    const compania = document.getElementById('busCompania').value;
+    const fecha    = document.getElementById('busFecha').value;
+
+    const params = { id_usuario: ID_USUARIO, tipo_usuario: TIPO_USUARIO };
+    if (poliza)   params.numero_poliza   = poliza;
+    if (cliente)  params.nombre_cliente  = cliente;
+    if (placas)   params.placas          = placas;
+    if (serie)    params.numero_serie    = serie;
+    if (compania) params.nombre_compania = compania;
+    if (fecha)    params.fecha           = fecha;
+
+    const qs = new URLSearchParams(params).toString();
+    try {
+      const resp = await fetch(`../php/buscar_siniestros.php?${qs}`);
+      const data = await resp.json();
+      renderResultados(data.ok ? data.siniestros : []);
+    } catch (e) { renderResultados([]); }
   }
 
   function limpiar() {
     ['busPoliza','busCliente','busPlacas','busSerie','busFecha'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('busCompania').value = '';
-    document.getElementById('resultados').classList.add('hidden');
-    document.getElementById('sinResultados').classList.add('hidden');
+    cargarTodos();
   }
+
+  cargarCompanias();
+  cargarTodos();
 </script>
 </body>
 </html>

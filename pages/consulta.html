@@ -53,12 +53,10 @@
               <option>Cerrado</option>
             </select>
           </div>
-          <div>
+          <div id="wrapAjustador">
             <label class="block text-xs font-medium text-gray-600 mb-1">Ajustador</label>
             <select id="filtroAjustador" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="">Todos</option>
-              <option>Luis Garza</option>
-              <option>María Torres</option>
             </select>
           </div>
           <button onclick="buscar()"
@@ -107,25 +105,25 @@
   SESSION.requerir('consulta.html');
   document.getElementById('sidebar').innerHTML = renderNav('consulta.html');
 
-  const siniestros = [
-    { id: 1, poliza: 'POL-00234', cliente: 'Juan Pérez', vehiculo: 'Toyota Corolla ABC-123', fecha: '2026-03-03', ajustador: 'Luis Garza', estado: 'En revisión' },
-    { id: 2, poliza: 'POL-00891', cliente: 'Ana López', vehiculo: 'Nissan Versa XYZ-789', fecha: '2026-02-28', ajustador: 'María Torres', estado: 'Aprobado' },
-    { id: 3, poliza: 'POL-01102', cliente: 'Carlos Mendoza', vehiculo: 'Honda Civic MNO-456', fecha: '2026-02-20', ajustador: 'Luis Garza', estado: 'Cerrado' },
-  ];
+  const sesion       = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+  const ID_USUARIO   = sesion.id_usuario || '';
+  const TIPO_USUARIO = sesion.tipo       || '';
+
+  const estadoBadge = {
+    'Registrado':             'bg-gray-100 text-gray-700',
+    'En revisión':            'bg-yellow-100 text-yellow-700',
+    'Aceptado':               'bg-green-100 text-green-700',
+    'Aceptado con deducible': 'bg-green-100 text-green-700',
+    'Aceptado sin deducible': 'bg-green-100 text-green-700',
+    'Aplica reparación':      'bg-blue-100 text-blue-700',
+    'Rechazado':              'bg-red-100 text-red-700',
+    'Pérdida total':          'bg-orange-100 text-orange-700',
+    'Cerrado':                'bg-purple-100 text-purple-700',
+  };
 
   function formatSiniestro(id) {
     return 'SIN-' + String(id).padStart(4, '0');
   }
-
-  const estadoBadge = {
-    'Registrado':    'bg-gray-100 text-gray-700',
-    'En revisión':   'bg-yellow-100 text-yellow-700',
-    'Aprobado':      'bg-green-100 text-green-700',
-    'Rechazado':     'bg-red-100 text-red-700',
-    'En reparación': 'bg-blue-100 text-blue-700',
-    'Pérdida total': 'bg-orange-100 text-orange-700',
-    'Cerrado':       'bg-purple-100 text-purple-700',
-  };
 
   function renderTabla(data) {
     const tbody = document.getElementById('tablaSiniestros');
@@ -135,54 +133,86 @@
       return;
     }
     tbody.innerHTML = data.map(s => {
-      const fechaDisplay = s.fecha.split('-').reverse().join('/');
+      const fechaDisplay = (s.fecha || '').split('-').reverse().join('/');
+      const vehiculo = `${s.marca || ''} ${s.modelo || ''} · ${s.placas || ''}`;
+      const estado   = s.estado_actual || 'Sin estado';
       return `
       <tr class="hover:bg-gray-50 transition-colors">
-        <td class="px-5 py-3 font-mono text-xs font-semibold text-blue-700">${formatSiniestro(s.id)}</td>
-        <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.poliza}</td>
-        <td class="px-5 py-3 font-medium text-gray-800">${s.cliente}</td>
-        <td class="px-5 py-3 text-gray-600">${s.vehiculo}</td>
+        <td class="px-5 py-3 font-mono text-xs font-semibold text-blue-700">${formatSiniestro(s.id_siniestro)}</td>
+        <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.numero_poliza || ''}</td>
+        <td class="px-5 py-3 font-medium text-gray-800">${s.nombre_asegurado || ''}</td>
+        <td class="px-5 py-3 text-gray-600">${vehiculo}</td>
         <td class="px-5 py-3 text-gray-600">${fechaDisplay}</td>
-        <td class="px-5 py-3 text-gray-600">${s.ajustador}</td>
+        <td class="px-5 py-3 text-gray-600">${s.nombre_ajustador || ''}</td>
         <td class="px-5 py-3">
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${estadoBadge[s.estado] || 'bg-gray-100 text-gray-600'}">
-            ${s.estado}
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${estadoBadge[estado] || 'bg-gray-100 text-gray-600'}">
+            ${estado}
           </span>
         </td>
         <td class="px-5 py-3">
-          <a href="detalle_siniestro.html" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
+          <a href="detalle_siniestro.html?id=${s.id_siniestro}" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver detalle →</a>
         </td>
       </tr>
-    `}).join('');
+      `;
+    }).join('');
+  }
+
+  async function cargarSiniestros(extra = {}) {
+    const qs = new URLSearchParams({ id_usuario: ID_USUARIO, tipo_usuario: TIPO_USUARIO, ...extra }).toString();
+    try {
+      const resp = await fetch(`../php/listar_siniestros.php?${qs}`);
+      const data = await resp.json();
+      renderTabla(data.ok ? data.siniestros : []);
+    } catch (e) { renderTabla([]); }
+  }
+
+  async function cargarAjustadores() {
+    if (TIPO_USUARIO !== 'Supervisor') {
+      document.getElementById('wrapAjustador').style.display = 'none';
+      return;
+    }
+    try {
+      const resp = await fetch('../php/listar_ajustadores.php');
+      const data = await resp.json();
+      const sel  = document.getElementById('filtroAjustador');
+      sel.innerHTML = '<option value="">Todos</option>';
+      if (data.ok && data.ajustadores) {
+        data.ajustadores.forEach(a => {
+          const opt       = document.createElement('option');
+          opt.value       = a.id_usuario;
+          opt.textContent = a.nombre + ' ' + a.apellidos;
+          sel.appendChild(opt);
+        });
+      }
+    } catch (e) {}
   }
 
   function buscar() {
-    const estado    = document.getElementById('filtroEstado').value;
-    const ajustador = document.getElementById('filtroAjustador').value;
-    const fechaIni  = document.getElementById('fechaInicio').value; // YYYY-MM-DD
-    const fechaFin  = document.getElementById('fechaFin').value;    // YYYY-MM-DD
-
-    const siniestro = document.getElementById('busSiniestro').value.trim().toLowerCase();
-    let filtrado = siniestros;
-    if (siniestro) filtrado = filtrado.filter(s => formatSiniestro(s.id).toLowerCase().includes(siniestro));
-    if (estado)    filtrado = filtrado.filter(s => s.estado === estado);
-    if (ajustador) filtrado = filtrado.filter(s => s.ajustador === ajustador);
-    if (fechaIni)  filtrado = filtrado.filter(s => s.fecha >= fechaIni);
-    if (fechaFin)  filtrado = filtrado.filter(s => s.fecha <= fechaFin);
-
-    renderTabla(filtrado);
+    const params = {};
+    const num  = document.getElementById('busSiniestro').value.trim();
+    const fIni = document.getElementById('fechaInicio').value;
+    const fFin = document.getElementById('fechaFin').value;
+    const est  = document.getElementById('filtroEstado').value;
+    const adj  = document.getElementById('filtroAjustador').value;
+    if (num)  params.numero_siniestro = num;
+    if (fIni) params.fecha_inicio     = fIni;
+    if (fFin) params.fecha_fin        = fFin;
+    if (est)  params.estado           = est;
+    if (adj)  params.ajustador        = adj;
+    cargarSiniestros(params);
   }
 
   function limpiarFiltros() {
-    document.getElementById('busSiniestro').value = '';
-    document.getElementById('fechaInicio').value = '';
-    document.getElementById('fechaFin').value = '';
-    document.getElementById('filtroEstado').value = '';
+    document.getElementById('busSiniestro').value  = '';
+    document.getElementById('fechaInicio').value   = '';
+    document.getElementById('fechaFin').value      = '';
+    document.getElementById('filtroEstado').value  = '';
     document.getElementById('filtroAjustador').value = '';
-    renderTabla(siniestros);
+    cargarSiniestros();
   }
 
-  renderTabla(siniestros);
+  cargarAjustadores();
+  cargarSiniestros();
 </script>
 </body>
 </html>
