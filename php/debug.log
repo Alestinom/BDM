@@ -103,3 +103,11 @@ Stack trace:
 [04-Jun-2026 07:34:59 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":1}
 [04-Jun-2026 07:34:59 Europe/Berlin] id_siniestro creado: 1
 [04-Jun-2026 07:34:59 Europe/Berlin] Multimedia imagen (hf_20260225_050236_5b5f4089-925a-4807-aa3f-2eacb5947d9a.jpeg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":1}
+[04-Jun-2026 08:41:44 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[04-Jun-2026 08:41:44 Europe/Berlin] POST recibido: {"id_poliza":"1","id_unidad":"1","id_usuario":"2","fecha":"2026-06-04","hora":"00:41","ubicacion":"Gonzalitos","descripcion":"CHoch\u00f3 con otro poste","otras_unidades":"0"}
+[04-Jun-2026 08:41:44 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":2}
+[04-Jun-2026 08:41:44 Europe/Berlin] id_siniestro creado: 2
+[04-Jun-2026 08:41:44 Europe/Berlin] Multimedia imagen (20241119_155805.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":2}
+[04-Jun-2026 08:41:44 Europe/Berlin] Multimedia imagen (20241119_155807.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":3}
+[04-Jun-2026 08:41:44 Europe/Berlin] Multimedia imagen (20241119_155810.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":4}
+[04-Jun-2026 08:41:45 Europe/Berlin] Multimedia video (0224.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":5}

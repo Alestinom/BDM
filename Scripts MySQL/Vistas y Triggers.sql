@@ -275,6 +275,8 @@ DELIMITER ;
 USE BDM;
 
 -- Ver todas las vistas
+DESCRIBE Aprobaciones;
+
 SHOW FULL TABLES WHERE Table_type = 'VIEW';
 
 -- Ver los triggers

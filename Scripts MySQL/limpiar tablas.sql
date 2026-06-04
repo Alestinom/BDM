@@ -31,3 +31,7 @@ SELECT id_usuario, nombre, apellidos, tipo_usuario, activo
 FROM Usuarios;
 
 DESCRIBE Polizas;
+
+ALTER TABLE Aprobaciones
+ADD COLUMN fecha_compromiso DATE NULL,
+ADD COLUMN observaciones TEXT NULL;

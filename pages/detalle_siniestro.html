@@ -19,14 +19,12 @@
         <span>›</span>
         <a href="consulta.html" class="hover:text-blue-600">Consulta</a>
         <span>›</span>
-        <span class="text-gray-800 font-medium">Detalle #SIN-0048</span>
+        <span id="breadcrumbNum" class="text-gray-800 font-medium">Detalle</span>
       </div>
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold text-gray-800">Detalle del Siniestro</h1>
-        <span class="text-sm font-mono text-gray-500 font-medium">#SIN-0048</span>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700">
-          ● En revisión
-        </span>
+        <span id="headerNum" class="text-sm font-mono text-gray-500 font-medium"></span>
+        <span id="headerEstado" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-gray-700"></span>
       </div>
     </div>
 
@@ -39,51 +37,51 @@
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <div>
               <p class="text-xs text-gray-500">Número de Siniestro</p>
-              <p class="font-bold text-blue-700 font-mono text-lg">SIN-0048</p>
+              <p id="infoNumSin" class="font-bold text-blue-700 font-mono text-lg"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Cliente</p>
-              <p class="font-medium text-gray-800">Juan Pérez</p>
+              <p id="infoCliente" class="font-medium text-gray-800"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Vehículo</p>
-              <p class="font-medium text-gray-800">Toyota Corolla 2021</p>
+              <p id="infoVehiculo" class="font-medium text-gray-800"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Placas</p>
-              <p class="font-medium text-gray-800 font-mono">ABC-123</p>
+              <p id="infoPlacas" class="font-medium text-gray-800 font-mono"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Número de Póliza</p>
-              <p class="font-medium text-gray-800 font-mono">POL-00234</p>
+              <p id="infoPoliza" class="font-medium text-gray-800 font-mono"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Compañía</p>
-              <p class="font-medium text-gray-800">AXA Seguros</p>
+              <p id="infoCompania" class="font-medium text-gray-800"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Ajustador</p>
-              <p class="font-medium text-gray-800">Luis Garza</p>
+              <p id="infoAjustador" class="font-medium text-gray-800"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Fecha</p>
-              <p class="font-medium text-gray-800">03/03/2026</p>
+              <p id="infoFecha" class="font-medium text-gray-800"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Hora</p>
-              <p class="font-medium text-gray-800">14:30 hrs</p>
+              <p id="infoHora" class="font-medium text-gray-800"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Otras unidades</p>
-              <p class="font-medium text-gray-800">No</p>
+              <p id="infoOtrasUnidades" class="font-medium text-gray-800"></p>
             </div>
             <div class="col-span-2 sm:col-span-3">
               <p class="text-xs text-gray-500">Ubicación</p>
-              <p class="font-medium text-gray-800">Av. Constitución 1000, Monterrey, NL</p>
+              <p id="infoUbicacion" class="font-medium text-gray-800"></p>
             </div>
             <div class="col-span-2 sm:col-span-3">
               <p class="text-xs text-gray-500">Descripción</p>
-              <p class="text-gray-700 text-sm leading-relaxed mt-1">Choque por alcance en avenida principal. El vehículo fue impactado por la parte trasera mientras esperaba en semáforo. Daños en defensa trasera y cajuela.</p>
+              <p id="infoDescripcion" class="text-gray-700 text-sm leading-relaxed mt-1"></p>
             </div>
           </div>
         </div>
@@ -91,38 +89,13 @@
         <!-- Historial de estados -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Historial de Estados</h2>
-          <div class="space-y-3">
-            <div class="flex items-start gap-3">
-              <div class="w-2.5 h-2.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></div>
-              <div>
-                <p class="text-sm font-medium text-gray-800">Registrado</p>
-                <p class="text-xs text-gray-400">03/03/2026 · 14:45 hrs · Luis Garza (Ajustador)</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400 mt-1.5 flex-shrink-0"></div>
-              <div>
-                <p class="text-sm font-medium text-gray-800">En revisión</p>
-                <p class="text-xs text-gray-400">03/03/2026 · 16:00 hrs · Sistema</p>
-              </div>
-            </div>
-          </div>
+          <div id="historialEstados" class="space-y-3"></div>
         </div>
 
         <!-- Multimedia -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Material Multimedia</h2>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
-              <span class="text-gray-400 text-xs">Foto 1</span>
-            </div>
-            <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
-              <span class="text-gray-400 text-xs">Foto 2</span>
-            </div>
-            <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
-              <span class="text-gray-400 text-xs">Foto 3</span>
-            </div>
-          </div>
+          <div id="galeriaMultimedia" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
         </div>
 
         <!-- Acciones del Supervisor -->
@@ -196,6 +169,149 @@
   if (!SESSION.es('Supervisor')) {
     document.getElementById('seccionResolucion').style.display = 'none';
   }
+
+  function formatSiniestro(id) {
+    return 'SIN-' + String(id).padStart(4, '0');
+  }
+
+  const estadoBadge = {
+    'Registrado':             'bg-gray-100 text-gray-700',
+    'En revisión':            'bg-yellow-100 text-yellow-700',
+    'Aceptado':               'bg-green-100 text-green-700',
+    'Aceptado con deducible': 'bg-green-100 text-green-700',
+    'Aceptado sin deducible': 'bg-green-100 text-green-700',
+    'Aplica reparación':      'bg-blue-100 text-blue-700',
+    'Rechazado':              'bg-red-100 text-red-700',
+    'Pérdida total':          'bg-orange-100 text-orange-700',
+    'Cerrado':                'bg-purple-100 text-purple-700',
+  };
+
+  const estadoBullet = {
+    'Registrado':             'bg-gray-400',
+    'En revisión':            'bg-yellow-400',
+    'Aceptado':               'bg-green-500',
+    'Aceptado con deducible': 'bg-green-500',
+    'Aceptado sin deducible': 'bg-green-500',
+    'Aplica reparación':      'bg-blue-500',
+    'Rechazado':              'bg-red-500',
+    'Pérdida total':          'bg-orange-500',
+    'Cerrado':                'bg-purple-500',
+  };
+
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val || '';
+  }
+
+  function mostrarError(msg) {
+    document.querySelector('.max-w-4xl').innerHTML = `
+      <div class="bg-white rounded-xl shadow-sm border border-red-200 p-10 text-center">
+        <p class="text-red-600 font-semibold mb-2">Error al cargar el siniestro</p>
+        <p class="text-gray-500 text-sm mb-5">${msg}</p>
+        <a href="consulta.html" class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
+          Volver al Listado
+        </a>
+      </div>`;
+  }
+
+  async function cargarDetalle() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) {
+      window.location.href = 'consulta.html';
+      return;
+    }
+
+    let data;
+    try {
+      const resp = await fetch(`../php/consultar_siniestro.php?id=${encodeURIComponent(id)}`);
+      data = await resp.json();
+    } catch (e) {
+      mostrarError('No se pudo conectar con el servidor.');
+      return;
+    }
+
+    if (!data.ok) {
+      mostrarError(data.mensaje || 'Siniestro no encontrado.');
+      return;
+    }
+
+    const s = data.siniestro;
+    const num = formatSiniestro(s.id_siniestro);
+    const estado = s.estado_actual || 'Sin estado';
+
+    // Breadcrumb y header
+    document.getElementById('breadcrumbNum').textContent = `Detalle #${num}`;
+    document.getElementById('headerNum').textContent = `#${num}`;
+    const headerEstado = document.getElementById('headerEstado');
+    headerEstado.textContent = `● ${estado}`;
+    headerEstado.className = `inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${estadoBadge[estado] || 'bg-gray-100 text-gray-700'}`;
+
+    // Información del siniestro
+    const fechaDisplay = (s.fecha || '').split('-').reverse().join('/');
+    setText('infoNumSin',        num);
+    setText('infoCliente',       s.nombre_asegurado);
+    setText('infoVehiculo',      `${s.marca || ''} ${s.modelo || ''} ${s.anio || ''}`.trim());
+    setText('infoPlacas',        s.placas);
+    setText('infoPoliza',        s.numero_poliza);
+    setText('infoCompania',      s.nombre_compania);
+    setText('infoAjustador',     s.nombre_ajustador);
+    setText('infoFecha',         fechaDisplay);
+    setText('infoHora',          s.hora ? s.hora + ' hrs' : '');
+    setText('infoOtrasUnidades', s.otras_unidades == 1 ? 'Sí' : 'No');
+    setText('infoUbicacion',     s.ubicacion);
+    setText('infoDescripcion',   s.descripcion);
+
+    // Historial
+    const histContainer = document.getElementById('historialEstados');
+    if (!data.historial.length) {
+      histContainer.innerHTML = '<p class="text-sm text-gray-400">Sin historial registrado.</p>';
+    } else {
+      histContainer.innerHTML = data.historial.map(h => {
+        const dt = h.fecha_cambio ? h.fecha_cambio.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/') : '';
+        const bullet = estadoBullet[h.estado] || 'bg-gray-400';
+        return `
+        <div class="flex items-start gap-3">
+          <div class="w-2.5 h-2.5 rounded-full ${bullet} mt-1.5 flex-shrink-0"></div>
+          <div>
+            <p class="text-sm font-medium text-gray-800">${h.estado || ''}</p>
+            <p class="text-xs text-gray-400">${dt} · ${h.nombre_usuario || ''} (${h.tipo_usuario || ''})</p>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // Multimedia
+    const galeria = document.getElementById('galeriaMultimedia');
+    if (!data.multimedia.length) {
+      galeria.className = '';
+      galeria.innerHTML = '<p class="text-sm text-gray-400">Sin archivos multimedia.</p>';
+    } else {
+      galeria.innerHTML = data.multimedia.map(m => {
+        const src = `../php/obtener_imagen.php?id=${m.id_multimedia}`;
+        const nombre = m.nombre_archivo || '';
+        if (m.tipo === 'video') {
+          return `
+          <div class="flex flex-col gap-1">
+            <video controls class="w-full aspect-video rounded-lg border border-gray-200 bg-black">
+              <source src="${src}">
+            </video>
+            <p class="text-xs text-gray-500 truncate" title="${nombre}">${nombre}</p>
+          </div>`;
+        } else {
+          return `
+          <div class="flex flex-col gap-1">
+            <a href="${src}" target="_blank">
+              <img src="${src}" alt="${nombre}" class="w-full aspect-video object-cover rounded-lg border border-gray-200">
+            </a>
+            <p class="text-xs text-gray-500 truncate" title="${nombre}">${nombre}</p>
+          </div>`;
+        }
+      }).join('');
+    }
+  }
+
+  cargarDetalle();
 
   function showAlertRes(msg, tipo = 'success') {
     const el = document.getElementById('alertResolucion');
