@@ -46,3 +46,60 @@ Stack trace:
 [04-Jun-2026 06:17:04 Europe/Berlin] Procesando vehiculo: {"marca":"Tr","modelo":"fd","anio":2002,"placas":"4F4SG","serie":"46465412316486461","color":"ROjo","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura B\u00e1sica","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2026-06-30"}
 [04-Jun-2026 06:17:04 Europe/Berlin] registro_cliente.php: Resultado vehiculo (4F4SG): {"resultado":"OK","mensaje":"Veh\u00edculo registrado correctamente","id_unidad":2}
 [04-Jun-2026 06:17:04 Europe/Berlin] registro_cliente.php: Resultado poliza (4F4SG): {"resultado":"OK","mensaje":"P\u00f3liza registrada correctamente"}
+[04-Jun-2026 07:04:55 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[04-Jun-2026 07:04:55 Europe/Berlin] POST recibido: {"id_poliza":"2","id_unidad":"1","id_usuario":"2","fecha":"2026-06-03","hora":"23:04","ubicacion":"Gonzalitos","descripcion":"lo","otras_unidades":"0"}
+[04-Jun-2026 07:04:55 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":1}
+[04-Jun-2026 07:04:55 Europe/Berlin] id_siniestro creado: 1
+[04-Jun-2026 07:04:55 Europe/Berlin] Multimedia imagen (178c3125-d542-43f0-a6b9-a0facfcce6ff.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":1}
+[04-Jun-2026 07:04:55 Europe/Berlin] Multimedia imagen (360_F_82744049_I55zkqp29SqGwbR1lBxngjsw6ocl2i1A.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":2}
+[04-Jun-2026 07:04:55 Europe/Berlin] Multimedia imagen (29341cdff97bc7044f227cc1c5fdb287.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":3}
+[04-Jun-2026 07:04:55 Europe/Berlin] PHP Warning:  MultimediaModel::alta(): Error occurred while closing statement in C:\xampp\htdocs\BDM\php\MultimediaModel.php on line 52
+[04-Jun-2026 07:04:55 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Got a packet bigger than 'max_allowed_packet' bytes in C:\xampp\htdocs\BDM\php\MultimediaModel.php:30
+Stack trace:
+#0 C:\xampp\htdocs\BDM\php\MultimediaModel.php(30): mysqli_stmt->execute()
+#1 C:\xampp\htdocs\BDM\php\MultimediaModel.php(52): MultimediaModel->ejecutarSP('ALTA', NULL, 1, '2', 'video', '\x00\x00\x00 ftypisom\x00\x00\x02...', '0224.mp4')
+#2 C:\xampp\htdocs\BDM\php\registro_siniestro.php(66): MultimediaModel->alta(1, '2', 'video', '\x00\x00\x00 ftypisom\x00\x00\x02...', '0224.mp4')
+#3 {main}
+  thrown in C:\xampp\htdocs\BDM\php\MultimediaModel.php on line 30
+[04-Jun-2026 07:05:42 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[04-Jun-2026 07:05:42 Europe/Berlin] POST recibido: {"id_poliza":"3","id_unidad":"2","id_usuario":"1","fecha":"2026-06-03","hora":"23:05","ubicacion":"Gonzalitos","descripcion":"jkjjkhkjhkj","otras_unidades":"0"}
+[04-Jun-2026 07:05:42 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":2}
+[04-Jun-2026 07:05:42 Europe/Berlin] id_siniestro creado: 2
+[04-Jun-2026 07:05:42 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Got a packet bigger than 'max_allowed_packet' bytes in C:\xampp\htdocs\BDM\php\MultimediaModel.php:30
+Stack trace:
+#0 C:\xampp\htdocs\BDM\php\MultimediaModel.php(30): mysqli_stmt->execute()
+#1 C:\xampp\htdocs\BDM\php\MultimediaModel.php(52): MultimediaModel->ejecutarSP('ALTA', NULL, 2, '1', 'imagen', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x01\x01...', 'hf_20260225_050...')
+#2 C:\xampp\htdocs\BDM\php\registro_siniestro.php(51): MultimediaModel->alta(2, '1', 'imagen', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x01\x01...', 'hf_20260225_050...')
+#3 {main}
+  thrown in C:\xampp\htdocs\BDM\php\MultimediaModel.php on line 30
+[04-Jun-2026 07:07:28 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[04-Jun-2026 07:07:28 Europe/Berlin] POST recibido: {"id_poliza":"2","id_unidad":"3","id_usuario":"1","fecha":"2026-06-03","hora":"23:07","ubicacion":"Gonzalitos","descripcion":"dada","otras_unidades":"0"}
+[04-Jun-2026 07:07:28 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":3}
+[04-Jun-2026 07:07:28 Europe/Berlin] id_siniestro creado: 3
+[04-Jun-2026 07:07:28 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Got a packet bigger than 'max_allowed_packet' bytes in C:\xampp\htdocs\BDM\php\MultimediaModel.php:30
+Stack trace:
+#0 C:\xampp\htdocs\BDM\php\MultimediaModel.php(30): mysqli_stmt->execute()
+#1 C:\xampp\htdocs\BDM\php\MultimediaModel.php(52): MultimediaModel->ejecutarSP('ALTA', NULL, 3, '1', 'imagen', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x01\x01...', 'hf_20260225_050...')
+#2 C:\xampp\htdocs\BDM\php\registro_siniestro.php(51): MultimediaModel->alta(3, '1', 'imagen', '\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x01\x01...', 'hf_20260225_050...')
+#3 {main}
+  thrown in C:\xampp\htdocs\BDM\php\MultimediaModel.php on line 30
+[04-Jun-2026 07:18:51 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[04-Jun-2026 07:18:51 Europe/Berlin] POST recibido: {"id_poliza":"3","id_unidad":"2","id_usuario":"2","fecha":"2026-06-03","hora":"23:18","ubicacion":"dadaedf","descripcion":"dfadfaes","otras_unidades":"1"}
+[04-Jun-2026 07:18:51 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":4}
+[04-Jun-2026 07:18:51 Europe/Berlin] id_siniestro creado: 4
+[04-Jun-2026 07:18:52 Europe/Berlin] Multimedia imagen (hf_20260225_050236_5b5f4089-925a-4807-aa3f-2eacb5947d9a.jpeg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":4}
+[04-Jun-2026 07:34:31 Europe/Berlin] === INICIO REGISTRO CLIENTE ===
+[04-Jun-2026 07:34:31 Europe/Berlin] POST recibido: {"nombre":"Andrea","apellidos":"Flores","fecha_nacimiento":"2007-08-07","genero":"Femenino","correo":"andrea@gmail.com","contrasena":"TB69!vNW","alias":"MiNovia","telefono":"8282456021","vehiculos":"[{\"marca\":\"Toyota\",\"modelo\":\"Corolla\",\"anio\":2020,\"placas\":\"ANS-28AS\",\"serie\":\"54566465878465113\",\"color\":\"rojo\",\"id_compania\":\"1\",\"companiaName\":\"CHUBB\",\"tipo_cobertura\":\"Cobertura Amplia\",\"monto_deducible\":\"1200\",\"fecha_inicio\":\"2026-06-03\",\"fecha_vencimiento\":\"2030-05-05\"}]"}
+[04-Jun-2026 07:34:31 Europe/Berlin] Vehiculos JSON: [{"marca":"Toyota","modelo":"Corolla","anio":2020,"placas":"ANS-28AS","serie":"54566465878465113","color":"rojo","id_compania":"1","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2030-05-05"}]
+[04-Jun-2026 07:34:31 Europe/Berlin] registro_cliente.php: Vehiculos recibidos: [{"marca":"Toyota","modelo":"Corolla","anio":2020,"placas":"ANS-28AS","serie":"54566465878465113","color":"rojo","id_compania":"1","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2030-05-05"}]
+[04-Jun-2026 07:34:32 Europe/Berlin] Resultado SP_Usuarios: {"resultado":"OK","mensaje":"Usuario registrado correctamente","id_usuario":17,"id_asegurado":1}
+[04-Jun-2026 07:34:32 Europe/Berlin] id_asegurado: 1
+[04-Jun-2026 07:34:32 Europe/Berlin] registro_cliente.php: id_asegurado obtenido: 1
+[04-Jun-2026 07:34:32 Europe/Berlin] Procesando vehiculo: {"marca":"Toyota","modelo":"Corolla","anio":2020,"placas":"ANS-28AS","serie":"54566465878465113","color":"rojo","id_compania":"1","companiaName":"CHUBB","tipo_cobertura":"Cobertura Amplia","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2030-05-05"}
+[04-Jun-2026 07:34:32 Europe/Berlin] registro_cliente.php: Resultado vehiculo (ANS-28AS): {"resultado":"OK","mensaje":"Veh\u00edculo registrado correctamente","id_unidad":1}
+[04-Jun-2026 07:34:32 Europe/Berlin] registro_cliente.php: Resultado poliza (ANS-28AS): {"resultado":"OK","mensaje":"P\u00f3liza registrada correctamente"}
+[04-Jun-2026 07:34:59 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[04-Jun-2026 07:34:59 Europe/Berlin] POST recibido: {"id_poliza":"1","id_unidad":"1","id_usuario":"1","fecha":"2026-06-03","hora":"23:34","ubicacion":"dadaedf","descripcion":"jamas","otras_unidades":"1"}
+[04-Jun-2026 07:34:59 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":1}
+[04-Jun-2026 07:34:59 Europe/Berlin] id_siniestro creado: 1
+[04-Jun-2026 07:34:59 Europe/Berlin] Multimedia imagen (hf_20260225_050236_5b5f4089-925a-4807-aa3f-2eacb5947d9a.jpeg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":1}

@@ -107,14 +107,14 @@
 
           <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Imágenes del siniestro</label>
-            <input type="file" id="imagenes" accept="image/*" multiple onchange="previsualizarImagenes(this)"
+            <input type="file" id="imagenes" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" multiple onchange="previsualizarImagenes(this)"
               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer mb-3">
             <div id="previewImagenes" class="grid grid-cols-3 gap-2"></div>
           </div>
 
           <div class="mt-4">
             <label class="block text-xs font-medium text-gray-700 mb-1">Videos del siniestro <span class="text-gray-400">(opcional)</span></label>
-            <input type="file" id="videos" accept="video/*" multiple
+            <input type="file" id="videos" accept="video/mp4,video/avi,video/quicktime,video/x-ms-wmv,video/x-matroska" multiple
               class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer">
           </div>
         </div>
@@ -258,6 +258,24 @@
       return;
     }
 
+    const imgs = document.getElementById('imagenes').files;
+    const tiposImg = ['image/jpeg','image/jpg','image/png','image/gif','image/webp'];
+    for (const f of imgs) {
+      if (!tiposImg.includes(f.type)) {
+        showAlert('Solo se permiten imágenes (JPG, PNG, GIF, WEBP). Archivo no válido: ' + f.name);
+        return;
+      }
+    }
+
+    const vids = document.getElementById('videos').files;
+    const tiposVid = ['video/mp4','video/avi','video/quicktime','video/x-ms-wmv','video/x-matroska'];
+    for (const f of vids) {
+      if (!tiposVid.includes(f.type)) {
+        showAlert('Solo se permiten videos (MP4, AVI, MOV, WMV, MKV). Archivo no válido: ' + f.name);
+        return;
+      }
+    }
+
     const otras = document.getElementById('otras_unidades').value === 'si' ? '1' : '0';
 
     const formData = new FormData();
@@ -270,10 +288,7 @@
     formData.append('descripcion',    descripcion);
     formData.append('otras_unidades', otras);
 
-    const imgs = document.getElementById('imagenes').files;
     for (const f of imgs) formData.append('imagenes[]', f);
-
-    const vids = document.getElementById('videos').files;
     for (const f of vids) formData.append('videos[]', f);
 
     try {

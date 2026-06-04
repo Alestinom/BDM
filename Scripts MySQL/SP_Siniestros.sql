@@ -144,3 +144,15 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+ALTER TABLE Polizas 
+ADD COLUMN id_unidad INT NULL,
+ADD FOREIGN KEY (id_unidad) REFERENCES Unidades(id_unidad);
+
+USE BDM;
+
+SELECT id_poliza, numero_poliza, id_asegurado, id_unidad 
+FROM Polizas WHERE activo = 1;
+
+SELECT id_unidad, id_asegurado, marca, modelo, placas 
+FROM Unidades WHERE activo = 1;
