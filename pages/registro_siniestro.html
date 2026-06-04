@@ -36,11 +36,8 @@
 
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Cliente (Asegurado) *</label>
-              <select id="cliente" onchange="cargarPoliza()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select id="cliente" onchange="cargarDatosCliente()" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Seleccionar cliente</option>
-                <option value="1" data-poliza="POL-00234" data-compania="AXA Seguros">Juan Pérez</option>
-                <option value="2" data-poliza="POL-00891" data-compania="GNP Seguros">Ana López</option>
-                <option value="3" data-poliza="POL-01102" data-compania="Qualitas">Carlos Mendoza</option>
               </select>
             </div>
 
@@ -144,29 +141,80 @@
   SESSION.requerir('registro_siniestro.html');
   document.getElementById('sidebar').innerHTML = renderNav('registro_siniestro.html');
 
-  // Vehículos por cliente (en producción se cargará desde BD vía SP)
-  const vehiculosPorCliente = {
-    '1': [{ id: 1, label: 'ABC-123 · Toyota Corolla 2021', serie: '3VWFE21C04M000001' }],
-    '2': [{ id: 2, label: 'XYZ-789 · Nissan Versa 2020',  serie: '3N1BC1APXAL000002' }],
-    '3': [{ id: 3, label: 'MNO-456 · Honda Civic 2022',   serie: '2HGFG3B59DH000003' }],
-  };
+  let idAseguradoActual = null;
+  let idPolizaActual    = null;
 
-  function cargarPoliza() {
-    const sel = document.getElementById('cliente');
-    const opt = sel.options[sel.selectedIndex];
-    document.getElementById('poliza').value = opt.dataset.poliza || '';
-    document.getElementById('compania').value = opt.dataset.compania || '';
+  async function cargarClientes() {
+    try {
+      const resp = await fetch('../php/listar_clientes.php');
+      const data = await resp.json();
+      const sel  = document.getElementById('cliente');
+      if (data.ok && Array.isArray(data.clientes)) {
+        data.clientes.forEach(c => {
+          const opt       = document.createElement('option');
+          opt.value       = c.id_usuario;
+          opt.textContent = c.nombre + ' ' + c.apellidos;
+          sel.appendChild(opt);
+        });
+      }
+    } catch (e) { console.error('Error cargando clientes:', e); }
+  }
 
-    // Cargar vehículos del cliente seleccionado
-    const selVehiculo = document.getElementById('vehiculo');
-    const clienteId = sel.value;
-    selVehiculo.innerHTML = '<option value="">Seleccionar vehículo</option>';
-    if (clienteId && vehiculosPorCliente[clienteId]) {
-      vehiculosPorCliente[clienteId].forEach(v => {
-        selVehiculo.innerHTML += `<option value="${v.id}" data-serie="${v.serie}">${v.label}</option>`;
-      });
-    } else {
-      selVehiculo.innerHTML = '<option value="">Selecciona primero un cliente</option>';
+  async function cargarDatosCliente() {
+    const idUsuario = document.getElementById('cliente').value;
+    document.getElementById('vehiculo').innerHTML = '<option value="">Cargando...</option>';
+    document.getElementById('poliza').value       = '';
+    document.getElementById('compania').value     = '';
+    idAseguradoActual = null;
+    idPolizaActual    = null;
+
+    if (!idUsuario) {
+      document.getElementById('vehiculo').innerHTML = '<option value="">Selecciona primero un cliente</option>';
+      return;
+    }
+
+    try {
+      const uResp = await fetch('../php/consultar_usuario.php?id=' + idUsuario);
+      const uData = await uResp.json();
+      if (!uData.ok || !uData.usuario || !uData.usuario.id_asegurado) {
+        document.getElementById('vehiculo').innerHTML = '<option value="">Sin vehículos registrados</option>';
+        return;
+      }
+      idAseguradoActual = uData.usuario.id_asegurado;
+
+      const [vResp, pResp] = await Promise.all([
+        fetch('../php/listar_vehiculos_asegurado.php?id=' + idAseguradoActual),
+        fetch('../php/listar_polizas_asegurado.php?id='   + idAseguradoActual),
+      ]);
+      const vData = await vResp.json();
+      const pData = await pResp.json();
+
+      const selV = document.getElementById('vehiculo');
+      selV.innerHTML = '<option value="">Seleccionar vehículo</option>';
+      if (vData.ok && Array.isArray(vData.vehiculos) && vData.vehiculos.length > 0) {
+        vData.vehiculos.forEach(v => {
+          const opt       = document.createElement('option');
+          opt.value       = v.id_unidad;
+          opt.textContent = `${v.marca} ${v.modelo} ${v.anio} · ${v.placas}`;
+          selV.appendChild(opt);
+        });
+        if (vData.vehiculos.length === 1) selV.selectedIndex = 1;
+      } else {
+        selV.innerHTML = '<option value="">Sin vehículos registrados</option>';
+      }
+
+      if (pData.ok && Array.isArray(pData.polizas) && pData.polizas.length > 0) {
+        const pol = pData.polizas[0];
+        document.getElementById('poliza').value   = pol.numero_poliza   || '';
+        document.getElementById('compania').value = pol.nombre_compania || '';
+        idPolizaActual = pol.id_poliza;
+      } else {
+        document.getElementById('poliza').value = 'Sin póliza activa';
+      }
+
+    } catch (e) {
+      console.error('Error cargando datos del cliente:', e);
+      document.getElementById('vehiculo').innerHTML = '<option value="">Error al cargar vehículos</option>';
     }
   }
 
@@ -187,17 +235,62 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function guardarSiniestro() {
-    const reqs = ['cliente', 'vehiculo', 'fecha', 'hora', 'ubicacion', 'descripcion'];
-    for (const id of reqs) {
-      if (!document.getElementById(id).value.trim()) {
-        showAlert('Por favor completa todos los campos obligatorios.');
-        return;
-      }
+  async function guardarSiniestro() {
+    const clienteVal  = document.getElementById('cliente').value;
+    const vehiculoVal = document.getElementById('vehiculo').value;
+    const fecha       = document.getElementById('fecha').value;
+    const hora        = document.getElementById('hora').value;
+    const ubicacion   = document.getElementById('ubicacion').value.trim();
+    const descripcion = document.getElementById('descripcion').value.trim();
+
+    if (!clienteVal || !vehiculoVal || !fecha || !hora || !ubicacion || !descripcion) {
+      showAlert('Por favor completa todos los campos obligatorios.');
+      return;
     }
-    showAlert('Siniestro registrado exitosamente. Estado: Registrado.', 'success');
-    setTimeout(() => window.location.href = 'consulta.html', 1800);
+    if (!idPolizaActual) {
+      showAlert('El cliente no tiene una póliza activa. No se puede registrar el siniestro.');
+      return;
+    }
+
+    const sesion = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+    if (!sesion.id_usuario) {
+      showAlert('No se pudo obtener la sesión. Por favor inicia sesión de nuevo.');
+      return;
+    }
+
+    const otras = document.getElementById('otras_unidades').value === 'si' ? '1' : '0';
+
+    const formData = new FormData();
+    formData.append('id_poliza',      idPolizaActual);
+    formData.append('id_unidad',      vehiculoVal);
+    formData.append('id_usuario',     sesion.id_usuario);
+    formData.append('fecha',          fecha);
+    formData.append('hora',           hora);
+    formData.append('ubicacion',      ubicacion);
+    formData.append('descripcion',    descripcion);
+    formData.append('otras_unidades', otras);
+
+    const imgs = document.getElementById('imagenes').files;
+    for (const f of imgs) formData.append('imagenes[]', f);
+
+    const vids = document.getElementById('videos').files;
+    for (const f of vids) formData.append('videos[]', f);
+
+    try {
+      const resp = await fetch('../php/registro_siniestro.php', { method: 'POST', body: formData });
+      const data = await resp.json();
+      if (data.ok) {
+        showAlert(data.mensaje || 'Siniestro registrado exitosamente.', 'success');
+        setTimeout(() => window.location.href = 'consulta.html', 1800);
+      } else {
+        showAlert(data.mensaje || 'Error al registrar el siniestro.');
+      }
+    } catch (e) {
+      showAlert('Error de conexión al registrar el siniestro.');
+    }
   }
+
+  cargarClientes();
 </script>
 </body>
 </html>

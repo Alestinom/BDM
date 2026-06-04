@@ -86,3 +86,15 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+CALL SP_Unidades(
+    'ALTA',     -- accion
+    NULL,       -- id_unidad
+    5,          -- id_asegurado (usa uno que exista)
+    'Toyota',   -- marca
+    'Corolla',  -- modelo
+    2023,       -- anio
+    'ABC-123',  -- placas
+    '12345678901234567', -- numero_serie (17 chars)
+    'Blanco'    -- color
+);

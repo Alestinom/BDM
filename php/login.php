@@ -16,11 +16,12 @@ if ($usuario) {
         substr($usuario['nombre'], 0, 1) . substr($usuario['apellidos'], 0, 1)
     );
     echo json_encode([
-        "ok"       => true,
-        "tipo"     => $usuario['tipo_usuario'],
-        "nombre"   => $nombreCompleto,
+        "ok"        => true,
+        "tipo"      => $usuario['tipo_usuario'],
+        "nombre"    => $nombreCompleto,
         "iniciales" => $iniciales,
-        "correo"   => $usuario['correo'],
+        "correo"    => $usuario['correo'],
+        "id_usuario" => $usuario['id_usuario'],
     ]);
 } else {
     echo json_encode(["ok" => false]);

@@ -36,3 +36,13 @@ Stack trace:
 #2 C:\xampp\htdocs\BDM\php\registro_cliente.php(92): VehiculoModel->alta(10, 'Toyota', 'Corolla', 2027, 'GERB-YQ7', '787897987988979...', 'NEGRO')
 #3 {main}
   thrown in C:\xampp\htdocs\BDM\php\VehiculoModel.php on line 32
+[04-Jun-2026 06:17:04 Europe/Berlin] === INICIO REGISTRO CLIENTE ===
+[04-Jun-2026 06:17:04 Europe/Berlin] POST recibido: {"nombre":"Patre","apellidos":"Lopez","fecha_nacimiento":"2005-02-05","genero":"Masculino","correo":"patre@gmail.com","contrasena":"#NfP!6UZ","alias":"patrecrack","telefono":"5412456582","vehiculos":"[{\"marca\":\"Tr\",\"modelo\":\"fd\",\"anio\":2002,\"placas\":\"4F4SG\",\"serie\":\"46465412316486461\",\"color\":\"ROjo\",\"id_compania\":\"2\",\"companiaName\":\"CHUBB\",\"tipo_cobertura\":\"Cobertura B\u00e1sica\",\"monto_deducible\":\"1200\",\"fecha_inicio\":\"2026-06-03\",\"fecha_vencimiento\":\"2026-06-30\"}]"}
+[04-Jun-2026 06:17:04 Europe/Berlin] Vehiculos JSON: [{"marca":"Tr","modelo":"fd","anio":2002,"placas":"4F4SG","serie":"46465412316486461","color":"ROjo","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Básica","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2026-06-30"}]
+[04-Jun-2026 06:17:04 Europe/Berlin] registro_cliente.php: Vehiculos recibidos: [{"marca":"Tr","modelo":"fd","anio":2002,"placas":"4F4SG","serie":"46465412316486461","color":"ROjo","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura Básica","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2026-06-30"}]
+[04-Jun-2026 06:17:04 Europe/Berlin] Resultado SP_Usuarios: {"resultado":"OK","mensaje":"Usuario registrado correctamente","id_usuario":16,"id_asegurado":11}
+[04-Jun-2026 06:17:04 Europe/Berlin] id_asegurado: 11
+[04-Jun-2026 06:17:04 Europe/Berlin] registro_cliente.php: id_asegurado obtenido: 11
+[04-Jun-2026 06:17:04 Europe/Berlin] Procesando vehiculo: {"marca":"Tr","modelo":"fd","anio":2002,"placas":"4F4SG","serie":"46465412316486461","color":"ROjo","id_compania":"2","companiaName":"CHUBB","tipo_cobertura":"Cobertura B\u00e1sica","monto_deducible":"1200","fecha_inicio":"2026-06-03","fecha_vencimiento":"2026-06-30"}
+[04-Jun-2026 06:17:04 Europe/Berlin] registro_cliente.php: Resultado vehiculo (4F4SG): {"resultado":"OK","mensaje":"Veh\u00edculo registrado correctamente","id_unidad":2}
+[04-Jun-2026 06:17:04 Europe/Berlin] registro_cliente.php: Resultado poliza (4F4SG): {"resultado":"OK","mensaje":"P\u00f3liza registrada correctamente"}
