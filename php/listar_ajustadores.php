@@ -1,20 +1,21 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/Conexion.php';
+require_once __DIR__ . '/UsuarioModel.php';
 
-$conn   = Conexion::getInstance()->getConexion();
-$result = $conn->query(
-    "SELECT id_usuario, nombre, apellidos
-     FROM Usuarios
-     WHERE tipo_usuario = 'Ajustador' AND activo = 1
-     ORDER BY nombre, apellidos"
-);
+$model = new UsuarioModel();
+$todos = $model->listar();
 
 $ajustadores = [];
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $ajustadores[] = $row;
+foreach ($todos as $row) {
+    if ($row['tipo_usuario'] === 'Ajustador' && ($row['activo'] ?? 1) == 1) {
+        $ajustadores[] = [
+            'id_usuario' => $row['id_usuario'],
+            'nombre'     => $row['nombre'],
+            'apellidos'  => $row['apellidos'],
+        ];
     }
 }
+
+usort($ajustadores, fn($a, $b) => ($a['nombre'] . $a['apellidos']) <=> ($b['nombre'] . $b['apellidos']));
 
 echo json_encode(["ok" => true, "ajustadores" => $ajustadores]);

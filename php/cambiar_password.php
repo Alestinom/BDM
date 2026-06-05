@@ -6,7 +6,6 @@ error_reporting(E_ALL);
 
 header('Content-Type: application/json');
 require_once __DIR__ . '/UsuarioModel.php';
-require_once __DIR__ . '/Conexion.php';
 
 error_log("=== INICIO CAMBIAR PASSWORD ===");
 error_log("POST: " . json_encode($_POST));
@@ -24,25 +23,15 @@ if (strlen($pass_nueva) < 8 || !preg_match('/[A-Z]/', $pass_nueva) || !preg_matc
     exit;
 }
 
-// Verificar contraseña actual
-$conn = Conexion::getInstance()->getConexion();
-$stmt = $conn->prepare("SELECT id_usuario FROM Usuarios WHERE id_usuario = ? AND contrasena = ?");
-if (!$stmt) {
-    error_log("Error prepare verificacion: " . $conn->error);
-    echo json_encode(["ok" => false, "mensaje" => "Error al verificar la contraseña."]);
-    exit;
-}
-$stmt->bind_param("is", $id_usuario, $pass_actual);
-$stmt->execute();
-$row = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+// Verificar contraseña actual mediante SP_Usuarios('VERIFICAR')
+$model  = new UsuarioModel();
+$verify = $model->verificar($id_usuario, $pass_actual);
 
-if (!$row) {
+if (!$verify) {
     echo json_encode(["ok" => false, "mensaje" => "La contraseña actual es incorrecta."]);
     exit;
 }
 
-$model  = new UsuarioModel();
 $result = $model->modificar(
     $id_usuario,
     null,        // nombre — IFNULL preserva existente

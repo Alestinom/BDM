@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/ComentarioModel.php';
-require_once __DIR__ . '/Conexion.php';
+require_once __DIR__ . '/MultimediaModel.php';
 
 $id_siniestro        = $_POST['id_siniestro']        ?? null;
 $id_usuario          = $_POST['id_usuario']          ?? null;
@@ -27,22 +27,13 @@ if ($tieneImagen) {
     $archivo        = file_get_contents($_FILES['imagen']['tmp_name']);
     $nombre_archivo = basename($_FILES['imagen']['name']);
 
-    $conn = Conexion::getInstance()->getConexion();
-    $stmt = $conn->prepare(
-        "INSERT INTO Multimedia (id_siniestro, id_usuario, tipo, archivo, nombre_archivo, fecha_subida) VALUES (?, ?, 'imagen_chat', ?, ?, NOW())"
-    );
-    if (!$stmt) {
-        echo json_encode(["ok" => false, "mensaje" => "Error al procesar la imagen: " . $conn->error]);
+    $mmModel  = new MultimediaModel();
+    $mmResult = $mmModel->alta($id_siniestro, $id_usuario, 'imagen_chat', $archivo, $nombre_archivo);
+    if (!$mmResult) {
+        echo json_encode(["ok" => false, "mensaje" => "Error al guardar la imagen."]);
         exit;
     }
-    $stmt->bind_param("ssss", $id_siniestro, $id_usuario, $archivo, $nombre_archivo);
-    if (!$stmt->execute()) {
-        echo json_encode(["ok" => false, "mensaje" => "Error al guardar la imagen: " . $stmt->error]);
-        $stmt->close();
-        exit;
-    }
-    $id_multimedia = $stmt->insert_id;
-    $stmt->close();
+    $id_multimedia = $mmResult['id_multimedia'];
 }
 
 // El mensaje es obligatorio si no hay imagen; usar espacio si solo se envió imagen

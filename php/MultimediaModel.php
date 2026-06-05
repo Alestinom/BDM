@@ -58,4 +58,10 @@ class MultimediaModel {
         $result = $this->ejecutarSP('LISTAR_POR_SINIESTRO', $n, $id_siniestro, $n, $n, $n, $n);
         return $result['ok'] ? $result['rows'] : [];
     }
+
+    public function obtener($id_multimedia) {
+        $n      = null;
+        $result = $this->ejecutarSP('OBTENER', $id_multimedia, $n, $n, $n, $n, $n);
+        return (!$result['ok'] || empty($result['rows'])) ? null : $result['rows'][0];
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/Conexion.php';
+require_once __DIR__ . '/SiniestroModel.php';
 
 $id_usuario      = $_GET['id_usuario']      ?? null;
 $tipo_usuario    = $_GET['tipo_usuario']    ?? '';
@@ -12,87 +12,41 @@ $numero_serie    = $_GET['numero_serie']    ?? '';
 $nombre_compania = $_GET['nombre_compania'] ?? '';
 $fecha           = $_GET['fecha']           ?? '';
 
-$conn   = Conexion::getInstance()->getConexion();
-$where  = [];
-$types  = '';
-$params = [];
+$model = new SiniestroModel();
 
-// Filtro obligatorio por rol
-if ($tipo_usuario === 'Ajustador') {
-    $where[]  = 'id_ajustador = ?';
-    $types   .= 's';
-    $params[] = $id_usuario;
-} elseif ($tipo_usuario === 'Asegurado') {
-    $where[]  = 'id_asegurado_usuario = ?';
-    $types   .= 's';
-    $params[] = $id_usuario;
+// Obtener siniestros por rol
+if ($tipo_usuario === 'Ajustador' && $id_usuario) {
+    $siniestros = $model->listarPorAjustador($id_usuario);
+} elseif ($tipo_usuario === 'Asegurado' && $id_usuario) {
+    $siniestros = $model->listarPorAsegurado($id_usuario);
+} else {
+    $siniestros = $model->listar();
 }
 
-// Criterios de búsqueda
+// Aplicar criterios de búsqueda en PHP
 if ($numero_siniestro) {
-    $num = preg_replace('/[^0-9]/', '', $numero_siniestro);
+    $num = (int)preg_replace('/[^0-9]/', '', $numero_siniestro);
     if ($num) {
-        $where[]  = 'id_siniestro = ?';
-        $types   .= 'i';
-        $params[] = (int)$num;
+        $siniestros = array_values(array_filter($siniestros, fn($s) => (int)($s['id_siniestro'] ?? 0) === $num));
     }
 }
 if ($numero_poliza) {
-    $where[]  = 'numero_poliza LIKE ?';
-    $types   .= 's';
-    $params[] = '%' . $numero_poliza . '%';
+    $siniestros = array_values(array_filter($siniestros, fn($s) => stripos($s['numero_poliza'] ?? '', $numero_poliza) !== false));
 }
 if ($nombre_cliente) {
-    $where[]  = 'nombre_asegurado LIKE ?';
-    $types   .= 's';
-    $params[] = '%' . $nombre_cliente . '%';
+    $siniestros = array_values(array_filter($siniestros, fn($s) => stripos($s['nombre_asegurado'] ?? '', $nombre_cliente) !== false));
 }
 if ($placas) {
-    $where[]  = 'placas LIKE ?';
-    $types   .= 's';
-    $params[] = '%' . $placas . '%';
+    $siniestros = array_values(array_filter($siniestros, fn($s) => stripos($s['placas'] ?? '', $placas) !== false));
 }
 if ($numero_serie) {
-    $where[]  = 'numero_serie LIKE ?';
-    $types   .= 's';
-    $params[] = '%' . $numero_serie . '%';
+    $siniestros = array_values(array_filter($siniestros, fn($s) => stripos($s['numero_serie'] ?? '', $numero_serie) !== false));
 }
 if ($nombre_compania) {
-    $where[]  = 'nombre_compania = ?';
-    $types   .= 's';
-    $params[] = $nombre_compania;
+    $siniestros = array_values(array_filter($siniestros, fn($s) => ($s['nombre_compania'] ?? '') === $nombre_compania));
 }
 if ($fecha) {
-    $where[]  = 'fecha = ?';
-    $types   .= 's';
-    $params[] = $fecha;
+    $siniestros = array_values(array_filter($siniestros, fn($s) => ($s['fecha'] ?? '') === $fecha));
 }
-
-$sql = "SELECT * FROM V_SiniestrosCompletos";
-if ($where) $sql .= " WHERE " . implode(' AND ', $where);
-$sql .= " ORDER BY fecha DESC, hora DESC";
-
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    echo json_encode(["ok" => false, "mensaje" => "Error en consulta: " . $conn->error]);
-    exit;
-}
-
-if ($params) {
-    $stmt->bind_param($types, ...$params);
-}
-
-if (!$stmt->execute()) {
-    echo json_encode(["ok" => false, "mensaje" => "Error al ejecutar consulta: " . $stmt->error]);
-    $stmt->close();
-    exit;
-}
-
-$result     = $stmt->get_result();
-$siniestros = [];
-while ($row = $result->fetch_assoc()) {
-    $siniestros[] = $row;
-}
-$stmt->close();
 
 echo json_encode(["ok" => true, "siniestros" => $siniestros]);

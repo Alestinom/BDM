@@ -94,4 +94,16 @@ class UsuarioModel {
         $result = $this->ejecutarSP('LISTAR', $n, $n, $n, $n, $n, $n, $n, $n, $n, $n, $n, $n);
         return $result['ok'] ? $result['rows'] : [];
     }
+
+    public function verificar($id_usuario, $contrasena) {
+        $n      = null;
+        $result = $this->ejecutarSP('VERIFICAR', $id_usuario, $n, $n, $n, $n, $n, $contrasena, $n, $n, $n, $n, $n);
+        return (!$result['ok'] || empty($result['rows'])) ? null : $result['rows'][0];
+    }
+
+    public function obtenerFoto($id_usuario) {
+        $n      = null;
+        $result = $this->ejecutarSP('OBTENER_FOTO', $id_usuario, $n, $n, $n, $n, $n, $n, $n, $n, $n, $n, $n);
+        return (!$result['ok'] || empty($result['rows'])) ? null : $result['rows'][0];
+    }
 }

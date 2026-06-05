@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/Conexion.php';
+require_once __DIR__ . '/MultimediaModel.php';
 
 $id_multimedia = $_GET['id'] ?? null;
 
@@ -8,17 +8,8 @@ if (!$id_multimedia) {
     exit;
 }
 
-$conn = Conexion::getInstance()->getConexion();
-$stmt = $conn->prepare("SELECT tipo, archivo, nombre_archivo FROM Multimedia WHERE id_multimedia = ?");
-if (!$stmt) {
-    http_response_code(500);
-    exit;
-}
-$stmt->bind_param("i", $id_multimedia);
-$stmt->execute();
-$result = $stmt->get_result();
-$row    = $result->fetch_assoc();
-$stmt->close();
+$model = new MultimediaModel();
+$row   = $model->obtener($id_multimedia);
 
 if (!$row || !$row['archivo']) {
     http_response_code(404);

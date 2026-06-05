@@ -101,23 +101,46 @@
           </div>
         </div>
 
+        <!-- ===================== MULTIMEDIA ===================== -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-5">
           <h2 class="text-base font-semibold text-gray-800 mb-1 pb-2 border-b border-gray-100">Material Multimedia</h2>
-          <p class="text-xs text-gray-400 mb-4">Puedes subir múltiples fotos y videos del siniestro.</p>
+          <p class="text-xs text-gray-400 mb-4">Puedes agregar múltiples fotos y videos del siniestro de forma incremental.</p>
 
+          <!-- Imágenes -->
           <div>
-            <label class="block text-xs font-medium text-gray-700 mb-1">Imágenes del siniestro</label>
-            <input type="file" id="imagenes" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" multiple onchange="previsualizarImagenes(this)"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer mb-3">
-            <div id="previewImagenes" class="grid grid-cols-3 gap-2"></div>
+            <label class="block text-xs font-medium text-gray-700 mb-2">Imágenes del siniestro</label>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <button type="button" onclick="abrirSelectorImagenes()"
+                class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+                + Agregar imágenes
+              </button>
+              <p id="contadorImagenes" class="text-xs text-gray-400 mt-2">0 imagen(es) seleccionada(s)</p>
+              <div id="galeriaImagenes" class="grid grid-cols-3 gap-2 mt-3"></div>
+            </div>
           </div>
 
+          <!-- Videos -->
           <div class="mt-4">
-            <label class="block text-xs font-medium text-gray-700 mb-1">Videos del siniestro <span class="text-gray-400">(opcional)</span></label>
-            <input type="file" id="videos" accept="video/mp4,video/avi,video/quicktime,video/x-ms-wmv,video/x-matroska" multiple
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 file:text-xs cursor-pointer">
+            <label class="block text-xs font-medium text-gray-700 mb-2">Videos del siniestro <span class="text-gray-400">(opcional)</span></label>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <button type="button" onclick="abrirSelectorVideos()"
+                class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+                + Agregar videos
+              </button>
+              <p id="contadorVideos" class="text-xs text-gray-400 mt-2">0 video(s) seleccionado(s)</p>
+              <div id="listaVideos" class="space-y-2 mt-3"></div>
+            </div>
           </div>
+
+          <!-- Inputs file ocultos — se activan mediante click() desde los botones -->
+          <input type="file" id="inputImagenes" class="hidden"
+            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" multiple
+            onchange="onFileSelectionImagenes(this)">
+          <input type="file" id="inputVideos" class="hidden"
+            accept="video/mp4,video/avi,video/quicktime,video/x-ms-wmv,video/x-matroska" multiple
+            onchange="onFileSelectionVideos(this)">
         </div>
+        <!-- ==================== /MULTIMEDIA ==================== -->
 
         <div class="flex gap-3">
           <button onclick="guardarSiniestro()"
@@ -141,9 +164,135 @@
   SESSION.requerir('registro_siniestro.html');
   document.getElementById('sidebar').innerHTML = renderNav('registro_siniestro.html');
 
+  // ── Estado de sesión / formulario ──────────────────────────────────────────
   let idAseguradoActual = null;
   let idPolizaActual    = null;
 
+  // ── Arrays globales de archivos acumulados ─────────────────────────────────
+  let imagenesSeleccionadas = [];
+  let videosSeleccionados   = [];
+
+  // ── Constantes de validación ───────────────────────────────────────────────
+  const TIPOS_IMG = ['image/jpeg','image/jpg','image/png','image/gif','image/webp'];
+  const TIPOS_VID = ['video/mp4','video/avi','video/quicktime','video/x-ms-wmv','video/x-matroska'];
+  const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function formatBytes(bytes) {
+    if (bytes < 1024)        return bytes + ' B';
+    if (bytes < 1048576)     return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  // ── Abrir selectores ───────────────────────────────────────────────────────
+  function abrirSelectorImagenes() {
+    document.getElementById('inputImagenes').click();
+  }
+
+  function abrirSelectorVideos() {
+    document.getElementById('inputVideos').click();
+  }
+
+  // ── Procesar selección de imágenes ─────────────────────────────────────────
+  function onFileSelectionImagenes(input) {
+    const rechazados = [];
+    Array.from(input.files).forEach(f => {
+      if (!TIPOS_IMG.includes(f.type)) {
+        rechazados.push('"' + f.name + '" (tipo no permitido)');
+      } else if (f.size > MAX_BYTES) {
+        rechazados.push('"' + f.name + '" (excede 50 MB)');
+      } else {
+        imagenesSeleccionadas.push(f);
+      }
+    });
+    // Resetear el input para permitir seleccionar el mismo archivo de nuevo
+    input.value = '';
+    if (rechazados.length) {
+      showAlert('Archivos no agregados: ' + rechazados.join(' — '));
+    }
+    renderizarGaleriaImagenes();
+  }
+
+  // ── Procesar selección de videos ───────────────────────────────────────────
+  function onFileSelectionVideos(input) {
+    const rechazados = [];
+    Array.from(input.files).forEach(f => {
+      if (!TIPOS_VID.includes(f.type)) {
+        rechazados.push('"' + f.name + '" (tipo no permitido)');
+      } else if (f.size > MAX_BYTES) {
+        rechazados.push('"' + f.name + '" (excede 50 MB)');
+      } else {
+        videosSeleccionados.push(f);
+      }
+    });
+    input.value = '';
+    if (rechazados.length) {
+      showAlert('Archivos no agregados: ' + rechazados.join(' — '));
+    }
+    renderizarListaVideos();
+  }
+
+  // ── Eliminar archivos individuales ─────────────────────────────────────────
+  function eliminarImagen(index) {
+    imagenesSeleccionadas.splice(index, 1);
+    renderizarGaleriaImagenes();
+  }
+
+  function eliminarVideo(index) {
+    videosSeleccionados.splice(index, 1);
+    renderizarListaVideos();
+  }
+
+  // ── Renderizar galería de imágenes ─────────────────────────────────────────
+  function renderizarGaleriaImagenes() {
+    const galeria  = document.getElementById('galeriaImagenes');
+    const contador = document.getElementById('contadorImagenes');
+    const total    = imagenesSeleccionadas.length;
+
+    contador.textContent = total + ' imagen(es) seleccionada(s)';
+    galeria.innerHTML    = '';
+
+    imagenesSeleccionadas.forEach((f, i) => {
+      const url = URL.createObjectURL(f);
+      const div = document.createElement('div');
+      div.className = 'relative group';
+      div.innerHTML =
+        '<img src="' + url + '" class="rounded-lg w-full h-20 object-cover border border-gray-200">' +
+        '<p class="text-xs text-gray-500 truncate mt-1 px-0.5">' + f.name + '</p>' +
+        '<button type="button" onclick="eliminarImagen(' + i + ')" ' +
+          'class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 ' +
+                 'text-xs font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition" ' +
+          'title="Eliminar">✕</button>';
+      galeria.appendChild(div);
+    });
+  }
+
+  // ── Renderizar lista de videos ─────────────────────────────────────────────
+  function renderizarListaVideos() {
+    const lista    = document.getElementById('listaVideos');
+    const contador = document.getElementById('contadorVideos');
+    const total    = videosSeleccionados.length;
+
+    contador.textContent = total + ' video(s) seleccionado(s)';
+    lista.innerHTML      = '';
+
+    videosSeleccionados.forEach((f, i) => {
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-3 bg-gray-50 rounded-lg px-3 py-2 border border-gray-200';
+      div.innerHTML =
+        '<span class="text-xl flex-shrink-0">🎬</span>' +
+        '<div class="flex-1 min-w-0">' +
+          '<p class="text-xs font-medium text-gray-700 truncate">' + f.name + '</p>' +
+          '<p class="text-xs text-gray-400">' + formatBytes(f.size) + '</p>' +
+        '</div>' +
+        '<button type="button" onclick="eliminarVideo(' + i + ')" ' +
+          'class="text-red-400 hover:text-red-600 font-bold text-sm px-1 flex-shrink-0" ' +
+          'title="Eliminar">✕</button>';
+      lista.appendChild(div);
+    });
+  }
+
+  // ── Carga de datos ─────────────────────────────────────────────────────────
   async function cargarClientes() {
     try {
       const resp = await fetch('../php/listar_clientes.php');
@@ -195,7 +344,7 @@
         vData.vehiculos.forEach(v => {
           const opt       = document.createElement('option');
           opt.value       = v.id_unidad;
-          opt.textContent = `${v.marca} ${v.modelo} ${v.anio} · ${v.placas}`;
+          opt.textContent = v.marca + ' ' + v.modelo + ' ' + v.anio + ' · ' + v.placas;
           selV.appendChild(opt);
         });
         if (vData.vehiculos.length === 1) selV.selectedIndex = 1;
@@ -218,23 +367,20 @@
     }
   }
 
-  function previsualizarImagenes(input) {
-    const container = document.getElementById('previewImagenes');
-    container.innerHTML = '';
-    Array.from(input.files).forEach(file => {
-      const url = URL.createObjectURL(file);
-      container.innerHTML += `<img src="${url}" class="rounded-lg w-full h-20 object-cover border border-gray-200">`;
-    });
-  }
-
+  // ── Alertas ────────────────────────────────────────────────────────────────
   function showAlert(msg, tipo = 'error') {
     const el = document.getElementById('alertMsg');
-    el.className = `text-sm px-4 py-3 rounded-lg mb-5 ${tipo === 'error' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`;
+    el.className = 'text-sm px-4 py-3 rounded-lg mb-5 ' + (
+      tipo === 'error'
+        ? 'bg-red-50 border border-red-200 text-red-700'
+        : 'bg-green-50 border border-green-200 text-green-700'
+    );
     el.textContent = msg;
     el.classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // ── Guardar siniestro ──────────────────────────────────────────────────────
   async function guardarSiniestro() {
     const clienteVal  = document.getElementById('cliente').value;
     const vehiculoVal = document.getElementById('vehiculo').value;
@@ -258,24 +404,6 @@
       return;
     }
 
-    const imgs = document.getElementById('imagenes').files;
-    const tiposImg = ['image/jpeg','image/jpg','image/png','image/gif','image/webp'];
-    for (const f of imgs) {
-      if (!tiposImg.includes(f.type)) {
-        showAlert('Solo se permiten imágenes (JPG, PNG, GIF, WEBP). Archivo no válido: ' + f.name);
-        return;
-      }
-    }
-
-    const vids = document.getElementById('videos').files;
-    const tiposVid = ['video/mp4','video/avi','video/quicktime','video/x-ms-wmv','video/x-matroska'];
-    for (const f of vids) {
-      if (!tiposVid.includes(f.type)) {
-        showAlert('Solo se permiten videos (MP4, AVI, MOV, WMV, MKV). Archivo no válido: ' + f.name);
-        return;
-      }
-    }
-
     const otras = document.getElementById('otras_unidades').value === 'si' ? '1' : '0';
 
     const formData = new FormData();
@@ -288,8 +416,9 @@
     formData.append('descripcion',    descripcion);
     formData.append('otras_unidades', otras);
 
-    for (const f of imgs) formData.append('imagenes[]', f);
-    for (const f of vids) formData.append('videos[]', f);
+    // Adjuntar archivos desde los arrays acumulados
+    imagenesSeleccionadas.forEach(f => formData.append('imagenes[]', f));
+    videosSeleccionados.forEach(f   => formData.append('videos[]',   f));
 
     try {
       const resp = await fetch('../php/registro_siniestro.php', { method: 'POST', body: formData });

@@ -146,3 +146,12 @@ Stack trace:
 [05-Jun-2026 02:20:10 Europe/Berlin] POST: {"id_usuario":"17","nombre":"Andrea","apellidos":"Flores","genero":"Femenino","correo":"andrea@gmail.com","alias":"MiNovia","telefono":"8282456021"}
 [05-Jun-2026 02:20:10 Europe/Berlin] Foto recibida, tamaño: 23088
 [05-Jun-2026 02:20:10 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[05-Jun-2026 03:54:53 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[05-Jun-2026 03:54:53 Europe/Berlin] POST recibido: {"id_poliza":"1","id_unidad":"1","id_usuario":"2","fecha":"2026-06-04","hora":"19:54","ubicacion":"Gonzalitos","descripcion":"Paso algo","otras_unidades":"0"}
+[05-Jun-2026 03:54:53 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":3}
+[05-Jun-2026 03:54:53 Europe/Berlin] id_siniestro creado: 3
+[05-Jun-2026 03:54:53 Europe/Berlin] Multimedia imagen (images (2).jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":8}
+[05-Jun-2026 03:54:53 Europe/Berlin] Multimedia imagen (images (3).jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":9}
+[05-Jun-2026 03:54:53 Europe/Berlin] Multimedia imagen (images (4).jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":10}
+[05-Jun-2026 03:54:54 Europe/Berlin] Multimedia video (video.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":11}
+[05-Jun-2026 03:54:54 Europe/Berlin] Multimedia video (video.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":12}

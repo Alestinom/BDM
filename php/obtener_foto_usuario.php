@@ -1,17 +1,11 @@
 <?php
-require_once __DIR__ . '/Conexion.php';
+require_once __DIR__ . '/UsuarioModel.php';
 
 $id_usuario = $_GET['id'] ?? null;
 if (!$id_usuario) { http_response_code(400); exit; }
 
-$conn = Conexion::getInstance()->getConexion();
-$stmt = $conn->prepare("SELECT foto FROM Usuarios WHERE id_usuario = ? AND foto IS NOT NULL");
-if (!$stmt) { http_response_code(500); exit; }
-$stmt->bind_param("i", $id_usuario);
-$stmt->execute();
-$result = $stmt->get_result();
-$row    = $result->fetch_assoc();
-$stmt->close();
+$model = new UsuarioModel();
+$row   = $model->obtenerFoto($id_usuario);
 
 if (!$row || !$row['foto']) { http_response_code(404); exit; }
 

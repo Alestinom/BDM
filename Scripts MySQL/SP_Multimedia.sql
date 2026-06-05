@@ -16,26 +16,56 @@ CREATE PROCEDURE SP_Multimedia(
 BEGIN
     CASE p_accion
 
+        -- --------------------------------------------------------
+        -- ALTA: guardar archivo multimedia vinculado a un siniestro
+        -- --------------------------------------------------------
         WHEN 'ALTA' THEN
-            INSERT INTO Multimedia(id_siniestro, id_usuario, tipo, archivo, nombre_archivo, fecha_subida)
-            VALUES (p_id_siniestro, p_id_usuario, p_tipo, p_archivo, p_nombre_archivo, NOW());
-            SELECT 'OK'                              AS resultado,
-                   'Archivo guardado correctamente'  AS mensaje,
-                   LAST_INSERT_ID()                  AS id_multimedia;
+            INSERT INTO Multimedia(
+                id_siniestro, id_usuario, tipo,
+                archivo, nombre_archivo, fecha_subida
+            ) VALUES (
+                p_id_siniestro, p_id_usuario, p_tipo,
+                p_archivo, p_nombre_archivo, NOW()
+            );
+            SELECT 'OK'                             AS resultado,
+                   'Archivo guardado correctamente' AS mensaje,
+                   LAST_INSERT_ID()                 AS id_multimedia;
 
+        -- --------------------------------------------------------
+        -- LISTAR_POR_SINIESTRO: metadatos sin BLOB para listar
+        -- Devuelve los mismos campos que V_MultimediaSiniestro
+        -- --------------------------------------------------------
         WHEN 'LISTAR_POR_SINIESTRO' THEN
-            SELECT id_multimedia, tipo, nombre_archivo, fecha_subida
+            SELECT
+                m.id_multimedia,
+                m.id_siniestro,
+                m.id_usuario,
+                m.tipo,
+                m.nombre_archivo,
+                m.fecha_subida,
+                CONCAT(u.nombre, ' ', u.apellidos) AS nombre_usuario
+            FROM Multimedia m
+            JOIN Usuarios u ON u.id_usuario = m.id_usuario
+            WHERE m.id_siniestro = p_id_siniestro
+            ORDER BY m.fecha_subida;
+
+        -- --------------------------------------------------------
+        -- OBTENER: archivo BLOB completo para servir como imagen/video
+        -- --------------------------------------------------------
+        WHEN 'OBTENER' THEN
+            SELECT tipo, archivo, nombre_archivo
             FROM Multimedia
-            WHERE id_siniestro = p_id_siniestro
-            ORDER BY fecha_subida;
+            WHERE id_multimedia = p_id_multimedia;
 
         ELSE
-            SELECT 'ERROR' AS resultado, 'Acción no reconocida' AS mensaje, NULL AS id_multimedia;
+            SELECT 'ERROR' AS resultado,
+                   'Acción no reconocida' AS mensaje,
+                   NULL AS id_multimedia;
 
     END CASE;
 END$$
 
 DELIMITER ;
 
-
+-- Aumentar tamaño máximo de paquete para subir archivos grandes (LONGBLOB)
 SET GLOBAL max_allowed_packet = 67108864;

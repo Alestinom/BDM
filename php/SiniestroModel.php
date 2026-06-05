@@ -90,4 +90,22 @@ class SiniestroModel {
         $result = $this->ejecutarSP('LISTAR_POR_ASEGURADO', $n, $id_asegurado, $n, $n, $n, $n, $n, $n, $n);
         return $result['ok'] ? $result['rows'] : [];
     }
+
+    public function historial($id_siniestro) {
+        $n      = null;
+        $result = $this->ejecutarSP('HISTORIAL', $id_siniestro, $n, $n, $n, $n, $n, $n, $n, $n);
+        return $result['ok'] ? $result['rows'] : [];
+    }
+
+    public function estadisticasGlobales() {
+        $n      = null;
+        $result = $this->ejecutarSP('ESTADISTICAS_GLOBALES', $n, $n, $n, $n, $n, $n, $n, $n, $n);
+        return ($result['ok'] && !empty($result['rows'])) ? $result['rows'][0] : [];
+    }
+
+    public function estadisticasAjustador($id_ajustador) {
+        $n      = null;
+        $result = $this->ejecutarSP('ESTADISTICAS_AJUSTADOR', $n, $n, $n, $id_ajustador, $n, $n, $n, $n, $n);
+        return ($result['ok'] && !empty($result['rows'])) ? $result['rows'][0] : [];
+    }
 }
