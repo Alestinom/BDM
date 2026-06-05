@@ -39,11 +39,9 @@ function renderNav(activeLink = '') {
       { href: 'clientes.html',            label: 'Clientes',             icon: ICON.users    },
       { href: 'consulta.html',            label: 'Siniestros',           icon: ICON.list     },
       { href: 'busqueda.html',            label: 'Búsqueda',             icon: ICON.search   },
-      { href: 'seguimiento.html',         label: 'Seguimiento',          icon: ICON.chat     },
     ],
     Asegurado: [
       { href: 'mis_siniestros.html',      label: 'Mis Siniestros',       icon: ICON.shield   },
-      { href: 'seguimiento.html',         label: 'Seguimiento',          icon: ICON.chat     },
     ],
   };
 
@@ -51,6 +49,7 @@ function renderNav(activeLink = '') {
   const nombre    = SESSION.nombre;
   const iniciales = SESSION.iniciales;
   const links     = LINKS[tipo] || LINKS['Supervisor'];
+  const sesId     = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}').id_usuario;
 
   const navLinks = links.map(l => `
     <a href="${l.href}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
@@ -87,7 +86,13 @@ function renderNav(activeLink = '') {
 
       <div class="p-3 border-t border-blue-900 space-y-2">
         <div class="flex items-center gap-3 px-2 py-1">
-          <div class="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">${iniciales}</div>
+          ${sesId
+            ? `<div class="flex-shrink-0">
+                <img src="../php/obtener_foto_usuario.php?id=${sesId}" class="w-8 h-8 rounded-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="w-8 h-8 bg-blue-700 rounded-full items-center justify-center text-white text-xs font-bold" style="display:none">${iniciales}</div>
+               </div>`
+            : `<div class="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">${iniciales}</div>`
+          }
           <div class="min-w-0">
             <div class="text-white text-xs font-medium truncate">${nombre}</div>
             <span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full mt-0.5 ${badge}">${tipo}</span>

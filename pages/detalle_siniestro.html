@@ -98,57 +98,84 @@
           <div id="galeriaMultimedia" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
         </div>
 
+        <!-- Resolución para el Asegurado (solo lectura) -->
+        <div id="seccionResolucionAsegurado" class="bg-blue-50 border border-blue-200 rounded-xl p-5" style="display:none">
+          <h3 class="font-semibold text-blue-800 mb-3">Resolución de tu Siniestro</h3>
+          <div id="cuerpoResolucionAsegurado"></div>
+        </div>
+
         <!-- Acciones del Supervisor -->
         <div id="seccionResolucion" class="bg-white rounded-xl shadow-sm border border-yellow-200 p-6">
           <h2 class="text-sm font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-100">Resolución del Supervisor</h2>
 
           <div id="alertResolucion" class="hidden text-sm px-4 py-3 rounded-lg mb-4"></div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Tipo de Resolución *</label>
-              <select id="tipoResolucion" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Seleccionar resolución</option>
-                <option value="rechazado">Rechazado</option>
-                <option value="aceptado">Aceptado</option>
-                <option value="con_deducible">Aceptado con pago de deducible</option>
-                <option value="sin_deducible">Aceptado sin pago de deducible</option>
-                <option value="reparacion">Aplica pago para reparación</option>
-                <option value="perdida_total">Pérdida total – pago completo</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Monto a pagar ($)</label>
-              <input id="montoPago" type="number" placeholder="0.00"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Fecha compromiso reparación/pago</label>
-              <input id="fechaCompromiso" type="date"
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-700 mb-1">Observaciones</label>
-              <input id="observaciones" type="text" placeholder="Notas adicionales..."
-                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+          <!-- Panel: resolución ya guardada -->
+          <div id="panelResolucion" class="hidden">
+            <div id="panelResolucionBody" class="bg-gray-50 rounded-lg p-4 mb-4 text-sm"></div>
+            <button onclick="mostrarFormEdicion()"
+              class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
+              Modificar Resolución
+            </button>
           </div>
 
-          <div class="flex gap-3">
-            <button onclick="guardarResolucion()"
-              class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
-              Guardar Resolución
-            </button>
+          <!-- Formulario: alta o modificación -->
+          <div id="formResolucion">
+            <input type="hidden" id="idAprobacion" value="">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Tipo de Resolución *</label>
+                <select id="tipoResolucion" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">Seleccionar resolución</option>
+                  <option value="rechazado">Rechazado</option>
+                  <option value="aceptado">Aceptado</option>
+                  <option value="con_deducible">Aceptado con pago de deducible</option>
+                  <option value="sin_deducible">Aceptado sin pago de deducible</option>
+                  <option value="reparacion">Aplica pago para reparación</option>
+                  <option value="perdida_total">Pérdida total – pago completo</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Monto a pagar ($)</label>
+                <input id="montoPago" type="number" placeholder="0.00"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Monto deducible aplicado ($)</label>
+                <input id="montoDeducible" type="number" placeholder="0.00"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Fecha compromiso reparación/pago</label>
+                <input id="fechaCompromiso" type="date"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Observaciones</label>
+                <textarea id="observaciones" rows="2" placeholder="Notas adicionales..."
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="guardarResolucion()" id="btnGuardarRes"
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
+                Guardar Resolución
+              </button>
+              <button onclick="cancelarForm()" id="btnCancelarForm"
+                class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- Acciones -->
         <div class="flex gap-3">
-          <a href="seguimiento.html"
+          <a id="linkSeguimiento" href="seguimiento.html"
             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
             Ver Seguimiento / Chat
           </a>
-          <a href="consulta.html"
+          <a id="linkVolver" href="consulta.html"
             class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
             Volver al Listado
           </a>
@@ -165,10 +192,11 @@
   SESSION.requerir('detalle_siniestro.html');
   document.getElementById('sidebar').innerHTML = renderNav('detalle_siniestro.html');
 
-  // Solo el Supervisor puede ver y usar el formulario de resolución
   if (!SESSION.es('Supervisor')) {
     document.getElementById('seccionResolucion').style.display = 'none';
   }
+
+  let ID_SINIESTRO = null;
 
   function formatSiniestro(id) {
     return 'SIN-' + String(id).padStart(4, '0');
@@ -198,6 +226,24 @@
     'Cerrado':                'bg-purple-500',
   };
 
+  const tipoLabel = {
+    'rechazado':     'Rechazado',
+    'aceptado':      'Aceptado',
+    'con_deducible': 'Aceptado con deducible',
+    'sin_deducible': 'Aceptado sin deducible',
+    'reparacion':    'Aplica reparación',
+    'perdida_total': 'Pérdida total',
+  };
+
+  const tipoLabelAsegurado = {
+    'rechazado':     'Siniestro Rechazado',
+    'aceptado':      'Siniestro Aceptado',
+    'con_deducible': 'Aceptado con pago de deducible',
+    'sin_deducible': 'Aceptado sin pago de deducible',
+    'reparacion':    'Aplica pago para reparación de la unidad',
+    'perdida_total': 'Pérdida total - Pago completo de la unidad',
+  };
+
   function setText(id, val) {
     const el = document.getElementById(id);
     if (el) el.textContent = val || '';
@@ -214,12 +260,164 @@
       </div>`;
   }
 
+  function showAlertRes(msg, tipo = 'success') {
+    const el = document.getElementById('alertResolucion');
+    if (!el) return;
+    el.className = `text-sm px-4 py-3 rounded-lg mb-4 ${tipo === 'error' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
+
+  // ---------- Sección de resolución ----------
+
+  function renderResolucion(aprobacion) {
+    const panelWrap  = document.getElementById('panelResolucion');
+    const formWrap   = document.getElementById('formResolucion');
+    const alertEl    = document.getElementById('alertResolucion');
+    if (alertEl) alertEl.classList.add('hidden');
+
+    if (!aprobacion) {
+      // Modo alta: mostrar formulario vacío
+      panelWrap.classList.add('hidden');
+      formWrap.classList.remove('hidden');
+      document.getElementById('idAprobacion').value   = '';
+      document.getElementById('tipoResolucion').value = '';
+      document.getElementById('montoPago').value      = '';
+      document.getElementById('montoDeducible').value = '';
+      document.getElementById('fechaCompromiso').value = '';
+      document.getElementById('observaciones').value  = '';
+      document.getElementById('btnCancelarForm').classList.add('hidden');
+      return;
+    }
+
+    // Modo vista: mostrar resolución existente
+    const tipo = tipoLabel[aprobacion.tipo_resolucion] || aprobacion.tipo_resolucion || '';
+    let html = `<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div>
+        <p class="text-xs text-gray-500 mb-0.5">Tipo de resolución</p>
+        <p class="font-semibold text-gray-800">${tipo}</p>
+      </div>`;
+    if (aprobacion.monto_pago) {
+      html += `<div>
+        <p class="text-xs text-gray-500 mb-0.5">Monto a pagar</p>
+        <p class="font-medium text-gray-800">$${parseFloat(aprobacion.monto_pago).toFixed(2)}</p>
+      </div>`;
+    }
+    if (aprobacion.monto_deducible_aplicado) {
+      html += `<div>
+        <p class="text-xs text-gray-500 mb-0.5">Deducible aplicado</p>
+        <p class="font-medium text-gray-800">$${parseFloat(aprobacion.monto_deducible_aplicado).toFixed(2)}</p>
+      </div>`;
+    }
+    if (aprobacion.fecha_compromiso) {
+      const fc = (aprobacion.fecha_compromiso || '').split('T')[0].split('-').reverse().join('/');
+      html += `<div>
+        <p class="text-xs text-gray-500 mb-0.5">Fecha compromiso</p>
+        <p class="font-medium text-gray-800">${fc}</p>
+      </div>`;
+    }
+    if (aprobacion.nombre_supervisor) {
+      html += `<div>
+        <p class="text-xs text-gray-500 mb-0.5">Supervisor</p>
+        <p class="font-medium text-gray-800">${aprobacion.nombre_supervisor}</p>
+      </div>`;
+    }
+    html += '</div>';
+    if (aprobacion.observaciones) {
+      html += `<div class="mt-3 pt-3 border-t border-gray-200">
+        <p class="text-xs text-gray-500 mb-0.5">Observaciones</p>
+        <p class="text-sm text-gray-700">${aprobacion.observaciones}</p>
+      </div>`;
+    }
+
+    document.getElementById('panelResolucionBody').innerHTML = html;
+    panelWrap.dataset.aprobacion = JSON.stringify(aprobacion);
+    panelWrap.classList.remove('hidden');
+    formWrap.classList.add('hidden');
+  }
+
+  function mostrarFormEdicion() {
+    const panelWrap  = document.getElementById('panelResolucion');
+    const aprobacion = JSON.parse(panelWrap.dataset.aprobacion || '{}');
+
+    document.getElementById('idAprobacion').value    = aprobacion.id_aprobacion || '';
+    document.getElementById('tipoResolucion').value  = aprobacion.tipo_resolucion || '';
+    document.getElementById('montoPago').value       = aprobacion.monto_pago || '';
+    document.getElementById('montoDeducible').value  = aprobacion.monto_deducible_aplicado || '';
+    document.getElementById('fechaCompromiso').value = aprobacion.fecha_compromiso ? aprobacion.fecha_compromiso.split('T')[0] : '';
+    document.getElementById('observaciones').value   = aprobacion.observaciones || '';
+
+    panelWrap.classList.add('hidden');
+    document.getElementById('formResolucion').classList.remove('hidden');
+    document.getElementById('btnCancelarForm').classList.remove('hidden');
+    document.getElementById('alertResolucion').classList.add('hidden');
+  }
+
+  function cancelarForm() {
+    document.getElementById('panelResolucion').classList.remove('hidden');
+    document.getElementById('formResolucion').classList.add('hidden');
+    document.getElementById('alertResolucion').classList.add('hidden');
+  }
+
+  async function guardarResolucion() {
+    const tipo = document.getElementById('tipoResolucion').value;
+    if (!tipo) {
+      showAlertRes('Selecciona un tipo de resolución.', 'error');
+      return;
+    }
+
+    const sesion       = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+    const id_usuario   = sesion.id_usuario || '';
+    const idAprobacion = document.getElementById('idAprobacion').value;
+
+    const body = new URLSearchParams({
+      id_siniestro:             ID_SINIESTRO,
+      id_usuario:               id_usuario,
+      tipo_resolucion:          tipo,
+      monto_pago:               document.getElementById('montoPago').value,
+      monto_deducible_aplicado: document.getElementById('montoDeducible').value,
+      fecha_resolucion:         new Date().toISOString().split('T')[0],
+      fecha_compromiso:         document.getElementById('fechaCompromiso').value,
+      observaciones:            document.getElementById('observaciones').value,
+    });
+    if (idAprobacion) body.set('id_aprobacion', idAprobacion);
+
+    const btn = document.getElementById('btnGuardarRes');
+    btn.disabled    = true;
+    btn.textContent = 'Guardando…';
+
+    try {
+      const resp = await fetch('../php/guardar_aprobacion.php', { method: 'POST', body });
+      const data = await resp.json();
+
+      if (data.ok) {
+        await cargarDetalle();
+        showAlertRes(data.mensaje || 'Resolución guardada correctamente.', 'success');
+      } else {
+        showAlertRes(data.mensaje || 'Error al guardar la resolución.', 'error');
+        btn.disabled    = false;
+        btn.textContent = 'Guardar Resolución';
+      }
+    } catch (e) {
+      showAlertRes('Error de conexión al guardar la resolución.', 'error');
+      btn.disabled    = false;
+      btn.textContent = 'Guardar Resolución';
+    }
+  }
+
+  // ---------- Carga principal ----------
+
   async function cargarDetalle() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     if (!id) {
       window.location.href = 'consulta.html';
       return;
+    }
+    ID_SINIESTRO = id;
+    document.getElementById('linkSeguimiento').href = `seguimiento.html?id=${id}`;
+    if (SESSION.es('Asegurado')) {
+      document.getElementById('linkVolver').href = 'mis_siniestros.html';
     }
 
     let data;
@@ -236,8 +434,8 @@
       return;
     }
 
-    const s = data.siniestro;
-    const num = formatSiniestro(s.id_siniestro);
+    const s      = data.siniestro;
+    const num    = formatSiniestro(s.id_siniestro);
     const estado = s.estado_actual || 'Sin estado';
 
     // Breadcrumb y header
@@ -268,7 +466,7 @@
       histContainer.innerHTML = '<p class="text-sm text-gray-400">Sin historial registrado.</p>';
     } else {
       histContainer.innerHTML = data.historial.map(h => {
-        const dt = h.fecha_cambio ? h.fecha_cambio.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/') : '';
+        const dt     = h.fecha_cambio ? h.fecha_cambio.replace('T', ' ').substring(0, 16).replace('-', '/').replace('-', '/') : '';
         const bullet = estadoBullet[h.estado] || 'bg-gray-400';
         return `
         <div class="flex items-start gap-3">
@@ -288,7 +486,7 @@
       galeria.innerHTML = '<p class="text-sm text-gray-400">Sin archivos multimedia.</p>';
     } else {
       galeria.innerHTML = data.multimedia.map(m => {
-        const src = `../php/obtener_imagen.php?id=${m.id_multimedia}`;
+        const src    = `../php/obtener_imagen.php?id=${m.id_multimedia}`;
         const nombre = m.nombre_archivo || '';
         if (m.tipo === 'video') {
           return `
@@ -309,25 +507,57 @@
         }
       }).join('');
     }
+
+    // Resolución del Supervisor
+    if (SESSION.es('Supervisor')) {
+      renderResolucion(data.aprobacion || null);
+    }
+
+    // Panel de resolución para el Asegurado (solo lectura)
+    if (SESSION.es('Asegurado') && data.aprobacion) {
+      const ap       = data.aprobacion;
+      const tipoText = tipoLabelAsegurado[ap.tipo_resolucion] || ap.tipo_resolucion || '';
+      const fc = ap.fecha_compromiso
+        ? ap.fecha_compromiso.split('T')[0].split('-').reverse().join('/')
+        : null;
+
+      let html = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+          <p class="text-xs text-blue-700 font-medium mb-0.5">Resolución</p>
+          <p class="font-semibold text-gray-800">${tipoText}</p>
+        </div>`;
+      if (ap.monto_pago) {
+        html += `<div>
+          <p class="text-xs text-blue-700 font-medium mb-0.5">Monto a pagar</p>
+          <p class="font-medium text-gray-800">$${parseFloat(ap.monto_pago).toFixed(2)}</p>
+        </div>`;
+      }
+      if (ap.monto_deducible_aplicado) {
+        html += `<div>
+          <p class="text-xs text-blue-700 font-medium mb-0.5">Deducible aplicado</p>
+          <p class="font-medium text-gray-800">$${parseFloat(ap.monto_deducible_aplicado).toFixed(2)}</p>
+        </div>`;
+      }
+      if (fc) {
+        html += `<div>
+          <p class="text-xs text-blue-700 font-medium mb-0.5">Fecha compromiso</p>
+          <p class="font-medium text-gray-800">${fc}</p>
+        </div>`;
+      }
+      html += '</div>';
+      if (ap.observaciones) {
+        html += `<div class="mt-3 pt-3 border-t border-blue-200">
+          <p class="text-xs text-blue-700 font-medium mb-0.5">Observaciones</p>
+          <p class="text-sm text-gray-700">${ap.observaciones}</p>
+        </div>`;
+      }
+
+      document.getElementById('cuerpoResolucionAsegurado').innerHTML = html;
+      document.getElementById('seccionResolucionAsegurado').style.display = '';
+    }
   }
 
   cargarDetalle();
-
-  function showAlertRes(msg, tipo = 'success') {
-    const el = document.getElementById('alertResolucion');
-    el.className = `text-sm px-4 py-3 rounded-lg mb-4 ${tipo === 'error' ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-green-50 border border-green-200 text-green-700'}`;
-    el.textContent = msg;
-    el.classList.remove('hidden');
-  }
-
-  function guardarResolucion() {
-    const res = document.getElementById('tipoResolucion').value;
-    if (!res) {
-      showAlertRes('Selecciona un tipo de resolución.', 'error');
-      return;
-    }
-    showAlertRes('Resolución guardada correctamente. El asegurado será notificado.');
-  }
 </script>
 </body>
 </html>

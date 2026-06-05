@@ -24,23 +24,23 @@
       <!-- Stats -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-          <p class="text-xs text-gray-500 mb-1">Total Siniestros</p>
-          <p class="text-3xl font-bold text-gray-800">48</p>
-          <p class="text-xs text-blue-600 mt-1">↑ 3 esta semana</p>
+          <p id="labelTotal" class="text-xs text-gray-500 mb-1">Total Siniestros</p>
+          <p id="statTotal" class="text-3xl font-bold text-gray-800">0</p>
+          <p class="text-xs text-blue-600 mt-1">↑ Actualizado ahora</p>
         </div>
         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
           <p class="text-xs text-gray-500 mb-1">En Revisión</p>
-          <p class="text-3xl font-bold text-yellow-500">12</p>
+          <p id="statRevision" class="text-3xl font-bold text-yellow-500">0</p>
           <p class="text-xs text-gray-400 mt-1">Pendientes de aprobación</p>
         </div>
         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
           <p class="text-xs text-gray-500 mb-1">Aprobados</p>
-          <p class="text-3xl font-bold text-green-500">29</p>
+          <p id="statAprobados" class="text-3xl font-bold text-green-500">0</p>
           <p class="text-xs text-gray-400 mt-1">En reparación o cerrados</p>
         </div>
         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
           <p class="text-xs text-gray-500 mb-1">Rechazados</p>
-          <p class="text-3xl font-bold text-red-500">7</p>
+          <p id="statRechazados" class="text-3xl font-bold text-red-500">0</p>
           <p class="text-xs text-gray-400 mt-1">Este mes</p>
         </div>
       </div>
@@ -93,6 +93,29 @@
       <p class="text-gray-500 text-sm">${t.desc}</p>
     </a>
   `).join('');
+
+  // Estadísticas dinámicas
+  (async () => {
+    const sesion       = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+    const id_usuario   = sesion.id_usuario || '';
+    const tipo_usuario = sesion.tipo       || '';
+
+    if (tipo_usuario === 'Ajustador') {
+      document.getElementById('labelTotal').textContent = 'Mis Siniestros';
+    }
+
+    try {
+      const qs   = new URLSearchParams({ id_usuario, tipo_usuario });
+      const resp = await fetch(`../php/estadisticas_dashboard.php?${qs}`);
+      const data = await resp.json();
+      if (data.ok) {
+        document.getElementById('statTotal').textContent     = data.total_siniestros;
+        document.getElementById('statRevision').textContent  = data.en_revision;
+        document.getElementById('statAprobados').textContent = data.aprobados;
+        document.getElementById('statRechazados').textContent = data.rechazados;
+      }
+    } catch (e) {}
+  })();
 </script>
 </body>
 </html>

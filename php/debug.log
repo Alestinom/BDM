@@ -111,3 +111,38 @@ Stack trace:
 [04-Jun-2026 08:41:44 Europe/Berlin] Multimedia imagen (20241119_155807.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":3}
 [04-Jun-2026 08:41:44 Europe/Berlin] Multimedia imagen (20241119_155810.jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":4}
 [04-Jun-2026 08:41:45 Europe/Berlin] Multimedia video (0224.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":5}
+[04-Jun-2026 20:48:20 Europe/Berlin] === INICIO ACTUALIZAR PERFIL ===
+[04-Jun-2026 20:48:20 Europe/Berlin] POST: {"id_usuario":"17","nombre":"Andrea","apellidos":"Flores","genero":"Femenino","correo":"andrea@gmail.com","alias":"MiNovia","telefono":"8282456021"}
+[04-Jun-2026 20:48:20 Europe/Berlin] Foto recibida, tamaño: 2666066
+[04-Jun-2026 20:48:20 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[04-Jun-2026 20:49:05 Europe/Berlin] === INICIO CAMBIAR PASSWORD ===
+[04-Jun-2026 20:49:05 Europe/Berlin] POST: {"id_usuario":"17","password_actual":"TB69!vNW","password_nueva":"Gael2003"}
+[04-Jun-2026 20:49:05 Europe/Berlin] Resultado cambiar password: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[04-Jun-2026 20:49:55 Europe/Berlin] === INICIO ACTUALIZAR PERFIL ===
+[04-Jun-2026 20:49:55 Europe/Berlin] POST: {"id_usuario":"2","nombre":"Luis","apellidos":"Garza","genero":"Masculino","correo":"ajustador@demo.com","alias":"lgarza","telefono":""}
+[04-Jun-2026 20:49:55 Europe/Berlin] Foto recibida, tamaño: 57769
+[04-Jun-2026 20:49:55 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":2,"id_asegurado":null}
+[04-Jun-2026 20:50:40 Europe/Berlin] === INICIO CAMBIAR PASSWORD ===
+[04-Jun-2026 20:50:40 Europe/Berlin] POST: {"id_usuario":"17","password_actual":"Gael2003","password_nueva":"Gael2002"}
+[04-Jun-2026 20:50:40 Europe/Berlin] Resultado cambiar password: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[04-Jun-2026 20:51:31 Europe/Berlin] === INICIO CAMBIAR PASSWORD ===
+[04-Jun-2026 20:51:31 Europe/Berlin] POST: {"id_usuario":"17","password_actual":"Gael200","password_nueva":"Gael2000"}
+[04-Jun-2026 20:51:37 Europe/Berlin] === INICIO CAMBIAR PASSWORD ===
+[04-Jun-2026 20:51:37 Europe/Berlin] POST: {"id_usuario":"17","password_actual":"Gael2002","password_nueva":"Gael2000"}
+[04-Jun-2026 20:51:37 Europe/Berlin] Resultado cambiar password: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[05-Jun-2026 00:08:53 Europe/Berlin] === INICIO ACTUALIZAR PERFIL ===
+[05-Jun-2026 00:08:53 Europe/Berlin] POST: {"id_usuario":"17","nombre":"Andrea","apellidos":"Flores","genero":"Femenino","correo":"andrea@gmail.com","alias":"MiNovia","telefono":"8282456021"}
+[05-Jun-2026 00:08:53 Europe/Berlin] Foto recibida, tamaño: 472129
+[05-Jun-2026 00:08:53 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[05-Jun-2026 00:10:05 Europe/Berlin] === INICIO ACTUALIZAR PERFIL ===
+[05-Jun-2026 00:10:05 Europe/Berlin] POST: {"id_usuario":"17","nombre":"Andrea","apellidos":"Flores","genero":"Femenino","correo":"andrea@gmail.com","alias":"MiNovia","telefono":"8282456021"}
+[05-Jun-2026 00:10:05 Europe/Berlin] Foto recibida, tamaño: 144131
+[05-Jun-2026 00:10:05 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}
+[05-Jun-2026 00:10:35 Europe/Berlin] === INICIO ACTUALIZAR PERFIL ===
+[05-Jun-2026 00:10:35 Europe/Berlin] POST: {"id_usuario":"1","nombre":"Roberto","apellidos":"Soto","genero":"Masculino","correo":"supervisor@demo.com","alias":"rsoto","telefono":""}
+[05-Jun-2026 00:10:35 Europe/Berlin] Foto recibida, tamaño: 20214
+[05-Jun-2026 00:10:35 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":1,"id_asegurado":null}
+[05-Jun-2026 02:20:10 Europe/Berlin] === INICIO ACTUALIZAR PERFIL ===
+[05-Jun-2026 02:20:10 Europe/Berlin] POST: {"id_usuario":"17","nombre":"Andrea","apellidos":"Flores","genero":"Femenino","correo":"andrea@gmail.com","alias":"MiNovia","telefono":"8282456021"}
+[05-Jun-2026 02:20:10 Europe/Berlin] Foto recibida, tamaño: 23088
+[05-Jun-2026 02:20:10 Europe/Berlin] Resultado modificar: {"resultado":"OK","mensaje":"Usuario modificado correctamente","id_usuario":17,"id_asegurado":null}

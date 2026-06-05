@@ -11,7 +11,6 @@
 
   <div id="sidebar"></div>
 
-  <!-- CONTENIDO -->
   <div class="flex-1 flex flex-col overflow-auto">
 
     <div class="bg-white border-b border-gray-200 px-8 py-4">
@@ -24,143 +23,21 @@
       <!-- Resumen rápido -->
       <div class="grid grid-cols-3 gap-4 mb-6">
         <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
-          <p class="text-2xl font-bold text-blue-600">2</p>
+          <p id="statTotal" class="text-2xl font-bold text-blue-600">0</p>
           <p class="text-xs text-gray-500 mt-1">Siniestros totales</p>
         </div>
         <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
-          <p class="text-2xl font-bold text-yellow-500">1</p>
+          <p id="statProceso" class="text-2xl font-bold text-yellow-500">0</p>
           <p class="text-xs text-gray-500 mt-1">En proceso</p>
         </div>
         <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
-          <p class="text-2xl font-bold text-green-500">1</p>
+          <p id="statCerrados" class="text-2xl font-bold text-green-500">0</p>
           <p class="text-xs text-gray-500 mt-1">Cerrado</p>
         </div>
       </div>
 
-      <!-- Siniestro activo -->
-      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Siniestro Activo</h2>
-
-      <div class="bg-white rounded-xl shadow-sm border border-yellow-200 p-6 mb-6">
-        <!-- Estado visual -->
-        <div class="flex items-start justify-between mb-5">
-          <div>
-            <div class="flex items-center gap-2 mb-1">
-              <span class="font-bold text-gray-800 text-lg">Siniestro #SIN-0048</span>
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">● En revisión</span>
-            </div>
-            <p class="text-gray-500 text-sm">Póliza <span class="font-mono font-medium text-gray-700">POL-00234</span> · AXA Seguros</p>
-          </div>
-          <div class="text-right text-xs text-gray-400">
-            <p>Registrado</p>
-            <p class="font-medium text-gray-600">03/03/2026</p>
-          </div>
-        </div>
-
-        <!-- Progreso del flujo -->
-        <div class="mb-5">
-          <p class="text-xs font-semibold text-gray-600 mb-3">Estado del proceso</p>
-          <div class="flex items-center gap-1">
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">1</div>
-              <p class="text-xs text-blue-600 font-medium mt-1 text-center">Registrado</p>
-            </div>
-            <div class="flex-1 h-0.5 bg-yellow-400 mx-1"></div>
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-white text-xs font-bold">2</div>
-              <p class="text-xs text-yellow-600 font-medium mt-1 text-center">En revisión</p>
-            </div>
-            <div class="flex-1 h-0.5 bg-gray-200 mx-1"></div>
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-bold">3</div>
-              <p class="text-xs text-gray-400 mt-1 text-center">Aprobado</p>
-            </div>
-            <div class="flex-1 h-0.5 bg-gray-200 mx-1"></div>
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-bold">4</div>
-              <p class="text-xs text-gray-400 mt-1 text-center">Reparación</p>
-            </div>
-            <div class="flex-1 h-0.5 bg-gray-200 mx-1"></div>
-            <div class="flex flex-col items-center">
-              <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-bold">5</div>
-              <p class="text-xs text-gray-400 mt-1 text-center">Cerrado</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Datos clave -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5 bg-gray-50 rounded-lg p-4">
-          <div>
-            <p class="text-xs text-gray-500">Vehículo</p>
-            <p class="text-sm font-medium text-gray-800">Toyota Corolla</p>
-            <p class="text-xs text-gray-400 font-mono">ABC-123</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-500">Ajustador</p>
-            <p class="text-sm font-medium text-gray-800">Luis Garza</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-500">Fecha del siniestro</p>
-            <p class="text-sm font-medium text-gray-800">03/03/2026</p>
-            <p class="text-xs text-gray-400">14:30 hrs</p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-500">Fecha compromiso</p>
-            <p class="text-sm font-medium text-blue-700">15/03/2026</p>
-          </div>
-        </div>
-
-        <!-- Última actualización -->
-        <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
-          <p class="text-xs font-semibold text-blue-700 mb-1">Última actualización del supervisor</p>
-          <p class="text-sm text-gray-700">"La unidad está en revisión. La fecha estimada de entrega es el 15 de marzo. Le avisaremos de cualquier cambio."</p>
-          <p class="text-xs text-gray-400 mt-1">Roberto Soto (Supervisor) · 03/03/2026 16:10</p>
-        </div>
-
-        <div class="flex gap-3">
-          <a href="seguimiento.html"
-            class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
-            💬 Ir al Chat de Seguimiento
-          </a>
-          <a href="detalle_siniestro.html"
-            class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
-            Ver detalle completo
-          </a>
-        </div>
-      </div>
-
-      <!-- Historial -->
-      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Historial</h2>
-
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
-                <th class="text-left px-5 py-3 font-semibold">Folio</th>
-                <th class="text-left px-5 py-3 font-semibold">Vehículo</th>
-                <th class="text-left px-5 py-3 font-semibold">Fecha</th>
-                <th class="text-left px-5 py-3 font-semibold">Resolución</th>
-                <th class="text-left px-5 py-3 font-semibold">Estado</th>
-                <th class="text-left px-5 py-3 font-semibold">Detalle</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-              <tr class="hover:bg-gray-50">
-                <td class="px-5 py-3 font-mono text-xs text-gray-700">SIN-0031</td>
-                <td class="px-5 py-3 text-gray-700">Toyota Corolla · <span class="font-mono text-xs">ABC-123</span></td>
-                <td class="px-5 py-3 text-gray-600">10/01/2026</td>
-                <td class="px-5 py-3 text-gray-600 text-xs">Aceptado con deducible</td>
-                <td class="px-5 py-3">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">Cerrado</span>
-                </td>
-                <td class="px-5 py-3">
-                  <a href="detalle_siniestro.html" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver →</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <!-- Contenido dinámico (activo + historial) -->
+      <div id="cuerpoSiniestros"></div>
 
     </div>
   </div>
@@ -171,6 +48,253 @@
 <script>
   SESSION.requerir('mis_siniestros.html');
   document.getElementById('sidebar').innerHTML = renderNav('mis_siniestros.html');
+
+  const sesion       = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+  const ID_USUARIO   = sesion.id_usuario || '';
+  const TIPO_USUARIO = sesion.tipo       || 'Asegurado';
+
+  const estadoBadge = {
+    'Registrado':             'bg-gray-100 text-gray-700',
+    'En revisión':            'bg-yellow-100 text-yellow-700',
+    'Aceptado':               'bg-green-100 text-green-700',
+    'Aceptado con deducible': 'bg-green-100 text-green-700',
+    'Aceptado sin deducible': 'bg-green-100 text-green-700',
+    'Aplica reparación':      'bg-blue-100 text-blue-700',
+    'Rechazado':              'bg-red-100 text-red-700',
+    'Pérdida total':          'bg-orange-100 text-orange-700',
+    'Cerrado':                'bg-purple-100 text-purple-700',
+  };
+
+  const resolucionLabel = {
+    'Registrado':             '–',
+    'En revisión':            'En trámite',
+    'Rechazado':              'Rechazado',
+    'Aceptado':               'Aceptado',
+    'Aceptado con deducible': 'Con deducible',
+    'Aceptado sin deducible': 'Sin deducible',
+    'Aplica reparación':      'Reparación',
+    'Pérdida total':          'Pérdida total',
+    'Cerrado':                'Cerrado',
+  };
+
+  function formatSiniestro(id) {
+    return 'SIN-' + String(id).padStart(4, '0');
+  }
+
+  function formatFecha(f) {
+    if (!f) return '–';
+    return String(f).split('T')[0].split('-').reverse().join('/');
+  }
+
+  function formatFechaHora(f) {
+    if (!f) return '';
+    const d = new Date(f);
+    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  }
+
+  function getStep(estado) {
+    if (!estado || estado === 'Registrado') return 1;
+    if (estado === 'En revisión' || estado === 'Rechazado') return 2;
+    if (['Aceptado','Aceptado con deducible','Aceptado sin deducible'].includes(estado)) return 3;
+    if (estado === 'Aplica reparación' || estado === 'Pérdida total') return 4;
+    if (estado === 'Cerrado') return 5;
+    return 1;
+  }
+
+  function renderTimeline(estado) {
+    const current = getStep(estado);
+    const steps   = ['Registrado', 'En revisión', 'Aprobado', 'Reparación', 'Cerrado'];
+    let html = '';
+    steps.forEach((label, i) => {
+      const num    = i + 1;
+      const done   = num < current;
+      const active = num === current;
+      const circleCls = done ? 'bg-blue-600' : active ? 'bg-yellow-400' : 'bg-gray-200';
+      const numCls    = done || active ? 'text-white' : 'text-gray-400';
+      const labelCls  = done ? 'text-blue-600 font-medium' : active ? 'text-yellow-600 font-medium' : 'text-gray-400';
+      html += `
+        <div class="flex flex-col items-center">
+          <div class="w-8 h-8 rounded-full ${circleCls} flex items-center justify-center ${numCls} text-xs font-bold">${num}</div>
+          <p class="text-xs ${labelCls} mt-1 text-center">${label}</p>
+        </div>`;
+      if (i < steps.length - 1) {
+        const lineColor = current > num ? 'bg-yellow-400' : 'bg-gray-200';
+        html += `<div class="flex-1 h-0.5 ${lineColor} mx-1 mt-3.5"></div>`;
+      }
+    });
+    return html;
+  }
+
+  async function cargar() {
+    const qs = new URLSearchParams({ id_usuario: ID_USUARIO, tipo_usuario: TIPO_USUARIO });
+    let todos = [];
+    try {
+      const resp = await fetch(`../php/listar_siniestros.php?${qs}`);
+      const data = await resp.json();
+      todos = data.ok ? data.siniestros : [];
+    } catch (e) {}
+
+    // Stats
+    const total    = todos.length;
+    const cerrados = todos.filter(s => s.estado_actual === 'Cerrado').length;
+    const proceso  = todos.filter(s => s.estado_actual !== 'Cerrado' && s.estado_actual !== 'Rechazado').length;
+    document.getElementById('statTotal').textContent    = total;
+    document.getElementById('statProceso').textContent  = proceso;
+    document.getElementById('statCerrados').textContent = cerrados;
+
+    const cuerpo = document.getElementById('cuerpoSiniestros');
+
+    if (!total) {
+      cuerpo.innerHTML = `
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-10 text-center">
+          <p class="text-gray-400 font-medium">No tienes siniestros registrados aún.</p>
+        </div>`;
+      return;
+    }
+
+    // Siniestro activo: el más reciente que no esté cerrado ni rechazado
+    const activo    = todos.find(s => s.estado_actual !== 'Cerrado' && s.estado_actual !== 'Rechazado') || null;
+    const historial = activo ? todos.filter(s => s.id_siniestro !== activo.id_siniestro) : todos;
+
+    let html = '';
+
+    if (activo) {
+      // Fecha compromiso desde aprobacion
+      let fechaCompromiso = '–';
+      try {
+        const r2 = await fetch(`../php/consultar_siniestro.php?id=${activo.id_siniestro}`);
+        const d2 = await r2.json();
+        if (d2.ok && d2.aprobacion && d2.aprobacion.fecha_compromiso) {
+          fechaCompromiso = formatFecha(d2.aprobacion.fecha_compromiso);
+        }
+      } catch (e) {}
+
+      // Último comentario del supervisor
+      let supBlock = '';
+      try {
+        const r3 = await fetch(`../php/listar_comentarios.php?id_siniestro=${activo.id_siniestro}`);
+        const d3 = await r3.json();
+        if (d3.ok && d3.comentarios) {
+          const supComents = d3.comentarios.filter(c => c.tipo_usuario === 'Supervisor');
+          if (supComents.length) {
+            const last = supComents[supComents.length - 1];
+            const msgEsc = (last.mensaje || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            supBlock = `
+              <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
+                <p class="text-xs font-semibold text-blue-700 mb-1">Última actualización del supervisor</p>
+                <p class="text-sm text-gray-700">"${msgEsc}"</p>
+                <p class="text-xs text-gray-400 mt-1">${last.nombre_usuario || ''} (Supervisor) · ${formatFechaHora(last.fecha)}</p>
+              </div>`;
+          }
+        }
+      } catch (e) {}
+
+      const num    = formatSiniestro(activo.id_siniestro);
+      const estado = activo.estado_actual || 'Sin estado';
+      const badge  = estadoBadge[estado]  || 'bg-gray-100 text-gray-700';
+
+      html += `
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Siniestro Activo</h2>
+        <div class="bg-white rounded-xl shadow-sm border border-yellow-200 p-6 mb-6">
+          <div class="flex items-start justify-between mb-5">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-bold text-gray-800 text-lg">Siniestro #${num}</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${badge}">● ${estado}</span>
+              </div>
+              <p class="text-gray-500 text-sm">Póliza <span class="font-mono font-medium text-gray-700">${activo.numero_poliza || ''}</span> · ${activo.nombre_compania || ''}</p>
+            </div>
+            <div class="text-right text-xs text-gray-400">
+              <p>Registrado</p>
+              <p class="font-medium text-gray-600">${formatFecha(activo.fecha)}</p>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <p class="text-xs font-semibold text-gray-600 mb-3">Estado del proceso</p>
+            <div class="flex items-center gap-1">${renderTimeline(estado)}</div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5 bg-gray-50 rounded-lg p-4">
+            <div>
+              <p class="text-xs text-gray-500">Vehículo</p>
+              <p class="text-sm font-medium text-gray-800">${activo.marca || ''} ${activo.modelo || ''}</p>
+              <p class="text-xs text-gray-400 font-mono">${activo.placas || ''}</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Ajustador</p>
+              <p class="text-sm font-medium text-gray-800">${activo.nombre_ajustador || ''}</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Fecha del siniestro</p>
+              <p class="text-sm font-medium text-gray-800">${formatFecha(activo.fecha)}</p>
+              <p class="text-xs text-gray-400">${activo.hora ? String(activo.hora).substring(0,5) + ' hrs' : ''}</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500">Fecha compromiso</p>
+              <p class="text-sm font-medium text-blue-700">${fechaCompromiso}</p>
+            </div>
+          </div>
+
+          ${supBlock}
+
+          <div class="flex gap-3">
+            <a href="seguimiento.html?id=${activo.id_siniestro}"
+              class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+              💬 Ir al Chat de Seguimiento
+            </a>
+            <a href="detalle_siniestro.html?id=${activo.id_siniestro}"
+              class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+              Ver detalle completo
+            </a>
+          </div>
+        </div>`;
+    }
+
+    if (historial.length) {
+      html += `
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Historial</h2>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+                  <th class="text-left px-5 py-3 font-semibold">Folio</th>
+                  <th class="text-left px-5 py-3 font-semibold">Vehículo</th>
+                  <th class="text-left px-5 py-3 font-semibold">Fecha</th>
+                  <th class="text-left px-5 py-3 font-semibold">Resolución</th>
+                  <th class="text-left px-5 py-3 font-semibold">Estado</th>
+                  <th class="text-left px-5 py-3 font-semibold">Detalle</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-50">
+                ${historial.map(s => {
+                  const est  = s.estado_actual || '';
+                  const bCls = estadoBadge[est] || 'bg-gray-100 text-gray-600';
+                  return `
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-3 font-mono text-xs text-gray-700">${formatSiniestro(s.id_siniestro)}</td>
+                    <td class="px-5 py-3 text-gray-700">${s.marca || ''} ${s.modelo || ''} · <span class="font-mono text-xs">${s.placas || ''}</span></td>
+                    <td class="px-5 py-3 text-gray-600">${formatFecha(s.fecha)}</td>
+                    <td class="px-5 py-3 text-gray-600 text-xs">${resolucionLabel[est] || est}</td>
+                    <td class="px-5 py-3">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bCls}">${est}</span>
+                    </td>
+                    <td class="px-5 py-3">
+                      <a href="detalle_siniestro.html?id=${s.id_siniestro}" class="text-blue-600 hover:text-blue-800 text-xs font-medium hover:underline">Ver →</a>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+    }
+
+    cuerpo.innerHTML = html;
+  }
+
+  cargar();
 </script>
 </body>
 </html>

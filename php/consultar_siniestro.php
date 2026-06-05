@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/Conexion.php';
+require_once __DIR__ . '/AprobacionModel.php';
 
 $id_siniestro = $_GET['id'] ?? null;
 
@@ -58,9 +59,14 @@ while ($row = $result3->fetch_assoc()) {
 }
 $stmt3->close();
 
+// Aprobación existente (null si no hay)
+$aprobacionModel = new AprobacionModel();
+$aprobacion      = $aprobacionModel->consultar($id_siniestro);
+
 echo json_encode([
     "ok"         => true,
     "siniestro"  => $siniestro,
     "historial"  => $historial,
     "multimedia" => $multimedia,
+    "aprobacion" => $aprobacion,
 ]);

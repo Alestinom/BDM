@@ -17,7 +17,7 @@ const SESSION = (() => {
       'clientes.html',
     ],
     Asegurado: [
-      'mis_siniestros.html','seguimiento.html','perfil.html',
+      'mis_siniestros.html','seguimiento.html','perfil.html','detalle_siniestro.html',
     ],
   };
 

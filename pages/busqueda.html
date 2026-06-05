@@ -31,6 +31,11 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
             <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1">Número de siniestro</label>
+              <input id="busNumSiniestro" type="text" placeholder="Ej. SIN-0001"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
               <label class="block text-xs font-medium text-gray-600 mb-1">Número de póliza</label>
               <input id="busPoliza" type="text" placeholder="Ej. POL-00234"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -84,7 +89,7 @@
             <table class="w-full text-sm">
               <thead>
                 <tr class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
-                  <th class="text-left px-5 py-3 font-semibold">Póliza</th>
+                  <th class="text-left px-5 py-3 font-semibold">No. Siniestro</th>
                   <th class="text-left px-5 py-3 font-semibold">Cliente</th>
                   <th class="text-left px-5 py-3 font-semibold">Vehículo</th>
                   <th class="text-left px-5 py-3 font-semibold">Fecha</th>
@@ -173,7 +178,7 @@
       const estado   = s.estado_actual || 'Sin estado';
       return `
       <tr class="hover:bg-gray-50 transition-colors">
-        <td class="px-5 py-3 font-mono text-xs text-gray-700">${s.numero_poliza || ''}</td>
+        <td class="px-5 py-3 font-mono text-xs text-gray-700">${formatSiniestro(s.id_siniestro)}</td>
         <td class="px-5 py-3 font-medium text-gray-800">${s.nombre_asegurado || ''}</td>
         <td class="px-5 py-3 text-gray-600">${vehiculo}</td>
         <td class="px-5 py-3 text-gray-600">${fechaDisplay}</td>
@@ -200,6 +205,7 @@
   }
 
   async function buscar() {
+    const numSin   = document.getElementById('busNumSiniestro').value.trim();
     const poliza   = document.getElementById('busPoliza').value.trim();
     const cliente  = document.getElementById('busCliente').value.trim();
     const placas   = document.getElementById('busPlacas').value.trim();
@@ -208,12 +214,13 @@
     const fecha    = document.getElementById('busFecha').value;
 
     const params = { id_usuario: ID_USUARIO, tipo_usuario: TIPO_USUARIO };
-    if (poliza)   params.numero_poliza   = poliza;
-    if (cliente)  params.nombre_cliente  = cliente;
-    if (placas)   params.placas          = placas;
-    if (serie)    params.numero_serie    = serie;
-    if (compania) params.nombre_compania = compania;
-    if (fecha)    params.fecha           = fecha;
+    if (numSin)   params.numero_siniestro = numSin;
+    if (poliza)   params.numero_poliza    = poliza;
+    if (cliente)  params.nombre_cliente   = cliente;
+    if (placas)   params.placas           = placas;
+    if (serie)    params.numero_serie     = serie;
+    if (compania) params.nombre_compania  = compania;
+    if (fecha)    params.fecha            = fecha;
 
     const qs = new URLSearchParams(params).toString();
     try {
@@ -224,7 +231,7 @@
   }
 
   function limpiar() {
-    ['busPoliza','busCliente','busPlacas','busSerie','busFecha'].forEach(id => document.getElementById(id).value = '');
+    ['busNumSiniestro','busPoliza','busCliente','busPlacas','busSerie','busFecha'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('busCompania').value = '';
     cargarTodos();
   }

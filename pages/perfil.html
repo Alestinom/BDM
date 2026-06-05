@@ -33,18 +33,16 @@
           <div class="flex items-center gap-6 mb-6">
             <!-- Avatar -->
             <div class="relative">
-              <div id="avatarPreview" class="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow">
-                JP
-              </div>
+              <div id="avatarPreview" class="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow overflow-hidden"></div>
               <label for="fotoInput" class="absolute -bottom-1 -right-1 w-7 h-7 bg-white border border-gray-200 rounded-full flex items-center justify-center cursor-pointer shadow hover:bg-gray-50 transition-colors">
                 <span class="text-xs">✎</span>
               </label>
               <input id="fotoInput" type="file" accept="image/*" class="hidden" onchange="previsualizarFoto(this)">
             </div>
             <div>
-              <h2 id="perfilNombre" class="text-xl font-bold text-gray-800">Juan Pérez López</h2>
-              <p class="text-gray-500 text-sm">@jperez</p>
-              <span id="perfilRolBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 mt-1">Asegurado</span>
+              <h2 id="perfilNombre" class="text-xl font-bold text-gray-800"></h2>
+              <p id="perfilAlias" class="text-gray-500 text-sm"></p>
+              <span id="perfilRolBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 mt-1"></span>
             </div>
           </div>
 
@@ -53,45 +51,45 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Nombre *</label>
-              <input id="nombre" type="text" value="Juan"
+              <input id="nombre" type="text" placeholder="Nombre"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Apellidos *</label>
-              <input id="apellidos" type="text" value="Pérez López"
+              <input id="apellidos" type="text" placeholder="Apellidos"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Fecha de Nacimiento</label>
-              <input id="fechaNac" type="date" value="1990-05-15"
+              <input id="fechaNac" type="date"
                 class="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed" readonly>
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Género</label>
               <select id="genero" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="M" selected>Masculino</option>
-                <option value="F">Femenino</option>
-                <option value="O">Prefiero no decir</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Prefiero no indicar">Prefiero no indicar</option>
               </select>
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico *</label>
-              <input id="correo" type="email" value="juan@email.com"
+              <input id="correo" type="email" placeholder="correo@ejemplo.com"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Alias * <span class="text-gray-400">(único)</span></label>
-              <input id="alias" type="text" value="@jperez"
+              <input id="alias" type="text" placeholder="@alias"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Teléfono</label>
-              <input id="telefono" type="tel" value="81 2345 6789"
+              <input id="telefono" type="tel" placeholder="Teléfono"
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-700 mb-1">Tipo de Usuario</label>
-              <input id="tipoUsuarioField" type="text" value="Asegurado" readonly
+              <input id="tipoUsuarioField" type="text" readonly
                 class="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed">
             </div>
           </div>
@@ -147,19 +145,14 @@
   SESSION.requerir('perfil.html');
   document.getElementById('sidebar').innerHTML = renderNav('perfil.html');
 
-  // Rellenar datos del usuario activo
-  document.getElementById('perfilNombre').textContent = SESSION.nombre;
-  document.getElementById('tipoUsuarioField').value = SESSION.tipo;
-  const rolColors = { Supervisor: 'bg-yellow-100 text-yellow-700', Ajustador: 'bg-teal-100 text-teal-700', Asegurado: 'bg-gray-100 text-gray-600' };
-  document.getElementById('perfilRolBadge').className = `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${rolColors[SESSION.tipo] || 'bg-gray-100 text-gray-600'}`;
-  document.getElementById('perfilRolBadge').textContent = SESSION.tipo;
+  const sesion       = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+  const ID_USUARIO   = sesion.id_usuario || '';
 
-  function previsualizarFoto(input) {
-    if (!input.files || !input.files[0]) return;
-    const url = URL.createObjectURL(input.files[0]);
-    const av = document.getElementById('avatarPreview');
-    av.innerHTML = `<img src="${url}" class="w-20 h-20 rounded-full object-cover">`;
-  }
+  const rolColors = {
+    Supervisor: 'bg-yellow-100 text-yellow-700',
+    Ajustador:  'bg-teal-100 text-teal-700',
+    Asegurado:  'bg-gray-100 text-gray-600',
+  };
 
   function showAlert(msg, tipo = 'success') {
     const el = document.getElementById('alertMsg');
@@ -169,40 +162,138 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function guardarPerfil() {
+  function previsualizarFoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const url = URL.createObjectURL(input.files[0]);
+    const av  = document.getElementById('avatarPreview');
+    av.innerHTML = `<img src="${url}" class="w-20 h-20 object-cover">`;
+  }
+
+  async function cargarPerfil() {
+    if (!ID_USUARIO) return;
+    try {
+      const resp = await fetch(`../php/consultar_usuario.php?id=${encodeURIComponent(ID_USUARIO)}`);
+      const data = await resp.json();
+      if (!data.ok) return;
+      const u = data.usuario;
+
+      // Avatar
+      const av  = document.getElementById('avatarPreview');
+      const img = new Image();
+      img.className = 'w-20 h-20 object-cover';
+      img.src = `../php/obtener_foto_usuario.php?id=${ID_USUARIO}`;
+      img.onload  = () => { av.innerHTML = ''; av.appendChild(img); };
+      img.onerror = () => {
+        av.innerHTML = (sesion.iniciales || (u.nombre ? u.nombre.charAt(0).toUpperCase() : '?'));
+      };
+
+      // Header
+      document.getElementById('perfilNombre').textContent    = `${u.nombre || ''} ${u.apellidos || ''}`.trim();
+      document.getElementById('perfilAlias').textContent     = u.alias || '';
+      const badge = document.getElementById('perfilRolBadge');
+      badge.className   = `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1 ${rolColors[u.tipo_usuario] || 'bg-gray-100 text-gray-600'}`;
+      badge.textContent = u.tipo_usuario || '';
+
+      // Campos
+      document.getElementById('nombre').value          = u.nombre       || '';
+      document.getElementById('apellidos').value       = u.apellidos    || '';
+      document.getElementById('fechaNac').value        = u.fecha_nacimiento || '';
+      document.getElementById('genero').value          = u.genero           || '';
+      document.getElementById('correo').value          = u.correo       || '';
+      document.getElementById('alias').value           = u.alias        || '';
+      document.getElementById('telefono').value        = u.telefono     || '';
+      document.getElementById('tipoUsuarioField').value = u.tipo_usuario || '';
+    } catch (e) {}
+  }
+
+  async function guardarPerfil() {
     const reqs = ['nombre','apellidos','correo','alias'];
     for (const id of reqs) {
       if (!document.getElementById(id).value.trim()) {
-        showAlert('Completa todos los campos obligatorios.', 'error'); return;
+        showAlert('Completa todos los campos obligatorios.', 'error');
+        return;
       }
     }
-    showAlert('Perfil actualizado correctamente.');
+
+    const fd = new FormData();
+    fd.append('id_usuario', ID_USUARIO);
+    fd.append('nombre',    document.getElementById('nombre').value.trim());
+    fd.append('apellidos', document.getElementById('apellidos').value.trim());
+    fd.append('genero',    document.getElementById('genero').value);
+    fd.append('correo',    document.getElementById('correo').value.trim());
+    fd.append('alias',     document.getElementById('alias').value.trim());
+    fd.append('telefono',  document.getElementById('telefono').value.trim());
+
+    const fi = document.getElementById('fotoInput');
+    if (fi.files && fi.files[0]) fd.append('foto', fi.files[0]);
+
+    try {
+      const resp = await fetch('../php/actualizar_perfil.php', { method: 'POST', body: fd });
+      const data = await resp.json();
+      if (data.ok) {
+        // Actualizar nombre en el header inmediatamente
+        const nombreActual    = document.getElementById('nombre').value.trim();
+        const apellidosActual = document.getElementById('apellidos').value.trim();
+        document.getElementById('perfilNombre').textContent = `${nombreActual} ${apellidosActual}`.trim();
+
+        // Si se subió foto nueva, recargar avatar con cache-busting
+        if (fi.files && fi.files[0]) {
+          const t = Date.now();
+          document.getElementById('avatarPreview').innerHTML =
+            `<img src="../php/obtener_foto_usuario.php?id=${ID_USUARIO}&t=${t}" class="w-20 h-20 rounded-full object-cover">`;
+          // Refrescar avatar en el sidebar
+          const navAvatar = document.querySelector('#sidebar img');
+          if (navAvatar) navAvatar.src = `../php/obtener_foto_usuario.php?id=${ID_USUARIO}&t=${t}`;
+        }
+
+        showAlert(data.mensaje || 'Perfil actualizado correctamente.');
+        cargarPerfil();
+      } else {
+        showAlert(data.mensaje || 'Error al actualizar el perfil.', 'error');
+      }
+    } catch (e) {
+      showAlert('Error de conexión.', 'error');
+    }
   }
 
   function validarPassPerfil(v) {
-    setR('pReqLen',  v.length >= 8);
-    setR('pReqUp',   /[A-Z]/.test(v));
-    setR('pReqNum',  /[0-9]/.test(v));
+    setR('pReqLen', v.length >= 8);
+    setR('pReqUp',  /[A-Z]/.test(v));
+    setR('pReqNum', /[0-9]/.test(v));
   }
 
   function setR(id, ok) {
     const el = document.getElementById(id);
-    el.className = ok ? 'text-green-500' : 'text-red-400';
+    el.className   = ok ? 'text-green-500' : 'text-red-400';
     el.textContent = (ok ? '✓' : '✗') + el.textContent.slice(1);
   }
 
-  function cambiarPassword() {
-    const actual   = document.getElementById('passActual').value;
-    const nueva    = document.getElementById('passNueva').value;
-    const confirm  = document.getElementById('passConfirm').value;
+  async function cambiarPassword() {
+    const actual  = document.getElementById('passActual').value;
+    const nueva   = document.getElementById('passNueva').value;
+    const confirm = document.getElementById('passConfirm').value;
     if (!actual || !nueva || !confirm) { showAlert('Completa los tres campos de contraseña.', 'error'); return; }
     if (nueva !== confirm)             { showAlert('Las contraseñas nuevas no coinciden.', 'error'); return; }
     if (nueva.length < 8 || !/[A-Z]/.test(nueva) || !/[0-9]/.test(nueva)) {
       showAlert('La nueva contraseña no cumple los requisitos de seguridad.', 'error'); return;
     }
-    showAlert('Contraseña actualizada correctamente.');
-    ['passActual','passNueva','passConfirm'].forEach(id => document.getElementById(id).value = '');
+
+    const body = new URLSearchParams({ id_usuario: ID_USUARIO, password_actual: actual, password_nueva: nueva });
+    try {
+      const resp = await fetch('../php/cambiar_password.php', { method: 'POST', body });
+      const data = await resp.json();
+      if (data.ok) {
+        showAlert(data.mensaje || 'Contraseña actualizada correctamente.');
+        ['passActual','passNueva','passConfirm'].forEach(id => document.getElementById(id).value = '');
+      } else {
+        showAlert(data.mensaje || 'Error al actualizar la contraseña.', 'error');
+      }
+    } catch (e) {
+      showAlert('Error de conexión.', 'error');
+    }
   }
+
+  cargarPerfil();
 </script>
 </body>
 </html>

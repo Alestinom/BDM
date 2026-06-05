@@ -17,15 +17,13 @@
       <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
         <a href="dashboard.html" class="hover:text-blue-600">Panel</a>
         <span>›</span>
-        <a href="detalle_siniestro.html" class="hover:text-blue-600">Detalle Siniestro</a>
+        <a id="linkDetalle" href="detalle_siniestro.html" class="hover:text-blue-600">Detalle Siniestro</a>
         <span>›</span>
-        <span class="text-gray-800 font-medium">Seguimiento</span>
+        <span id="breadcrumbNum" class="text-gray-800 font-medium">Seguimiento</span>
       </div>
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold text-gray-800">Seguimiento del Siniestro</h1>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700">
-          ● En revisión
-        </span>
+        <span id="headerEstado" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-gray-700"></span>
       </div>
     </div>
 
@@ -37,19 +35,19 @@
           <div class="flex flex-wrap gap-6">
             <div>
               <p class="text-xs text-gray-500">Cliente</p>
-              <p class="font-medium text-gray-800 text-sm">Juan Pérez</p>
+              <p id="infoCliente" class="font-medium text-gray-800 text-sm"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Póliza</p>
-              <p class="font-medium text-gray-800 text-sm font-mono">POL-00234</p>
+              <p id="infoPoliza" class="font-medium text-gray-800 text-sm font-mono"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Vehículo</p>
-              <p class="font-medium text-gray-800 text-sm">Toyota Corolla · ABC-123</p>
+              <p id="infoVehiculo" class="font-medium text-gray-800 text-sm"></p>
             </div>
             <div>
               <p class="text-xs text-gray-500">Fecha compromiso</p>
-              <p class="font-medium text-blue-700 text-sm">15/03/2026</p>
+              <p id="infoFechaCompromiso" class="font-medium text-blue-700 text-sm">–</p>
             </div>
           </div>
         </div>
@@ -62,76 +60,33 @@
           </div>
 
           <!-- Mensajes -->
-          <div id="chatMessages" class="flex-1 p-5 space-y-4 overflow-y-auto" style="max-height:400px;">
-
-            <!-- Asegurado -->
-            <div class="flex gap-3">
-              <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">JP</div>
-              <div class="flex-1 max-w-sm">
-                <div class="flex items-baseline gap-2 mb-1">
-                  <span class="text-xs font-semibold text-gray-700">Juan Pérez</span>
-                  <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">Asegurado</span>
-                  <span class="text-xs text-gray-400">03/03 14:52</span>
-                </div>
-                <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
-                  ¿Cuándo estará lista la reparación de mi vehículo?
-                </div>
-              </div>
-            </div>
-
-            <!-- Supervisor -->
-            <div class="flex gap-3">
-              <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">RS</div>
-              <div class="flex-1 max-w-sm">
-                <div class="flex items-baseline gap-2 mb-1">
-                  <span class="text-xs font-semibold text-gray-700">Roberto Soto</span>
-                  <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded">Supervisor</span>
-                  <span class="text-xs text-gray-400">03/03 16:10</span>
-                </div>
-                <div class="bg-blue-50 border border-blue-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
-                  Hola Juan, la unidad está en revisión. La fecha estimada de entrega es el 15 de marzo. Le avisaremos de cualquier cambio.
-                </div>
-              </div>
-            </div>
-
-            <!-- Ajustador -->
-            <div class="flex gap-3">
-              <div class="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">LG</div>
-              <div class="flex-1 max-w-sm">
-                <div class="flex items-baseline gap-2 mb-1">
-                  <span class="text-xs font-semibold text-gray-700">Luis Garza</span>
-                  <span class="text-xs px-1.5 py-0.5 bg-teal-100 text-teal-600 rounded">Ajustador</span>
-                  <span class="text-xs text-gray-400">04/03 09:30</span>
-                </div>
-                <div class="bg-teal-50 border border-teal-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
-                  Acabo de subir fotos del estado actual de la defensa trasera. Ya está en el taller.
-                </div>
-              </div>
-            </div>
-
-            <!-- Asegurado -->
-            <div class="flex gap-3">
-              <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">JP</div>
-              <div class="flex-1 max-w-sm">
-                <div class="flex items-baseline gap-2 mb-1">
-                  <span class="text-xs font-semibold text-gray-700">Juan Pérez</span>
-                  <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">Asegurado</span>
-                  <span class="text-xs text-gray-400">04/03 10:05</span>
-                </div>
-                <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">
-                  Perfecto, muchas gracias por la información.
-                </div>
-              </div>
-            </div>
-
-          </div>
+          <div id="chatMessages" class="flex-1 p-5 space-y-4 overflow-y-auto" style="max-height:400px;"></div>
 
           <!-- Input del chat -->
           <div class="px-5 py-4 border-t border-gray-100">
             <div id="alertChat" class="hidden text-sm px-4 py-2 rounded-lg mb-3 bg-red-50 border border-red-200 text-red-700"></div>
-            <div class="flex gap-3">
-              <textarea id="nuevoMensaje" rows="2" placeholder="Escribe un comentario o pregunta..."
-                class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+            <!-- Preview imagen adjunta -->
+            <div id="previewImagenChat" class="hidden mb-3 flex items-center gap-2">
+              <img id="previewImgTag" src="" class="h-16 rounded-lg object-cover border border-gray-200" alt="imagen">
+              <button onclick="quitarImagen()" class="text-xs text-red-500 hover:text-red-700 font-medium">✕ Quitar</button>
+            </div>
+            <input id="fotoChat" type="file" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden" onchange="previsualizarImagenChat(this)">
+            <div class="flex gap-2 items-end">
+              <button onclick="document.getElementById('fotoChat').click()" title="Adjuntar imagen"
+                class="text-gray-400 hover:text-blue-600 transition-colors pb-2.5 flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                </svg>
+              </button>
+              <div class="flex-1">
+                <textarea id="nuevoMensaje" rows="2" maxlength="500" placeholder="Escribe un comentario o pregunta..."
+                  class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  oninput="actualizarContador()" onfocus="mostrarEscribiendo()" onblur="ocultarEscribiendo()"></textarea>
+                <div class="flex items-center mt-1 px-1">
+                  <p id="escribiendoIndicador" class="text-xs text-gray-400 hidden">Escribiendo...</p>
+                  <span id="contadorChars" class="text-xs text-gray-400 ml-auto">0 / 500 caracteres</span>
+                </div>
+              </div>
               <button onclick="enviarMensaje()"
                 class="bg-blue-700 hover:bg-blue-800 text-white px-5 rounded-xl text-sm font-medium transition-colors self-end py-2.5">
                 Enviar
@@ -141,7 +96,7 @@
         </div>
 
         <div class="flex gap-3">
-          <a href="detalle_siniestro.html"
+          <a id="linkDetalleBack" href="detalle_siniestro.html"
             class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
             ← Volver al Detalle
           </a>
@@ -158,40 +113,258 @@
   SESSION.requerir('seguimiento.html');
   document.getElementById('sidebar').innerHTML = renderNav('seguimiento.html');
 
-  function enviarMensaje() {
-    const input = document.getElementById('nuevoMensaje');
-    const msg = input.value.trim();
-    const alertEl = document.getElementById('alertChat');
+  const sesion         = JSON.parse(sessionStorage.getItem('siniestros_session') || '{}');
+  const ID_USUARIO     = sesion.id_usuario || '';
+  const TIPO_USUARIO   = sesion.tipo       || '';
+  const NOMBRE_SESION  = sesion.nombre     || 'Yo';
+  const INICIALES_SESION = sesion.iniciales || (sesion.nombre ? sesion.nombre.charAt(0).toUpperCase() : '?');
 
-    if (!msg) {
-      alertEl.textContent = 'Escribe un mensaje antes de enviar.';
+  let ID_SINIESTRO = null;
+
+  function formatSiniestro(id) {
+    return 'SIN-' + String(id).padStart(4, '0');
+  }
+
+  function iniciales(nombre) {
+    return (nombre || 'U').split(' ').filter(Boolean).map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  }
+
+  function formatFecha(fechaStr) {
+    if (!fechaStr) return '';
+    const d   = new Date(fechaStr);
+    const dd  = String(d.getDate()).padStart(2, '0');
+    const mm  = String(d.getMonth() + 1).padStart(2, '0');
+    const hh  = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return `${dd}/${mm} ${hh}:${min}`;
+  }
+
+  const estadoBadge = {
+    'Registrado':             'bg-gray-100 text-gray-700',
+    'En revisión':            'bg-yellow-100 text-yellow-700',
+    'Aceptado':               'bg-green-100 text-green-700',
+    'Aceptado con deducible': 'bg-green-100 text-green-700',
+    'Aceptado sin deducible': 'bg-green-100 text-green-700',
+    'Aplica reparación':      'bg-blue-100 text-blue-700',
+    'Rechazado':              'bg-red-100 text-red-700',
+    'Pérdida total':          'bg-orange-100 text-orange-700',
+    'Cerrado':                'bg-purple-100 text-purple-700',
+  };
+
+  const rolCfg = {
+    'Supervisor': { avatar: 'bg-blue-600', badge: 'bg-blue-100 text-blue-600',   bubbleOther: 'bg-blue-50 border border-blue-100 text-gray-700',   bubbleOwn: 'bg-blue-600 text-white' },
+    'Ajustador':  { avatar: 'bg-teal-500', badge: 'bg-teal-100 text-teal-600',   bubbleOther: 'bg-teal-50 border border-teal-100 text-gray-700',   bubbleOwn: 'bg-teal-500 text-white' },
+    'Asegurado':  { avatar: 'bg-gray-400', badge: 'bg-gray-100 text-gray-500',   bubbleOther: 'bg-gray-100 text-gray-700',                          bubbleOwn: 'bg-gray-500 text-white' },
+  };
+
+  function rolStyles(tipo) {
+    return rolCfg[tipo] || rolCfg['Asegurado'];
+  }
+
+  function renderComentario(c) {
+    const esMio  = String(c.id_usuario) === String(ID_USUARIO);
+    const rol    = rolStyles(c.tipo_usuario);
+    const ini    = iniciales(c.nombre_usuario);
+    const hora   = formatFecha(c.fecha);
+    const nombre = c.nombre_usuario || 'Usuario';
+    const tipo   = c.tipo_usuario   || '';
+    const msg    = (c.mensaje || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const avatarDiv = `<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 ${rol.avatar}">
+      <img src="../php/obtener_foto_usuario.php?id=${c.id_usuario}&t=${Date.now()}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="${ini}">
+      <div class="w-full h-full items-center justify-center text-white text-xs font-bold" style="display:none">${ini}</div>
+    </div>`;
+
+    const imgAdjunta = c.id_multimedia
+      ? `<img src="../php/obtener_imagen.php?id=${c.id_multimedia}" class="mt-2 rounded-lg max-w-xs max-h-48 object-cover" loading="lazy">`
+      : '';
+
+    if (esMio) {
+      return `
+      <div class="flex gap-3 justify-end">
+        <div class="max-w-sm">
+          <div class="flex items-baseline gap-2 mb-1 justify-end">
+            <span class="text-xs text-gray-400">${hora}</span>
+            <span class="text-xs px-1.5 py-0.5 ${rol.badge} rounded">${tipo}</span>
+            <span class="text-xs font-semibold text-gray-700">${nombre}</span>
+          </div>
+          <div class="${rol.bubbleOwn} rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm text-right">${msg}${imgAdjunta}</div>
+        </div>
+        ${avatarDiv}
+      </div>`;
+    }
+
+    return `
+    <div class="flex gap-3">
+      ${avatarDiv}
+      <div class="flex-1 max-w-sm">
+        <div class="flex items-baseline gap-2 mb-1">
+          <span class="text-xs font-semibold text-gray-700">${nombre}</span>
+          <span class="text-xs px-1.5 py-0.5 ${rol.badge} rounded">${tipo}</span>
+          <span class="text-xs text-gray-400">${hora}</span>
+        </div>
+        <div class="${rol.bubbleOther} rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm">${msg}${imgAdjunta}</div>
+      </div>
+    </div>`;
+  }
+
+  function previsualizarImagenChat(input) {
+    if (!input.files || !input.files[0]) return;
+    document.getElementById('previewImgTag').src = URL.createObjectURL(input.files[0]);
+    document.getElementById('previewImagenChat').classList.remove('hidden');
+  }
+
+  function quitarImagen() {
+    document.getElementById('fotoChat').value = '';
+    document.getElementById('previewImgTag').src = '';
+    document.getElementById('previewImagenChat').classList.add('hidden');
+  }
+
+  function actualizarContador() {
+    const len = document.getElementById('nuevoMensaje').value.length;
+    const el  = document.getElementById('contadorChars');
+    el.textContent = `${len} / 500 caracteres`;
+    el.className   = `text-xs ml-auto ${len > 450 ? 'text-red-500' : 'text-gray-400'}`;
+  }
+
+  function mostrarEscribiendo() {
+    document.getElementById('escribiendoIndicador').classList.remove('hidden');
+  }
+
+  function ocultarEscribiendo() {
+    document.getElementById('escribiendoIndicador').classList.add('hidden');
+  }
+
+  async function cargarComentarios(forzarScroll = false) {
+    const container   = document.getElementById('chatMessages');
+    const estaEnFondo = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+
+    try {
+      const resp = await fetch(`../php/listar_comentarios.php?id_siniestro=${encodeURIComponent(ID_SINIESTRO)}`);
+      const data = await resp.json();
+
+      if (data.ok && data.comentarios.length) {
+        container.innerHTML = data.comentarios.map(c => renderComentario(c)).join('');
+      } else if (data.ok) {
+        container.innerHTML = '<p class="text-gray-400 text-sm text-center py-10">Aún no hay comentarios. ¡Sé el primero en escribir!</p>';
+      }
+
+      if (forzarScroll || estaEnFondo) {
+        container.scrollTop = container.scrollHeight;
+      }
+    } catch (e) {}
+  }
+
+  async function cargarSiniestro() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id        = urlParams.get('id');
+    if (!id) { window.location.href = 'consulta.html'; return; }
+    ID_SINIESTRO = id;
+
+    try {
+      const resp = await fetch(`../php/consultar_siniestro.php?id=${encodeURIComponent(id)}`);
+      const data = await resp.json();
+      if (!data.ok) { window.location.href = 'consulta.html'; return; }
+
+      const s   = data.siniestro;
+      const num = formatSiniestro(s.id_siniestro);
+
+      // Breadcrumb y links
+      document.getElementById('breadcrumbNum').textContent = `Seguimiento #${num}`;
+      document.getElementById('linkDetalle').href          = `detalle_siniestro.html?id=${id}`;
+      document.getElementById('linkDetalleBack').href      = `detalle_siniestro.html?id=${id}`;
+
+      // Header estado
+      const estado     = s.estado_actual || 'Sin estado';
+      const headerEl   = document.getElementById('headerEstado');
+      headerEl.textContent = `● ${estado}`;
+      headerEl.className   = `inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${estadoBadge[estado] || 'bg-gray-100 text-gray-700'}`;
+
+      // Info resumida
+      document.getElementById('infoCliente').textContent  = s.nombre_asegurado || '';
+      document.getElementById('infoPoliza').textContent   = s.numero_poliza     || '';
+      document.getElementById('infoVehiculo').textContent = `${s.marca || ''} ${s.modelo || ''} · ${s.placas || ''}`.trim();
+
+      const ap = data.aprobacion;
+      if (ap && ap.fecha_compromiso) {
+        const fc = ap.fecha_compromiso.split('T')[0].split('-').reverse().join('/');
+        document.getElementById('infoFechaCompromiso').textContent = fc;
+      } else {
+        document.getElementById('infoFechaCompromiso').textContent = 'Sin fecha';
+      }
+
+      await cargarComentarios(true);
+      setInterval(() => cargarComentarios(false), 15000);
+    } catch (e) {
+      window.location.href = 'consulta.html';
+    }
+  }
+
+  async function enviarMensaje() {
+    const input      = document.getElementById('nuevoMensaje');
+    const msg        = input.value.trim();
+    const alertEl    = document.getElementById('alertChat');
+    const fotoInput  = document.getElementById('fotoChat');
+    const tieneImagen = fotoInput.files && fotoInput.files[0];
+
+    if (!msg && !tieneImagen) {
+      alertEl.textContent = 'Escribe un mensaje o adjunta una imagen antes de enviar.';
       alertEl.classList.remove('hidden');
       return;
     }
     alertEl.classList.add('hidden');
+    ocultarEscribiendo();
 
-    const ahora = new Date();
-    const hora = `${String(ahora.getDate()).padStart(2,'0')}/${String(ahora.getMonth()+1).padStart(2,'0')} ${String(ahora.getHours()).padStart(2,'0')}:${String(ahora.getMinutes()).padStart(2,'0')}`;
+    const btn = document.querySelector('button[onclick="enviarMensaje()"]');
+    if (btn) { btn.disabled = true; btn.textContent = '…'; }
 
-    const container = document.getElementById('chatMessages');
-    container.innerHTML += `
-      <div class="flex gap-3">
-        <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">YO</div>
-        <div class="flex-1 max-w-sm">
-          <div class="flex items-baseline gap-2 mb-1">
-            <span class="text-xs font-semibold text-gray-700">Tú</span>
-            <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded">Supervisor</span>
-            <span class="text-xs text-gray-400">${hora}</span>
-          </div>
-          <div class="bg-blue-50 border border-blue-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-gray-700">${msg}</div>
-        </div>
-      </div>`;
+    const fd = new FormData();
+    fd.append('id_siniestro',        ID_SINIESTRO);
+    fd.append('id_usuario',          ID_USUARIO);
+    fd.append('mensaje',             msg);
+    fd.append('id_comentario_padre', '');
+    if (tieneImagen) fd.append('imagen', fotoInput.files[0]);
 
-    input.value = '';
-    container.scrollTop = container.scrollHeight;
+    try {
+      const resp = await fetch('../php/enviar_comentario.php', { method: 'POST', body: fd });
+      const data = await resp.json();
+
+      if (data.ok) {
+        const container = document.getElementById('chatMessages');
+        const empty = container.querySelector('p');
+        if (empty) container.innerHTML = '';
+
+        const coment = {
+          id_comentario: data.id_comentario,
+          id_usuario:    ID_USUARIO,
+          nombre_usuario: NOMBRE_SESION,
+          tipo_usuario:  TIPO_USUARIO,
+          mensaje:       msg,
+          fecha:         new Date().toISOString(),
+          id_multimedia: data.id_multimedia || null,
+        };
+        container.innerHTML += renderComentario(coment);
+        container.scrollTop = container.scrollHeight;
+        input.value = '';
+        actualizarContador();
+        if (tieneImagen) {
+          fotoInput.value = '';
+          document.getElementById('previewImagenChat').classList.add('hidden');
+        }
+      } else {
+        alertEl.textContent = data.mensaje || 'Error al enviar el mensaje.';
+        alertEl.classList.remove('hidden');
+      }
+    } catch (e) {
+      alertEl.textContent = 'Error de conexión al enviar el mensaje.';
+      alertEl.classList.remove('hidden');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Enviar'; }
+    }
   }
 
-  // Enviar con Enter (Shift+Enter para nueva línea)
+  cargarSiniestro();
+
   document.getElementById('nuevoMensaje').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
