@@ -30,3 +30,5 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DESCRIBE Comentarios;

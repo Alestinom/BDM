@@ -155,3 +155,14 @@ Stack trace:
 [05-Jun-2026 03:54:53 Europe/Berlin] Multimedia imagen (images (4).jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":10}
 [05-Jun-2026 03:54:54 Europe/Berlin] Multimedia video (video.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":11}
 [05-Jun-2026 03:54:54 Europe/Berlin] Multimedia video (video.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":12}
+[05-Jun-2026 04:21:01 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[05-Jun-2026 04:21:01 Europe/Berlin] POST recibido: {"id_poliza":"1","id_unidad":"1","id_usuario":"2","fecha":"2026-06-04","hora":"20:20","ubicacion":"Cgaa","descripcion":"HOla","otras_unidades":"0"}
+[05-Jun-2026 04:21:01 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":4}
+[05-Jun-2026 04:21:01 Europe/Berlin] id_siniestro creado: 4
+[05-Jun-2026 04:30:01 Europe/Berlin] === INICIO REGISTRO SINIESTRO ===
+[05-Jun-2026 04:30:01 Europe/Berlin] POST recibido: {"id_poliza":"1","id_unidad":"1","id_usuario":"2","fecha":"2026-06-01","hora":"18:29","ubicacion":"Campus CU","descripcion":"Choch\u00f3 contra un poste","otras_unidades":"1"}
+[05-Jun-2026 04:30:01 Europe/Berlin] Resultado SP_Siniestros ALTA: {"resultado":"OK","mensaje":"Siniestro registrado correctamente","id_siniestro":5}
+[05-Jun-2026 04:30:01 Europe/Berlin] id_siniestro creado: 5
+[05-Jun-2026 04:30:01 Europe/Berlin] Multimedia imagen (images (2).jpg): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":14}
+[05-Jun-2026 04:30:01 Europe/Berlin] Multimedia video (video.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":15}
+[05-Jun-2026 04:30:01 Europe/Berlin] Multimedia video (video.mp4): {"resultado":"OK","mensaje":"Archivo guardado correctamente","id_multimedia":16}

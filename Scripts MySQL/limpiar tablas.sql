@@ -3,6 +3,8 @@ USE BDM;
 SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_SAFE_UPDATES = 0;
 
+select * from Multimedia;
+
 TRUNCATE TABLE Comentarios;
 TRUNCATE TABLE Multimedia;
 TRUNCATE TABLE Aprobaciones;

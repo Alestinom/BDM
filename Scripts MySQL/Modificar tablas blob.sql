@@ -71,6 +71,8 @@ CREATE TABLE Unidades(
     FOREIGN KEY(id_asegurado) REFERENCES Asegurados(id_asegurado)
 );
 
+select * from siniestros;
+DESCRIBE Siniestros;
 -- Siniestros
 CREATE TABLE Siniestros(
     id_siniestro INT AUTO_INCREMENT PRIMARY KEY,
@@ -155,3 +157,12 @@ MODIFY COLUMN archivo LONGBLOB;
 -- (útil para saber si es jpg, mp4, etc al recuperarlo)
 ALTER TABLE Multimedia
 ADD COLUMN nombre_archivo VARCHAR(255) AFTER tipo;
+
+
+ALTER TABLE Comentarios 
+ADD COLUMN id_multimedia INT NULL,
+ADD FOREIGN KEY (id_multimedia) REFERENCES Multimedia(id_multimedia);
+
+ALTER TABLE Comentarios ADD COLUMN id_multimedia INT NULL;
+ALTER TABLE Comentarios ADD CONSTRAINT fk_comentarios_multimedia 
+  FOREIGN KEY (id_multimedia) REFERENCES Multimedia(id_multimedia);

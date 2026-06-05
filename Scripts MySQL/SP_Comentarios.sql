@@ -10,25 +10,26 @@ CREATE PROCEDURE SP_Comentarios(
     IN p_id_siniestro INT,
     IN p_id_usuario INT,
     IN p_id_comentario_padre INT,
-    IN p_mensaje TEXT
+    IN p_mensaje TEXT,
+    IN p_id_multimedia INT
 )
 BEGIN
     CASE p_accion
 
-        -- ALTA
         WHEN 'ALTA' THEN
             INSERT INTO Comentarios(
                 id_siniestro, id_usuario, 
-                id_comentario_padre, mensaje, fecha
+                id_comentario_padre, mensaje, 
+                fecha, id_multimedia
             ) VALUES (
                 p_id_siniestro, p_id_usuario,
-                p_id_comentario_padre, p_mensaje, NOW()
+                p_id_comentario_padre, p_mensaje,
+                NOW(), p_id_multimedia
             );
             SELECT 'OK' AS resultado,
                    'Comentario enviado correctamente' AS mensaje,
                    LAST_INSERT_ID() AS id_comentario;
 
-        -- LISTAR POR SINIESTRO
         WHEN 'LISTAR_POR_SINIESTRO' THEN
             SELECT 
                 co.id_comentario,
@@ -37,6 +38,7 @@ BEGIN
                 co.id_comentario_padre,
                 co.mensaje,
                 co.fecha,
+                co.id_multimedia,
                 CONCAT(u.nombre, ' ', u.apellidos) AS nombre_usuario,
                 u.tipo_usuario,
                 u.alias
@@ -45,7 +47,6 @@ BEGIN
             WHERE co.id_siniestro = p_id_siniestro
             ORDER BY co.fecha ASC;
 
-        -- ELIMINAR
         WHEN 'ELIMINAR' THEN
             IF NOT EXISTS (SELECT 1 FROM Comentarios 
                           WHERE id_comentario = p_id_comentario) THEN

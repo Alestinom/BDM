@@ -221,3 +221,9 @@ CALL SP_Usuarios('ALTA', NULL, 'Luis', 'Garza', '1992-05-10',
 CALL SP_Usuarios('ALTA', NULL, 'Juan', 'Perez', '1995-03-20',
 'Masculino', 'asegurado@demo.com', 'Asegu1@', 'jperez', NULL,
 'Asegurado', 'CLI-0001', '81 1234 5678');
+
+
+SELECT id_multimedia, nombre_archivo, tipo, 
+       LENGTH(archivo) as tamanio_bytes
+FROM Multimedia
+ORDER BY id_multimedia DESC;
